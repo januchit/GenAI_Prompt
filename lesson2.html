@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 2: Large Language Models (LLMs)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">02</span> Fundamentals</div>
+      <h1>Large Language Models (LLMs)</h1>
+      <p class="lesson-desc">เจาะลึกสถาปัตยกรรม Transformer ที่เป็นหัวใจของ LLM ทุกตัว ตั้งแต่ Tokenization, Embeddings จนถึงกระบวนการ Training และโมเดลสำคัญในปัจจุบัน</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับพื้นฐาน–กลาง</span>
+        <span><i class="fa-solid fa-list-check"></i> 6 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+    <aside class="toc-sidebar" id="tocSidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">2.1 Language Model คืออะไร?</a></li>
+        <li><a href="#sec2" class="toc-link">2.2 Tokenization</a></li>
+        <li><a href="#sec3" class="toc-link">2.3 Word Embeddings</a></li>
+        <li><a href="#sec4" class="toc-link">2.4 Transformer Architecture</a></li>
+        <li><a href="#sec5" class="toc-link">2.5 กระบวนการ Training</a></li>
+        <li><a href="#sec6" class="toc-link">2.6 โมเดล LLM สำคัญ</a></li>
+        <li><a href="#sec7" class="toc-link">2.7 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <main class="lesson-content">
+
+      <!-- 2.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">2.1</span> Language Model คืออะไร?</h2>
+        <p>
+          <strong>Language Model (LM)</strong> คือโมเดลที่เรียนรู้ความน่าจะเป็นของคำหรือประโยคในภาษา กล่าวคือ
+          โมเดลจะทำนายว่า "คำถัดไปคืออะไร" โดยอาศัยบริบทที่ผ่านมา
+        </p>
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <div>
+            <strong>ตัวอย่างง่ายๆ</strong><br/>
+            "ฉันชอบกิน ___" → โมเดลจะทำนายว่าคำที่เหมาะสมถัดไปคืออะไร เช่น "ข้าว", "ส้มตำ", "พิซซ่า" โดยแต่ละคำมีความน่าจะเป็นต่างกัน
+          </div>
+        </div>
+        <h3>วิวัฒนาการของ Language Model</h3>
+        <div class="evo-steps">
+          <div class="evo-card">
+            <div class="evo-era">ยุค 1990–2000s</div>
+            <h4>N-gram Models</h4>
+            <p>นับความถี่ของคำต่อเนื่องกัน n คำ ง่ายแต่ไม่เข้าใจบริบทระยะไกล</p>
+          </div>
+          <div class="evo-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="evo-card">
+            <div class="evo-era">ยุค 2010s</div>
+            <h4>RNN / LSTM</h4>
+            <p>ใช้ Recurrent Neural Network จำบริบทได้ดีขึ้น แต่ช้าและลืมบริบทระยะไกล</p>
+          </div>
+          <div class="evo-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="evo-card evo-highlight">
+            <div class="evo-era">2017–ปัจจุบัน</div>
+            <h4>Transformer / LLM</h4>
+            <p>Attention Mechanism ทำให้เข้าใจบริบทระยะไกลได้ดี เร็ว และ Scale ได้มหาศาล</p>
+          </div>
+        </div>
+        <h3>ทำไม "Large"?</h3>
+        <div class="param-grid">
+          <div class="param-card">
+            <div class="param-name">GPT-2</div>
+            <div class="param-bar-wrap"><div class="param-bar" style="width:3%"></div></div>
+            <div class="param-val">1.5B params</div>
+          </div>
+          <div class="param-card">
+            <div class="param-name">GPT-3</div>
+            <div class="param-bar-wrap"><div class="param-bar" style="width:18%"></div></div>
+            <div class="param-val">175B params</div>
+          </div>
+          <div class="param-card">
+            <div class="param-name">PaLM</div>
+            <div class="param-bar-wrap"><div class="param-bar" style="width:55%"></div></div>
+            <div class="param-val">540B params</div>
+          </div>
+          <div class="param-card">
+            <div class="param-name">GPT-4</div>
+            <div class="param-bar-wrap"><div class="param-bar" style="width:100%"></div></div>
+            <div class="param-val">&gt;1T params (ประมาณ)</div>
+          </div>
+        </div>
+        <p style="margin-top:1rem">Parameters คือตัวเลขที่โมเดลเรียนรู้จากข้อมูล ยิ่งมากยิ่งจำและเข้าใจรูปแบบภาษาได้ละเอียดขึ้น</p>
+      </section>
+
+      <!-- 2.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">2.2</span> Tokenization</h2>
+        <p>
+          ก่อนที่ LLM จะประมวลผลข้อความ ต้องแปลงข้อความเป็น <strong>Token</strong> ก่อน
+          Token คือหน่วยย่อยของข้อความ ซึ่งอาจเป็นคำ, ส่วนของคำ, หรือสัญลักษณ์
+        </p>
+        <div class="token-demo">
+          <p class="token-label-top">ประโยค: "Generative AI เปลี่ยนโลก"</p>
+          <div class="token-row">
+            <span class="token t1">Gener</span>
+            <span class="token t2">ative</span>
+            <span class="token t3"> AI</span>
+            <span class="token t4"> เปล</span>
+            <span class="token t5">ี่ยน</span>
+            <span class="token t6">โลก</span>
+          </div>
+          <p class="token-note">1 token ≈ 0.75 คำ ภาษาอังกฤษ &nbsp;|&nbsp; ภาษาไทย 1 token ≈ น้อยกว่า 1 พยางค์</p>
+        </div>
+        <h3>วิธี Tokenization ยอดนิยม</h3>
+        <div class="method-list">
+          <div class="method-item">
+            <div class="method-icon purple"><i class="fa-solid fa-scissors"></i></div>
+            <div>
+              <h4>Byte Pair Encoding (BPE)</h4>
+              <p>ใช้ใน GPT-2, GPT-3, GPT-4, LLaMA รวมคู่ตัวอักษรที่ปรากฏบ่อยที่สุดเข้าด้วยกัน เหมาะกับหลายภาษา</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon blue"><i class="fa-solid fa-puzzle-piece"></i></div>
+            <div>
+              <h4>WordPiece</h4>
+              <p>ใช้ใน BERT, RoBERTa แบ่งคำออกเป็น subword ที่มีความน่าจะเป็นสูงสุด</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon green"><i class="fa-solid fa-grip"></i></div>
+            <div>
+              <h4>SentencePiece</h4>
+              <p>ใช้ใน T5, Gemma ทำงานระดับ byte ไม่ขึ้นกับช่องว่างระหว่างคำ เหมาะกับภาษาเอเชีย</p>
+            </div>
+          </div>
+        </div>
+        <div class="info-box box-orange">
+          <div class="box-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <strong>Context Window</strong><br/>
+            LLM รับ Token ได้จำกัดใน 1 การประมวลผล เรียกว่า Context Window เช่น GPT-4 = 128K tokens, Claude 3 = 200K tokens
+            ยิ่ง Context Window กว้าง ยิ่งจำบริบทได้มากขึ้น
+          </div>
+        </div>
+      </section>
+
+      <!-- 2.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">2.3</span> Word Embeddings</h2>
+        <p>
+          หลัง Tokenization แต่ละ Token จะถูกแปลงเป็น <strong>Embedding Vector</strong> — ตัวเลขหลายมิติที่แทนความหมายของคำ
+          คำที่มีความหมายใกล้เคียงกันจะมี Vector ที่อยู่ใกล้กันในพื้นที่มิติสูง
+        </p>
+        <div class="embed-visual">
+          <div class="embed-space">
+            <div class="embed-dot" style="top:25%;left:20%"><span class="embed-word">กษัตริย์</span><div class="dot-point king"></div></div>
+            <div class="embed-dot" style="top:55%;left:22%"><span class="embed-word">ราชินี</span><div class="dot-point queen"></div></div>
+            <div class="embed-dot" style="top:20%;left:65%"><span class="embed-word">ชาย</span><div class="dot-point man"></div></div>
+            <div class="embed-dot" style="top:50%;left:67%"><span class="embed-word">หญิง</span><div class="dot-point woman"></div></div>
+            <div class="embed-arrow"></div>
+            <div class="embed-caption">Vector Space 2D (จริงๆ มีหลายร้อย–พันมิติ)</div>
+          </div>
+        </div>
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-calculator"></i></div>
+          <div>
+            <strong>Vector Arithmetic ที่น่าทึ่ง</strong><br/>
+            กษัตริย์ − ชาย + หญิง ≈ <strong>ราชินี</strong><br/>
+            ปารีส − ฝรั่งเศส + ไทย ≈ <strong>กรุงเทพฯ</strong><br/>
+            แสดงว่า Embedding เข้าใจความสัมพันธ์เชิงความหมายได้จริง
+          </div>
+        </div>
+        <h3>Embedding Dimension</h3>
+        <ul class="content-list">
+          <li><strong>Word2Vec (2013)</strong> — 100–300 มิติ รุ่นแรกที่โด่งดัง</li>
+          <li><strong>GloVe (2014)</strong> — 50–300 มิติ เรียนรู้จาก co-occurrence matrix</li>
+          <li><strong>GPT-3 (2020)</strong> — 12,288 มิติ แต่ละ token เป็นเวกเตอร์ขนาดใหญ่มาก</li>
+          <li><strong>Modern LLMs</strong> — หลายพัน dimension เพื่อจับความหมายที่ละเอียดขึ้น</li>
+        </ul>
+      </section>
+
+      <!-- 2.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">2.4</span> Transformer Architecture</h2>
+        <p>
+          Transformer คือสถาปัตยกรรม Neural Network ที่นำเสนอในงานวิจัย <em>"Attention is All You Need"</em> (Google Brain, 2017)
+          เป็นพื้นฐานของ LLM แทบทุกตัวในปัจจุบัน
+        </p>
+
+        <div class="transformer-diagram">
+          <div class="td-col">
+            <div class="td-title encoder-title">Encoder<br/><small>(BERT style)</small></div>
+            <div class="td-block input-block">Input Tokens</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block embed-block">Input Embedding<br/>+ Positional Encoding</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block attn-block"><i class="fa-solid fa-star"></i> Multi-Head<br/>Self-Attention</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block norm-block">Add &amp; Norm</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block ff-block">Feed Forward<br/>Network</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block norm-block">Add &amp; Norm</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block out-block">Encoder Output</div>
+          </div>
+          <div class="td-middle"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="td-col">
+            <div class="td-title decoder-title">Decoder<br/><small>(GPT style)</small></div>
+            <div class="td-block input-block">Output Tokens</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block embed-block">Output Embedding<br/>+ Positional Encoding</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block attn-block attn-masked"><i class="fa-solid fa-star"></i> Masked Multi-Head<br/>Self-Attention</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block norm-block">Add &amp; Norm</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block attn-block"><i class="fa-solid fa-star"></i> Cross-Attention</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block ff-block">Feed Forward<br/>Network</div>
+            <div class="td-arrow-v"></div>
+            <div class="td-block out-block">Linear + Softmax<br/>→ Next Token</div>
+          </div>
+        </div>
+
+        <h3>Self-Attention คืออะไร?</h3>
+        <p>กลไกหลักของ Transformer คือ <strong>Self-Attention</strong> ที่ทำให้โมเดลสามารถ "มองย้อนกลับ" ไปยังคำอื่นๆ ในประโยคได้พร้อมกัน</p>
+        <div class="attn-example">
+          <p class="attn-sentence">
+            "The <span class="hl-word">animal</span> didn't cross the street because <span class="hl-ref">it</span> was too tired."
+          </p>
+          <div class="attn-arrow-wrap">
+            <i class="fa-solid fa-arrow-down"></i>
+          </div>
+          <p class="attn-explain">Self-Attention ทำให้โมเดลรู้ว่า <strong>"it"</strong> หมายถึง <strong>"animal"</strong> ไม่ใช่ "street" โดยคำนวณ Attention Score ระหว่างทุกคำ</p>
+        </div>
+
+        <h3>Positional Encoding</h3>
+        <p>
+          เนื่องจาก Transformer ประมวลผลคำทั้งหมดพร้อมกัน (ต่างจาก RNN ที่ประมวลผลทีละคำ)
+          จึงต้องเพิ่ม <strong>Positional Encoding</strong> เพื่อบอกว่าคำแต่ละคำอยู่ตำแหน่งที่เท่าไร
+        </p>
+        <ul class="content-list">
+          <li><strong>Sinusoidal PE</strong> (ต้นฉบับ) — ใช้ฟังก์ชัน sine/cosine คงที่</li>
+          <li><strong>Learned PE</strong> — เรียนรู้ตำแหน่งจากข้อมูล ใช้ใน GPT-2/3</li>
+          <li><strong>RoPE</strong> (Rotary PE) — ใช้ใน LLaMA, Gemma รองรับ Context ยาวได้ดีกว่า</li>
+        </ul>
+      </section>
+
+      <!-- 2.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">2.5</span> กระบวนการ Training LLM</h2>
+        <p>การสร้าง LLM มี 3 ขั้นตอนหลัก:</p>
+
+        <div class="train-steps">
+          <div class="train-step">
+            <div class="train-num">1</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-database" style="color:#6366f1"></i> Pre-training</h4>
+              <p>ฝึกกับข้อมูลข้อความขนาดมหาศาล (Common Crawl, Wikipedia, GitHub, Books) ด้วยการทำนายคำถัดไป ใช้เวลาและพลังงานสูงมาก</p>
+              <div class="train-tag">Unsupervised Learning</div>
+            </div>
+          </div>
+          <div class="train-connector"></div>
+          <div class="train-step">
+            <div class="train-num">2</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-user-check" style="color:#8b5cf6"></i> Supervised Fine-tuning (SFT)</h4>
+              <p>ปรับโมเดลด้วยข้อมูลที่มนุษย์เขียนตัวอย่าง ทั้งคำถามและคำตอบที่ดี เพื่อให้โมเดลตอบคำถามได้อย่างมีประโยชน์</p>
+              <div class="train-tag">Supervised Learning</div>
+            </div>
+          </div>
+          <div class="train-connector"></div>
+          <div class="train-step">
+            <div class="train-num">3</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-medal" style="color:#06b6d4"></i> RLHF (Reinforcement Learning from Human Feedback)</h4>
+              <p>มนุษย์จัดอันดับคำตอบที่โมเดลสร้าง โมเดล Reward ถูกฝึก แล้วใช้ PPO เพื่อให้โมเดลหลักตอบได้ตรงความต้องการมนุษย์มากขึ้น</p>
+              <div class="train-tag">Reinforcement Learning</div>
+            </div>
+          </div>
+        </div>
+
+        <h3>Scale Laws</h3>
+        <div class="info-box box-green">
+          <div class="box-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <div>
+            <strong>Scaling Law (Kaplan et al., 2020)</strong><br/>
+            ประสิทธิภาพของ LLM ขึ้นกับ 3 ปัจจัย: <strong>จำนวน Parameters (N), ขนาดข้อมูล (D), และ Compute (C)</strong>
+            ยิ่งเพิ่มทั้ง 3 อย่างพร้อมกัน ประสิทธิภาพจะดีขึ้นตาม Power Law อย่างต่อเนื่อง
+          </div>
+        </div>
+
+        <h3>Emergent Abilities</h3>
+        <p>เมื่อโมเดลใหญ่ถึงระดับหนึ่ง จะเกิดความสามารถที่ไม่ได้สอนโดยตรง เรียกว่า <strong>Emergent Abilities</strong> เช่น:</p>
+        <ul class="content-list">
+          <li>Chain-of-Thought Reasoning — คิดเป็นขั้นตอน</li>
+          <li>In-context Learning — เรียนรู้จากตัวอย่างใน Prompt โดยไม่ต้อง Fine-tune</li>
+          <li>Instruction Following — ทำตามคำสั่งที่ซับซ้อน</li>
+          <li>Code Generation — เขียนโปรแกรมได้โดยไม่ได้ฝึกเฉพาะด้าน</li>
+        </ul>
+      </section>
+
+      <!-- 2.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">2.6</span> โมเดล LLM สำคัญ</h2>
+
+        <div class="model-table-wrap">
+          <table class="model-table">
+            <thead>
+              <tr>
+                <th>โมเดล</th>
+                <th>ผู้พัฒนา</th>
+                <th>ปี</th>
+                <th>ขนาด</th>
+                <th>จุดเด่น</th>
+                <th>License</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="model-name gpt">GPT-4o</strong></td>
+                <td>OpenAI</td>
+                <td>2024</td>
+                <td>~200B+</td>
+                <td>Multimodal, รวดเร็ว, ภาษาดี</td>
+                <td><span class="lic closed">Closed</span></td>
+              </tr>
+              <tr>
+                <td><strong class="model-name claude">Claude 3.5/4</strong></td>
+                <td>Anthropic</td>
+                <td>2024–25</td>
+                <td>ไม่เปิดเผย</td>
+                <td>ปลอดภัย, Context 200K, Coding ดี</td>
+                <td><span class="lic closed">Closed</span></td>
+              </tr>
+              <tr>
+                <td><strong class="model-name gemini">Gemini 2.0</strong></td>
+                <td>Google</td>
+                <td>2024–25</td>
+                <td>ไม่เปิดเผย</td>
+                <td>Multimodal, Context 1M, Google Search</td>
+                <td><span class="lic closed">Closed</span></td>
+              </tr>
+              <tr>
+                <td><strong class="model-name llama">LLaMA 3.1</strong></td>
+                <td>Meta</td>
+                <td>2024</td>
+                <td>8B–405B</td>
+                <td>Open source, ปรับแต่งได้เอง</td>
+                <td><span class="lic open">Open</span></td>
+              </tr>
+              <tr>
+                <td><strong class="model-name mistral">Mistral</strong></td>
+                <td>Mistral AI</td>
+                <td>2023–24</td>
+                <td>7B–141B</td>
+                <td>Efficient, MoE, European AI</td>
+                <td><span class="lic open">Open</span></td>
+              </tr>
+              <tr>
+                <td><strong class="model-name">Gemma 2</strong></td>
+                <td>Google</td>
+                <td>2024</td>
+                <td>2B–27B</td>
+                <td>เล็ก, รันบน device ได้, ฟรี</td>
+                <td><span class="lic open">Open</span></td>
+              </tr>
+              <tr>
+                <td><strong class="model-name">Qwen 2.5</strong></td>
+                <td>Alibaba</td>
+                <td>2024</td>
+                <td>0.5B–72B</td>
+                <td>ภาษาจีน/อังกฤษดี, หลายขนาด</td>
+                <td><span class="lic open">Open</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>GPT vs BERT vs LLaMA</h3>
+        <div class="arch-compare">
+          <div class="arch-card">
+            <div class="arch-icon" style="background:#10a37f"><i class="fa-solid fa-robot"></i></div>
+            <h4>GPT (Decoder-only)</h4>
+            <p>เหมาะกับงาน <strong>Generation</strong> สร้างข้อความ, ตอบคำถาม, เขียนโค้ด ใช้ Autoregressive — ทำนายคำทีละคำจากซ้ายไปขวา</p>
+          </div>
+          <div class="arch-card">
+            <div class="arch-icon" style="background:#f59e0b"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <h4>BERT (Encoder-only)</h4>
+            <p>เหมาะกับงาน <strong>Understanding</strong> จำแนกประโยค, NER, คำถาม-ตอบ ใช้ Masked LM — เห็นบริบทซ้าย-ขวาพร้อมกัน</p>
+          </div>
+          <div class="arch-card">
+            <div class="arch-icon" style="background:#3b82f6"><i class="fa-solid fa-layer-group"></i></div>
+            <h4>T5 (Encoder-Decoder)</h4>
+            <p>เหมาะกับงาน <strong>Seq2Seq</strong> แปลภาษา, สรุป, QA แปลง text เป็น text ได้ทุกรูปแบบ</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2.7 -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">2.7</span> สรุปและแบบฝึกหัด</h2>
+
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li>Language Model ทำนายความน่าจะเป็นของคำถัดไป พัฒนาจาก N-gram → RNN → Transformer</li>
+            <li>Tokenization แปลงข้อความเป็น Token ก่อนป้อนให้โมเดล ภาษาไทยใช้ Token มากกว่าอังกฤษ</li>
+            <li>Embedding แปลง Token เป็น Vector เพื่อแทนความหมายในพื้นที่มิติสูง</li>
+            <li>Transformer ใช้ Self-Attention เข้าใจความสัมพันธ์ระหว่างคำในประโยคพร้อมกัน</li>
+            <li>Training LLM มี 3 ขั้น: Pre-training → SFT → RLHF</li>
+            <li>โมเดลสำคัญ: GPT-4o (OpenAI), Claude (Anthropic), Gemini (Google), LLaMA (Meta)</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item">
+            <div class="ex-num">1</div>
+            <div>
+              <strong>ทดลอง Tokenizer</strong>
+              <p>ลองใช้ <a href="https://platform.openai.com/tokenizer" target="_blank" style="color:#818cf8">platform.openai.com/tokenizer</a> นับจำนวน Token ของประโยคภาษาไทยและอังกฤษ แล้วเปรียบเทียบผล</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">2</div>
+            <div>
+              <strong>เปรียบเทียบโมเดล</strong>
+              <p>ถามคำถามเดียวกันกับ ChatGPT, Claude และ Gemini แล้วเปรียบเทียบคุณภาพ ความถูกต้อง และสไตล์การตอบ</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">3</div>
+            <div>
+              <strong>คำนวณ Context</strong>
+              <p>ถ้าโมเดลมี Context Window 128K tokens และ 1 token ≈ 4 ตัวอักษร จะสามารถรับข้อความได้กี่หน้ากระดาษโดยประมาณ? (สมมติ 1 หน้า ≈ 3,000 ตัวอักษร)</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">4</div>
+            <div>
+              <strong>ค้นคว้า</strong>
+              <p>LLaMA 3 และ Mistral เป็น Open Source Model หาข้อมูลวิธีรัน LLM เหล่านี้บน computer ส่วนตัว โดยใช้ Ollama หรือ LM Studio</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-nav">
+          <a href="lesson1.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> บทที่ 1: Intro to GenAI</a>
+          <a href="lesson3.html" class="btn btn-primary">บทที่ 3: Prompt Engineering <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand"><i class="fa-solid fa-robot"></i><span>Generative AI & Prompt Engineering</span></div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const sections = document.querySelectorAll('.content-section');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+</body>
+</html>

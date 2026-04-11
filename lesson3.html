@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 3: Introduction to Prompt Engineering</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">03</span> Prompt Basics</div>
+      <h1>Introduction to Prompt Engineering</h1>
+      <p class="lesson-desc">เรียนรู้หลักการเขียน Prompt ที่ดี โครงสร้างของ Prompt ที่มีประสิทธิภาพ และเทคนิคพื้นฐานที่ช่วยให้ AI ตอบได้ตรงความต้องการ</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับเริ่มต้น</span>
+        <span><i class="fa-solid fa-list-check"></i> 6 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+    <aside class="toc-sidebar" id="tocSidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">3.1 Prompt Engineering คืออะไร?</a></li>
+        <li><a href="#sec2" class="toc-link">3.2 โครงสร้างของ Prompt</a></li>
+        <li><a href="#sec3" class="toc-link">3.3 หลัก 6 ข้อของ Prompt ที่ดี</a></li>
+        <li><a href="#sec4" class="toc-link">3.4 Role Prompting</a></li>
+        <li><a href="#sec5" class="toc-link">3.5 Output Format Control</a></li>
+        <li><a href="#sec6" class="toc-link">3.6 ข้อผิดพลาดที่ควรหลีกเลี่ยง</a></li>
+        <li><a href="#sec7" class="toc-link">3.7 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <main class="lesson-content">
+
+      <!-- 3.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">3.1</span> Prompt Engineering คืออะไร?</h2>
+        <p>
+          <strong>Prompt Engineering</strong> คือศาสตร์และศิลป์ของการออกแบบคำสั่ง (Prompt) เพื่อสื่อสารกับ AI อย่างมีประสิทธิภาพ
+          เพื่อให้ได้ผลลัพธ์ที่ถูกต้อง ครบถ้วน และตรงความต้องการ
+        </p>
+        <div class="analogy-box">
+          <div class="analogy-col">
+            <i class="fa-solid fa-person-chalkboard fa-2x" style="color:#6366f1"></i>
+            <h4>เปรียบเหมือนการสั่งงานคน</h4>
+            <p>"ช่วยทำรายงาน"<br/><span style="color:#f87171">→ ไม่ชัดเจน ได้งานผิดที่คาดหวัง</span></p>
+            <p style="margin-top:.75rem">"ช่วยทำรายงานสรุปยอดขายเดือนมกราคม รูปแบบตาราง ภาษาไทย ความยาว 1 หน้า A4"<br/><span style="color:#34d399">→ ชัดเจน ได้งานตรงใจ</span></p>
+          </div>
+          <div class="analogy-divider"></div>
+          <div class="analogy-col">
+            <i class="fa-solid fa-robot fa-2x" style="color:#8b5cf6"></i>
+            <h4>เปรียบเหมือนการตั้งโปรแกรม</h4>
+            <p>Prompt คือ "Input" ที่กำหนดพฤติกรรมของ AI ในการสนทนานั้น Prompt ที่ดี = Output ที่แม่นยำ</p>
+            <p style="margin-top:.75rem">Prompt ที่แย่จะทำให้ AI เดา ตอบกว้าง หรือตีความผิด</p>
+          </div>
+        </div>
+        <h3>ทำไม Prompt Engineering ถึงสำคัญ?</h3>
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-bullseye"></i></div>
+            <h4>ความแม่นยำ</h4>
+            <p>Prompt ที่ดีลดความเข้าใจผิดและเพิ่มความถูกต้องของคำตอบ</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-gauge-high"></i></div>
+            <h4>ประหยัดเวลา</h4>
+            <p>ไม่ต้องถามซ้ำ ได้คำตอบที่ใช้งานได้จริงตั้งแต่ครั้งแรก</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-unlock"></i></div>
+            <h4>ปลดล็อกความสามารถ</h4>
+            <p>AI มีความสามารถซ่อนอยู่มาก Prompt ที่ดีช่วยดึงออกมาใช้ได้</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-coins"></i></div>
+            <h4>ประหยัดต้นทุน</h4>
+            <p>Prompt สั้นกระชับลด Token ที่ใช้ ลดค่าใช้จ่าย API</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">3.2</span> โครงสร้างของ Prompt</h2>
+        <p>Prompt ที่ดีมักประกอบด้วยองค์ประกอบเหล่านี้ (ไม่จำเป็นต้องครบทุกข้อ):</p>
+
+        <div class="prompt-structure">
+          <div class="ps-item">
+            <div class="ps-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc">Role</div>
+            <div class="ps-desc">
+              <h4>บทบาท (Role / Persona)</h4>
+              <p>กำหนดให้ AI เล่นบทบาทหรือมีความเชี่ยวชาญในด้านใด</p>
+              <div class="ps-example">"คุณเป็นอาจารย์สอนวิชาคณิตศาสตร์ระดับมหาวิทยาลัย..."</div>
+            </div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-tag" style="background:rgba(139,92,246,0.2);color:#c4b5fd">Context</div>
+            <div class="ps-desc">
+              <h4>บริบท (Context / Background)</h4>
+              <p>ให้ข้อมูลพื้นฐานที่ AI จำเป็นต้องรู้เพื่อตอบได้ถูกต้อง</p>
+              <div class="ps-example">"ฉันกำลังเตรียม presentation สำหรับผู้บริหารระดับ C-Suite ที่ไม่มีพื้นฐาน AI..."</div>
+            </div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-tag" style="background:rgba(6,182,212,0.2);color:#67e8f9">Task</div>
+            <div class="ps-desc">
+              <h4>งาน (Task / Instruction)</h4>
+              <p>บอกชัดเจนว่าต้องการให้ AI ทำอะไร — หัวใจสำคัญของ Prompt</p>
+              <div class="ps-example">"สรุปประโยชน์ของ Generative AI ในองค์กร 5 ข้อ พร้อมตัวอย่างจริง"</div>
+            </div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7">Format</div>
+            <div class="ps-desc">
+              <h4>รูปแบบผลลัพธ์ (Output Format)</h4>
+              <p>กำหนดว่าต้องการคำตอบในรูปแบบใด เช่น ตาราง, bullet, JSON, โค้ด</p>
+              <div class="ps-example">"ตอบเป็น Markdown ใช้หัวข้อ H2 สำหรับแต่ละประเด็น ความยาวไม่เกิน 500 คำ"</div>
+            </div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-tag" style="background:rgba(245,158,11,0.2);color:#fde68a">Example</div>
+            <div class="ps-desc">
+              <h4>ตัวอย่าง (Examples)</h4>
+              <p>ให้ตัวอย่าง Input/Output เพื่อช่วยให้ AI เข้าใจรูปแบบที่ต้องการ</p>
+              <div class="ps-example">"ตัวอย่าง: Input: 'แมว' → Output: 'สัตว์เลี้ยงลูกด้วยนม 4 ขา...'"</div>
+            </div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-tag" style="background:rgba(239,68,68,0.2);color:#fca5a5">Constraint</div>
+            <div class="ps-desc">
+              <h4>ข้อจำกัด (Constraints)</h4>
+              <p>บอกสิ่งที่ไม่ต้องการหรือข้อห้ามในการตอบ</p>
+              <div class="ps-example">"อย่าใช้ศัพท์เทคนิค อย่าแนะนำให้ซื้อสินค้า ตอบเป็นภาษาไทยเท่านั้น"</div>
+            </div>
+          </div>
+        </div>
+
+        <h3>ตัวอย่าง Prompt แบบครบโครงสร้าง</h3>
+        <div class="full-prompt-box">
+          <div class="fp-header"><i class="fa-solid fa-wand-magic-sparkles"></i> Full Prompt Example</div>
+          <div class="fp-body">
+            <span class="fp-tag role-tag">[Role]</span> คุณเป็นนักการตลาดดิจิทัลที่มีประสบการณ์ 10 ปี<br/><br/>
+            <span class="fp-tag ctx-tag">[Context]</span> ฉันมีร้านขายกาแฟขนาดเล็กในกรุงเทพฯ มีลูกค้าหลักอายุ 25-35 ปี งบโฆษณา 5,000 บาท/เดือน<br/><br/>
+            <span class="fp-tag task-tag">[Task]</span> ช่วยวางแผนการตลาดบน Social Media สำหรับเดือนหน้า<br/><br/>
+            <span class="fp-tag fmt-tag">[Format]</span> ตอบเป็นตาราง แบ่งตาม Platform (IG, TikTok, Facebook) พร้อมระบุ: ประเภทคอนเทนต์, ความถี่โพสต์, งบที่แนะนำ<br/><br/>
+            <span class="fp-tag con-tag">[Constraint]</span> ใช้ภาษาไทย ไม่ต้องอธิบายทฤษฎี เน้นแผนที่ทำได้จริงทันที
+          </div>
+        </div>
+      </section>
+
+      <!-- 3.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">3.3</span> หลัก 6 ข้อของ Prompt ที่ดี</h2>
+
+        <div class="principle-list">
+          <div class="principle-item">
+            <div class="p-num">1</div>
+            <div class="p-body">
+              <h4><i class="fa-solid fa-crosshairs"></i> ชัดเจน (Clear)</h4>
+              <p>ใช้ภาษาตรงไปตรงมา ไม่คลุมเครือ ระบุสิ่งที่ต้องการอย่างชัดเจน</p>
+              <div class="compare-mini">
+                <div class="mini-bad"><i class="fa-solid fa-xmark"></i> "บอกเกี่ยวกับ AI หน่อย"</div>
+                <div class="mini-good"><i class="fa-solid fa-check"></i> "อธิบายว่า Generative AI แตกต่างจาก Traditional AI อย่างไร ในแง่เทคนิคและการใช้งาน ความยาว 3-4 ประโยค"</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="principle-item">
+            <div class="p-num">2</div>
+            <div class="p-body">
+              <h4><i class="fa-solid fa-circle-info"></i> มีบริบท (Contextual)</h4>
+              <p>ให้ข้อมูลพื้นหลังที่จำเป็น เพื่อให้ AI ตอบได้เหมาะกับสถานการณ์จริง</p>
+              <div class="compare-mini">
+                <div class="mini-bad"><i class="fa-solid fa-xmark"></i> "แปลประโยคนี้"</div>
+                <div class="mini-good"><i class="fa-solid fa-check"></i> "แปลประโยคนี้จากอังกฤษเป็นไทย สำหรับใช้ใน Email ทางธุรกิจ ให้เป็นทางการและสุภาพ: 'We need to reschedule the meeting.'"</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="principle-item">
+            <div class="p-num">3</div>
+            <div class="p-body">
+              <h4><i class="fa-solid fa-ruler"></i> ระบุขอบเขต (Specific)</h4>
+              <p>กำหนดความยาว รูปแบบ จำนวน หรือขอบเขตของคำตอบที่ต้องการ</p>
+              <div class="compare-mini">
+                <div class="mini-bad"><i class="fa-solid fa-xmark"></i> "ช่วยเขียนบทความ"</div>
+                <div class="mini-good"><i class="fa-solid fa-check"></i> "เขียนบทความ 300 คำ หัวข้อ 'AI กับการศึกษาไทย' สำหรับนิตยสาร กลุ่มเป้าหมายคือครูและอาจารย์"</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="principle-item">
+            <div class="p-num">4</div>
+            <div class="p-body">
+              <h4><i class="fa-solid fa-sliders"></i> กำหนด Tone (Tone & Style)</h4>
+              <p>บอกน้ำเสียง สไตล์ และระดับภาษาที่ต้องการ เพื่อให้ตรงกลุ่มเป้าหมาย</p>
+              <div class="tone-chips">
+                <span>🎓 เป็นทางการ</span><span>😊 เป็นกันเอง</span><span>😂 ขำขัน</span>
+                <span>🔬 วิชาการ</span><span>📣 กระตุ้น</span><span>🤝 สร้างแรงบันดาลใจ</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="principle-item">
+            <div class="p-num">5</div>
+            <div class="p-body">
+              <h4><i class="fa-solid fa-rotate"></i> Iterate (ปรับปรุงต่อเนื่อง)</h4>
+              <p>Prompt Engineering เป็นกระบวนการ ทดลอง → ดูผล → ปรับ → ทดลองใหม่</p>
+              <div class="iter-flow">
+                <span class="iter-step">เขียน Prompt</span>
+                <i class="fa-solid fa-arrow-right"></i>
+                <span class="iter-step">ดูผลลัพธ์</span>
+                <i class="fa-solid fa-arrow-right"></i>
+                <span class="iter-step">วิเคราะห์ปัญหา</span>
+                <i class="fa-solid fa-arrow-right"></i>
+                <span class="iter-step iter-highlight">ปรับ Prompt</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="principle-item">
+            <div class="p-num">6</div>
+            <div class="p-body">
+              <h4><i class="fa-solid fa-shield-halved"></i> ระบุข้อห้าม (Negative Constraints)</h4>
+              <p>บอก AI ว่า "ไม่ต้องการอะไร" ช่วยลด Hallucination และคำตอบที่ไม่เกี่ยวข้อง</p>
+              <div class="compare-mini">
+                <div class="mini-good"><i class="fa-solid fa-check"></i> "ตอบเฉพาะข้อมูลที่แน่ใจ ถ้าไม่มั่นใจให้บอกว่าไม่ทราบ อย่าสมมติข้อมูล"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">3.4</span> Role Prompting</h2>
+        <p>
+          การกำหนด <strong>Role</strong> ให้ AI ช่วยปรับโทน ความเชี่ยวชาญ และรูปแบบการตอบให้เหมาะกับงาน
+          เป็นเทคนิคที่ง่ายแต่ได้ผลชัดเจน
+        </p>
+
+        <h3>System Prompt vs User Prompt</h3>
+        <div class="sys-user-box">
+          <div class="su-col sys-col">
+            <div class="su-header"><i class="fa-solid fa-gear"></i> System Prompt</div>
+            <div class="su-body">
+              <p>กำหนดบุคลิก กฎ และพฤติกรรมหลักของ AI ตลอดการสนทนา ผู้ใช้ทั่วไปมักมองไม่เห็น</p>
+              <div class="su-example">
+                "คุณเป็น Customer Service ของร้านอาหาร 'ข้าวต้มป้าแดง' ตอบภาษาไทยเท่านั้น สุภาพและเป็นมิตร ถ้าถามนอกเรื่องอาหารให้ปฏิเสธสุภาพ"
+              </div>
+            </div>
+          </div>
+          <div class="su-col user-col">
+            <div class="su-header"><i class="fa-solid fa-user"></i> User Prompt</div>
+            <div class="su-body">
+              <p>คำถามหรือคำสั่งที่ผู้ใช้พิมพ์ในแต่ละรอบ AI จะตอบโดยอ้างอิงทั้ง System และ User Prompt</p>
+              <div class="su-example">
+                "มีเมนูอะไรบ้างที่ไม่มีผักชี?"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3>ตัวอย่าง Role Prompting ในบริบทต่างๆ</h3>
+        <div class="role-cards">
+          <div class="role-card">
+            <div class="role-icon" style="background:#1d4ed8"><i class="fa-solid fa-user-doctor"></i></div>
+            <h4>แพทย์</h4>
+            <p>"คุณเป็นแพทย์ผู้เชี่ยวชาญด้านโภชนาการ อธิบายด้วยภาษาที่เข้าใจง่าย..."</p>
+          </div>
+          <div class="role-card">
+            <div class="role-icon" style="background:#7c3aed"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h4>ทนายความ</h4>
+            <p>"คุณเป็นทนายความผู้เชี่ยวชาญกฎหมายแรงงานไทย อธิบายสิทธิ์ของลูกจ้าง..."</p>
+          </div>
+          <div class="role-card">
+            <div class="role-icon" style="background:#0f766e"><i class="fa-solid fa-graduation-cap"></i></div>
+            <h4>ครูสอนพิเศษ</h4>
+            <p>"คุณเป็นครูสอนคณิตศาสตร์ ม.4 อธิบายให้เข้าใจง่าย พร้อมตัวอย่าง 3 ข้อ..."</p>
+          </div>
+          <div class="role-card">
+            <div class="role-icon" style="background:#b45309"><i class="fa-solid fa-chart-pie"></i></div>
+            <h4>นักวิเคราะห์</h4>
+            <p>"คุณเป็น Business Analyst วิเคราะห์ข้อมูลต่อไปนี้และสรุปเป็น Insight..."</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">3.5</span> Output Format Control</h2>
+        <p>การควบคุมรูปแบบผลลัพธ์ช่วยให้นำ Output ไปใช้งานต่อได้ทันที ไม่ต้องแก้ไขเพิ่มเติม</p>
+
+        <div class="format-showcase">
+
+          <div class="fmt-item">
+            <div class="fmt-label"><i class="fa-solid fa-table"></i> ตาราง (Table)</div>
+            <div class="fmt-prompt">Prompt: "เปรียบเทียบ ChatGPT, Claude, Gemini ในรูปแบบตาราง Markdown"</div>
+            <div class="fmt-output">
+<pre>| โมเดล   | ผู้พัฒนา  | จุดเด่น          |
+|---------|----------|-----------------|
+| ChatGPT | OpenAI   | ใช้งานง่าย       |
+| Claude  | Anthropic| Context ยาว     |
+| Gemini  | Google   | ค้นข้อมูลได้    |</pre>
+            </div>
+          </div>
+
+          <div class="fmt-item">
+            <div class="fmt-label"><i class="fa-solid fa-code"></i> JSON</div>
+            <div class="fmt-prompt">Prompt: "สร้างข้อมูลนักเรียน 2 คน ในรูปแบบ JSON"</div>
+            <div class="fmt-output">
+<pre>{
+  "students": [
+    {"id": 1, "name": "สมชาย", "gpa": 3.8},
+    {"id": 2, "name": "สมหญิง", "gpa": 3.5}
+  ]
+}</pre>
+            </div>
+          </div>
+
+          <div class="fmt-item">
+            <div class="fmt-label"><i class="fa-solid fa-list-ol"></i> Numbered List</div>
+            <div class="fmt-prompt">Prompt: "แนะนำขั้นตอนการเรียน Python 5 ขั้นตอน เป็น numbered list"</div>
+            <div class="fmt-output">
+              <ol style="padding-left:1.2rem;color:var(--text-muted);font-size:.88rem;line-height:2">
+                <li>เรียนพื้นฐาน Python syntax</li>
+                <li>ฝึก Data Types และ Control Flow</li>
+                <li>เรียน Functions และ OOP</li>
+                <li>ทำ Projects จริง</li>
+                <li>เรียน Library เช่น NumPy, Pandas</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="fmt-item">
+            <div class="fmt-label"><i class="fa-brands fa-markdown"></i> Markdown</div>
+            <div class="fmt-prompt">Prompt: "เขียนรายงานสรุป AI ในรูปแบบ Markdown มีหัวข้อ บทนำ เนื้อหา สรุป"</div>
+            <div class="fmt-output">
+<pre># รายงาน: AI ในปัจจุบัน
+## บทนำ
+AI กำลังเปลี่ยนแปลงโลก...
+## เนื้อหา
+### 1. LLM
+...
+## สรุป
+AI จะมีบทบาทสำคัญ...</pre>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="info-box box-blue" style="margin-top:1.5rem">
+          <div class="box-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <div>
+            <strong>เทคนิค: บอกรูปแบบด้วยตัวอย่าง</strong><br/>
+            แทนที่จะอธิบายรูปแบบยาวๆ ให้ใส่ตัวอย่างรูปแบบที่ต้องการไปเลย เช่น "ตอบในรูปแบบนี้: [หัวข้อ]: [คำอธิบาย]"
+          </div>
+        </div>
+      </section>
+
+      <!-- 3.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">3.6</span> ข้อผิดพลาดที่ควรหลีกเลี่ยง</h2>
+
+        <div class="mistake-list">
+          <div class="mistake-item">
+            <div class="mistake-icon"><i class="fa-solid fa-xmark"></i></div>
+            <div class="mistake-body">
+              <h4>Prompt คลุมเครือเกินไป</h4>
+              <p>การใช้คำถามกว้างๆ ทำให้ AI ตอบได้ทุกทิศทาง ผลลัพธ์ไม่ตรงใจ</p>
+              <div class="mistake-ex bad">"บอกเกี่ยวกับ Machine Learning"</div>
+              <div class="mistake-ex good">"อธิบาย Supervised Learning คืออะไร ด้วยตัวอย่าง 2 ตัวอย่าง ความยาว 100 คำ"</div>
+            </div>
+          </div>
+          <div class="mistake-item">
+            <div class="mistake-icon"><i class="fa-solid fa-xmark"></i></div>
+            <div class="mistake-body">
+              <h4>ขอหลายอย่างในคราวเดียว</h4>
+              <p>Prompt ที่มีหลาย Task ซ้อนกัน ทำให้ AI ทำได้ไม่ครบหรือไม่ดีในทุกส่วน</p>
+              <div class="mistake-ex bad">"เขียนบทความ แปลเป็นอังกฤษ สรุป และทำ Presentation"</div>
+              <div class="mistake-ex good">แบ่งเป็น Prompt แยกกัน ทีละ Task</div>
+            </div>
+          </div>
+          <div class="mistake-item">
+            <div class="mistake-icon"><i class="fa-solid fa-xmark"></i></div>
+            <div class="mistake-body">
+              <h4>ไม่ระบุกลุ่มเป้าหมาย</h4>
+              <p>AI ไม่รู้ว่าควรใช้ระดับภาษาใด เทคนิคหรือทั่วไป เด็กหรือผู้ใหญ่</p>
+              <div class="mistake-ex bad">"อธิบาย Neural Network"</div>
+              <div class="mistake-ex good">"อธิบาย Neural Network ให้นักเรียน ม.5 เข้าใจ โดยไม่ใช้สมการ"</div>
+            </div>
+          </div>
+          <div class="mistake-item">
+            <div class="mistake-icon"><i class="fa-solid fa-xmark"></i></div>
+            <div class="mistake-body">
+              <h4>เชื่อทุกอย่างที่ AI บอก</h4>
+              <p>LLM สามารถ "Hallucinate" — สร้างข้อมูลที่ดูน่าเชื่อถือแต่ผิด ควรตรวจสอบข้อเท็จจริงเสมอ</p>
+              <div class="info-box box-orange" style="margin-top:.75rem">
+                <div class="box-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>ใช้ Prompt: <strong>"ตอบเฉพาะที่แน่ใจ ถ้าไม่มั่นใจให้บอก" </strong>เพื่อลด Hallucination</div>
+              </div>
+            </div>
+          </div>
+          <div class="mistake-item">
+            <div class="mistake-icon"><i class="fa-solid fa-xmark"></i></div>
+            <div class="mistake-body">
+              <h4>ไม่ Iterate</h4>
+              <p>ถ้าผลลัพธ์แรกไม่ดี หลายคนยอมแพ้ แต่ควรปรับ Prompt และลองใหม่ การ Iterate คือกุญแจสำคัญ</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3.7 -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">3.7</span> สรุปและแบบฝึกหัด</h2>
+
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li>Prompt Engineering คือการออกแบบคำสั่งเพื่อดึงประสิทธิภาพสูงสุดจาก AI</li>
+            <li>โครงสร้าง Prompt ที่ดี: Role + Context + Task + Format + Example + Constraint</li>
+            <li>หลัก 6 ข้อ: ชัดเจน, มีบริบท, ระบุขอบเขต, กำหนด Tone, Iterate, ระบุข้อห้าม</li>
+            <li>Role Prompting ช่วยให้ AI ตอบตรงจุดและมีความเชี่ยวชาญในด้านที่ต้องการ</li>
+            <li>ควบคุม Output Format เพื่อได้ผลลัพธ์ที่นำไปใช้ได้ทันที</li>
+            <li>หลีกเลี่ยง Prompt คลุมเครือ, หลาย Task พร้อมกัน, และเชื่อ AI โดยไม่ตรวจสอบ</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item">
+            <div class="ex-num">1</div>
+            <div>
+              <strong>ปรับปรุง Prompt</strong>
+              <p>นำ Prompt แย่ๆ เหล่านี้ไปปรับปรุงให้ดีขึ้น: (1) "แนะนำหนังสือ" (2) "เขียน Email" (3) "อธิบาย AI" แล้วทดสอบกับ ChatGPT หรือ Claude</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">2</div>
+            <div>
+              <strong>Role Prompting ทดลอง</strong>
+              <p>ถามคำถามเดียวกัน "อธิบาย Blockchain" กับ AI โดยกำหนด Role ต่างกัน: (1) ครูสอนเด็ก ป.6 (2) นักลงทุน (3) นักพัฒนาซอฟต์แวร์ เปรียบเทียบความแตกต่าง</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">3</div>
+            <div>
+              <strong>สร้าง System Prompt</strong>
+              <p>ออกแบบ System Prompt สำหรับ AI Chatbot ของธุรกิจที่ตนเองสนใจ (เช่น ร้านค้า, คลินิก, โรงเรียน) กำหนดบุคลิก กฎ และขอบเขตการตอบ</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">4</div>
+            <div>
+              <strong>Output Format Challenge</strong>
+              <p>ใช้ Prompt เดียวให้ AI สร้างข้อมูลในทุกรูปแบบนี้: ตาราง, JSON, Markdown, Bullet points เปรียบเทียบว่ารูปแบบไหนเหมาะกับการใช้งานอะไร</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-nav">
+          <a href="lesson2.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> บทที่ 2: LLMs</a>
+          <a href="index.html#modules" class="btn btn-primary">ดูบทเรียนทั้งหมด <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand"><i class="fa-solid fa-robot"></i><span>Generative AI & Prompt Engineering</span></div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const sections = document.querySelectorAll('.content-section');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+</body>
+</html>
