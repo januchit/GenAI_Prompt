@@ -265,6 +265,8 @@ a { color: inherit; text-decoration: none; }
 .module-info p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem; }
 .module-meta { font-size: 0.8rem; color: var(--text-muted); }
 .module-meta i { margin-right: 0.3rem; }
+.module-card-link { display: flex; text-decoration: none; cursor: pointer; }
+.module-card-link:hover { border-color: var(--primary); box-shadow: 0 8px 30px rgba(99,102,241,0.2); }
 
 /* ===== TOOLS ===== */
 .tools-grid {

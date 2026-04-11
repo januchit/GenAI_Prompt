@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 1: Introduction to Generative AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- Lesson Hero -->
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">01</span> Introduction</div>
+      <h1>Introduction to Generative AI</h1>
+      <p class="lesson-desc">ทำความเข้าใจพื้นฐานของ Generative AI ประวัติความเป็นมา หลักการทำงาน และการประยุกต์ใช้งานในโลกจริง</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับเริ่มต้น</span>
+        <span><i class="fa-solid fa-list-check"></i> 5 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+
+    <!-- Sidebar TOC -->
+    <aside class="toc-sidebar" id="tocSidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">1.1 AI คืออะไร?</a></li>
+        <li><a href="#sec2" class="toc-link">1.2 ประวัติและพัฒนาการของ AI</a></li>
+        <li><a href="#sec3" class="toc-link">1.3 Generative AI คืออะไร?</a></li>
+        <li><a href="#sec4" class="toc-link">1.4 ประเภทของ Generative AI</a></li>
+        <li><a href="#sec5" class="toc-link">1.5 Use Cases ในอุตสาหกรรม</a></li>
+        <li><a href="#sec6" class="toc-link">1.6 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lesson-content">
+
+      <!-- Section 1.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">1.1</span> AI คืออะไร?</h2>
+
+        <p>
+          <strong>ปัญญาประดิษฐ์ (Artificial Intelligence: AI)</strong> หมายถึง ระบบคอมพิวเตอร์ที่ถูกออกแบบให้สามารถ
+          ทำงานที่ต้องใช้ความฉลาดของมนุษย์ได้ เช่น การเรียนรู้ การใช้เหตุผล การแก้ปัญหา และการเข้าใจภาษา
+        </p>
+
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <div>
+            <strong>นิยามของ AI</strong><br/>
+            "ความสามารถของเครื่องจักรในการแสดงพฤติกรรมที่มีลักษณะคล้ายกับความฉลาดของมนุษย์" — John McCarthy (1956)
+          </div>
+        </div>
+
+        <h3>ประเภทของ AI</h3>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-microchip"></i></div>
+            <h4>Narrow AI (ANI)</h4>
+            <p>AI ที่เชี่ยวชาญในงานเฉพาะด้าน เช่น การแนะนำสินค้า ตรวจจับใบหน้า แปลภาษา ปัจจุบันใช้งานอยู่ทั่วไป</p>
+            <span class="type-label current">ปัจจุบัน</span>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-brain"></i></div>
+            <h4>General AI (AGI)</h4>
+            <p>AI ที่มีความฉลาดเทียบเท่ามนุษย์ สามารถเรียนรู้และทำงานได้หลากหลาย ยังอยู่ในขั้นวิจัย</p>
+            <span class="type-label research">วิจัย</span>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-infinity"></i></div>
+            <h4>Super AI (ASI)</h4>
+            <p>AI ที่มีความฉลาดเหนือมนุษย์ในทุกด้าน เป็นเพียงแนวคิดทางทฤษฎีในอนาคต</p>
+            <span class="type-label future">อนาคต</span>
+          </div>
+        </div>
+
+        <h3>AI, Machine Learning และ Deep Learning</h3>
+        <div class="nested-diagram">
+          <div class="nest-outer">
+            <span class="nest-label">Artificial Intelligence</span>
+            <div class="nest-inner">
+              <span class="nest-label">Machine Learning</span>
+              <div class="nest-innermost">
+                <span class="nest-label">Deep Learning</span>
+                <div class="nest-core">
+                  <span>Generative AI</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="content-list">
+          <li><strong>Artificial Intelligence (AI)</strong> — ระบบที่จำลองความฉลาดของมนุษย์</li>
+          <li><strong>Machine Learning (ML)</strong> — AI ที่เรียนรู้จากข้อมูลโดยไม่ต้องเขียนกฎเอง</li>
+          <li><strong>Deep Learning (DL)</strong> — ML ที่ใช้ Neural Network หลายชั้น เรียนรู้ Feature ได้เอง</li>
+          <li><strong>Generative AI</strong> — Deep Learning ที่สามารถ <em>สร้าง</em> ข้อมูลใหม่ได้</li>
+        </ul>
+      </section>
+
+      <!-- Section 1.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">1.2</span> ประวัติและพัฒนาการของ AI</h2>
+
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1950</div>
+            <div class="tl-content">
+              <h4>Turing Test</h4>
+              <p>Alan Turing เสนอการทดสอบเพื่อวัดความฉลาดของเครื่องจักรในบทความ "Computing Machinery and Intelligence"</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1956</div>
+            <div class="tl-content">
+              <h4>กำเนิด AI</h4>
+              <p>John McCarthy บัญญัติคำว่า "Artificial Intelligence" และจัด Dartmouth Conference ซึ่งถือเป็นจุดกำเนิดของสาขา AI</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1980s</div>
+            <div class="tl-content">
+              <h4>Expert Systems</h4>
+              <p>ระบบ AI ที่เลียนแบบการตัดสินใจของผู้เชี่ยวชาญ ใช้ในวงการแพทย์และอุตสาหกรรม</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1997</div>
+            <div class="tl-content">
+              <h4>Deep Blue ชนะ Chess</h4>
+              <p>IBM Deep Blue เอาชนะแชมป์หมากรุกโลก Garry Kasparov เป็นครั้งแรกในประวัติศาสตร์</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2012</div>
+            <div class="tl-content">
+              <h4>Deep Learning ยุคใหม่</h4>
+              <p>AlexNet ชนะ ImageNet Competition ด้วย CNN จุดเริ่มต้นของยุค Deep Learning สมัยใหม่</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2017</div>
+            <div class="tl-content">
+              <h4>Transformer Architecture</h4>
+              <p>Google Brain เผยแพร่ "Attention is All You Need" นำเสนอ Transformer ที่เป็นรากฐานของ LLM ทุกตัวในปัจจุบัน</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2020</div>
+            <div class="tl-content">
+              <h4>GPT-3</h4>
+              <p>OpenAI เปิดตัว GPT-3 โมเดลภาษาขนาด 175B parameters สร้างความตื่นตะลึงให้วงการ AI ทั่วโลก</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2022</div>
+            <div class="tl-content">
+              <h4>ChatGPT & Stable Diffusion</h4>
+              <p>ChatGPT มีผู้ใช้ 1 ล้านคนใน 5 วัน สร้างกระแส Generative AI ทั่วโลก Stable Diffusion เปิด Text-to-Image</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot tl-dot-active"></div>
+            <div class="tl-year">2024–25</div>
+            <div class="tl-content">
+              <h4>AI Agents & Multimodal AI</h4>
+              <p>GPT-4o, Claude 3.5/4, Gemini 2.0 — AI เข้าใจทั้งข้อความ ภาพ เสียง และวิดีโอ AI Agents ทำงานอัตโนมัติได้</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">1.3</span> Generative AI คืออะไร?</h2>
+
+        <p>
+          <strong>Generative AI</strong> คือ AI ที่สามารถ <em>สร้างเนื้อหาใหม่</em> ได้ ไม่ว่าจะเป็นข้อความ รูปภาพ เสียง วิดีโอ หรือโค้ด
+          โดยเรียนรู้รูปแบบจากข้อมูลจำนวนมหาศาล แล้วนำมาสร้างสิ่งใหม่ที่ไม่เคยมีมาก่อน
+        </p>
+
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-magnifying-glass"></i> Discriminative AI (แบบเดิม)</h4>
+            <ul>
+              <li>วิเคราะห์และจำแนกข้อมูลที่มีอยู่</li>
+              <li>ตอบว่า "นี่คืออะไร?"</li>
+              <li>เช่น: ตรวจจับแมว/สุนัข, ตรวจ spam</li>
+              <li>Output: Label / Class</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-wand-magic-sparkles"></i> Generative AI (ใหม่)</h4>
+            <ul>
+              <li>สร้างข้อมูลใหม่ที่ยังไม่เคยมี</li>
+              <li>ตอบว่า "สร้างสิ่งนี้ให้ฉันได้ไหม?"</li>
+              <li>เช่น: เขียนบทความ, วาดภาพ, แต่งเพลง</li>
+              <li>Output: ข้อความ / ภาพ / เสียง / โค้ด</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>หลักการทำงานของ Generative AI</h3>
+        <div class="steps-flow">
+          <div class="step-box">
+            <div class="step-num">1</div>
+            <div class="step-icon"><i class="fa-solid fa-database"></i></div>
+            <h4>เรียนรู้จากข้อมูล</h4>
+            <p>ฝึกด้วยข้อมูลขนาดใหญ่มหาศาล (Text, Image, Code)</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">2</div>
+            <div class="step-icon"><i class="fa-solid fa-chart-network"></i></div>
+            <h4>เรียนรู้รูปแบบ</h4>
+            <p>Neural Network จดจำ Pattern ความสัมพันธ์ของข้อมูล</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">3</div>
+            <div class="step-icon"><i class="fa-solid fa-comment"></i></div>
+            <h4>รับ Prompt</h4>
+            <p>ผู้ใช้ส่งคำสั่งหรือข้อมูลเพื่อชี้นำการสร้าง</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">4</div>
+            <div class="step-icon"><i class="fa-solid fa-sparkles"></i></div>
+            <h4>สร้างเนื้อหาใหม่</h4>
+            <p>AI สร้าง Output ใหม่ที่ไม่เคยมีมาก่อน</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">1.4</span> ประเภทของ Generative AI</h2>
+
+        <div class="gen-types">
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+              <i class="fa-solid fa-file-lines"></i>
+            </div>
+            <h4>Text Generation</h4>
+            <p>สร้างข้อความ บทความ สรุป แปลภาษา ตอบคำถาม เขียนโค้ด</p>
+            <div class="gen-examples">
+              <span>ChatGPT</span><span>Claude</span><span>Gemini</span><span>LLaMA</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">
+              <i class="fa-solid fa-image"></i>
+            </div>
+            <h4>Image Generation</h4>
+            <p>สร้างภาพจากข้อความ แก้ไขภาพ Style Transfer สร้างงานศิลปะ</p>
+            <div class="gen-examples">
+              <span>DALL-E 3</span><span>Midjourney</span><span>Stable Diffusion</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+              <i class="fa-solid fa-music"></i>
+            </div>
+            <h4>Audio Generation</h4>
+            <p>สร้างเพลง สังเคราะห์เสียง Text-to-Speech โคลนเสียง</p>
+            <div class="gen-examples">
+              <span>Suno</span><span>ElevenLabs</span><span>MusicGen</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#10b981,#06b6d4)">
+              <i class="fa-solid fa-video"></i>
+            </div>
+            <h4>Video Generation</h4>
+            <p>สร้างวิดีโอจากข้อความหรือภาพ Deepfake Animation</p>
+            <div class="gen-examples">
+              <span>Sora</span><span>Runway</span><span>Pika</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">
+              <i class="fa-solid fa-code"></i>
+            </div>
+            <h4>Code Generation</h4>
+            <p>เขียนโค้ด Debug แนะนำโค้ด สร้าง Unit Test อธิบายโค้ด</p>
+            <div class="gen-examples">
+              <span>GitHub Copilot</span><span>Cursor</span><span>CodeWhisperer</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
+              <i class="fa-solid fa-cube"></i>
+            </div>
+            <h4>3D & Multimodal</h4>
+            <p>สร้าง 3D Model รับข้อมูลหลายรูปแบบพร้อมกัน (ภาพ+ข้อความ)</p>
+            <div class="gen-examples">
+              <span>Point-E</span><span>GPT-4o</span><span>Gemini</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">1.5</span> Use Cases ในอุตสาหกรรม</h2>
+
+        <div class="industry-grid">
+          <div class="industry-card">
+            <div class="ind-header" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <h4>การศึกษา</h4>
+            </div>
+            <ul>
+              <li>สร้างเนื้อหาการสอนอัตโนมัติ</li>
+              <li>Tutoring Bot ส่วนตัว</li>
+              <li>ประเมินผลและให้ Feedback</li>
+              <li>แปลเนื้อหาข้ามภาษา</li>
+            </ul>
+          </div>
+          <div class="industry-card">
+            <div class="ind-header" style="background:linear-gradient(135deg,#059669,#10b981)">
+              <i class="fa-solid fa-hospital"></i>
+              <h4>การแพทย์</h4>
+            </div>
+            <ul>
+              <li>วิเคราะห์ภาพ X-ray / MRI</li>
+              <li>สรุปบันทึกผู้ป่วย</li>
+              <li>ค้นหายาและการรักษา</li>
+              <li>ช่วยเขียนรายงานทางการแพทย์</li>
+            </ul>
+          </div>
+          <div class="industry-card">
+            <div class="ind-header" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)">
+              <i class="fa-solid fa-chart-line"></i>
+              <h4>การเงินและธุรกิจ</h4>
+            </div>
+            <ul>
+              <li>วิเคราะห์รายงานการเงิน</li>
+              <li>Chatbot บริการลูกค้า</li>
+              <li>ตรวจจับการฉ้อโกง</li>
+              <li>สร้างรายงานอัตโนมัติ</li>
+            </ul>
+          </div>
+          <div class="industry-card">
+            <div class="ind-header" style="background:linear-gradient(135deg,#b45309,#f59e0b)">
+              <i class="fa-solid fa-palette"></i>
+              <h4>สื่อและความบันเทิง</h4>
+            </div>
+            <ul>
+              <li>เขียนบทภาพยนตร์ / โฆษณา</li>
+              <li>สร้าง Artwork ดิจิทัล</li>
+              <li>แต่งเพลงและเสียงประกอบ</li>
+              <li>สร้าง Avatar และ NPC ใน Game</li>
+            </ul>
+          </div>
+          <div class="industry-card">
+            <div class="ind-header" style="background:linear-gradient(135deg,#be185d,#ec4899)">
+              <i class="fa-solid fa-code"></i>
+              <h4>ซอฟต์แวร์</h4>
+            </div>
+            <ul>
+              <li>เขียนโค้ดและ Debug อัตโนมัติ</li>
+              <li>สร้างเอกสาร (Documentation)</li>
+              <li>Code Review อัตโนมัติ</li>
+              <li>แปลงโค้ดระหว่างภาษา</li>
+            </ul>
+          </div>
+          <div class="industry-card">
+            <div class="ind-header" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">
+              <i class="fa-solid fa-industry"></i>
+              <h4>อุตสาหกรรมการผลิต</h4>
+            </div>
+            <ul>
+              <li>ออกแบบชิ้นส่วนด้วย AI</li>
+              <li>ทำนายการบำรุงรักษา</li>
+              <li>ตรวจสอบคุณภาพด้วย Vision AI</li>
+              <li>ปรับกระบวนการผลิต</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-box box-green" style="margin-top:2rem">
+          <div class="box-icon"><i class="fa-solid fa-chart-bar"></i></div>
+          <div>
+            <strong>ตลาด Generative AI ทั่วโลก</strong><br/>
+            มูลค่าตลาดในปี 2024 อยู่ที่ประมาณ <strong>67 พันล้านดอลลาร์</strong> และคาดว่าจะเติบโตเป็น
+            <strong>1.3 ล้านล้านดอลลาร์</strong> ภายในปี 2032 (CAGR ~46%)
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">1.6</span> สรุปและแบบฝึกหัด</h2>
+
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li>AI คือระบบที่จำลองความฉลาดมนุษย์ แบ่งเป็น Narrow AI, General AI, Super AI</li>
+            <li>Deep Learning เป็นรากฐานของ Generative AI ที่ใช้ Neural Network หลายชั้น</li>
+            <li>Generative AI <em>สร้าง</em> ข้อมูลใหม่ได้ ต่างจาก Discriminative AI ที่จำแนกข้อมูลที่มีอยู่</li>
+            <li>Transformer (2017) คือสถาปัตยกรรมที่เปลี่ยนโลก เป็นพื้นฐานของ GPT, Claude, Gemini</li>
+            <li>Generative AI ประยุกต์ใช้ได้ในทุกอุตสาหกรรม: การศึกษา, การแพทย์, ธุรกิจ, ซอฟต์แวร์</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item">
+            <div class="ex-num">1</div>
+            <div>
+              <strong>ค้นคว้าและเปรียบเทียบ</strong>
+              <p>เปรียบเทียบ ChatGPT, Claude และ Gemini ในด้าน: ผู้พัฒนา, โมเดล, ความสามารถ และข้อจำกัด สร้างตารางเปรียบเทียบ</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">2</div>
+            <div>
+              <strong>ทดลองใช้งาน</strong>
+              <p>เลือก Generative AI 1 ตัว แล้วทดลองถามคำถาม 5 ข้อ สังเกตว่า AI ตอบได้ถูกต้องและมีประโยชน์ในระดับใด</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">3</div>
+            <div>
+              <strong>วิเคราะห์ Use Case</strong>
+              <p>เลือกอุตสาหกรรมที่สนใจ แล้วเสนอ Use Case ที่สามารถนำ Generative AI มาช่วยได้ พร้อมอธิบายประโยชน์และความเสี่ยง</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">4</div>
+            <div>
+              <strong>ถกเถียง</strong>
+              <p>"Generative AI จะช่วยเพิ่มงานหรือทำให้คนตกงาน?" เขียนเรียงความสั้นๆ 1 หน้ากระดาษแสดงความคิดเห็น</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nav Buttons -->
+        <div class="lesson-nav">
+          <div></div>
+          <a href="lesson2.html" class="btn btn-primary">บทที่ 2: Large Language Models <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i class="fa-solid fa-robot"></i>
+          <span>Generative AI & Prompt Engineering</span>
+        </div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // TOC active highlight
+    const sections = document.querySelectorAll('.content-section');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      tocLinks.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+</body>
+</html>
