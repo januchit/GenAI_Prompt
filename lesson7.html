@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 7: AI for Software Development</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand"><a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a></div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="tools.html">AI Tools</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">07</span> Code AI</div>
+      <h1>AI for Software Development</h1>
+      <p class="lesson-desc">เรียนรู้การใช้ GitHub Copilot, Cursor และ AI Tools เพื่อเขียนโค้ด, Debug, สร้าง Unit Test, Code Review และเพิ่มประสิทธิภาพการพัฒนาซอฟต์แวร์</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับกลาง</span>
+        <span><i class="fa-solid fa-list-check"></i> 7 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+    <aside class="toc-sidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">7.1 AI กับการพัฒนาซอฟต์แวร์</a></li>
+        <li><a href="#sec2" class="toc-link">7.2 GitHub Copilot</a></li>
+        <li><a href="#sec3" class="toc-link">7.3 Cursor AI Editor</a></li>
+        <li><a href="#sec4" class="toc-link">7.4 Code Generation</a></li>
+        <li><a href="#sec5" class="toc-link">7.5 Debugging ด้วย AI</a></li>
+        <li><a href="#sec6" class="toc-link">7.6 Unit Testing & Code Review</a></li>
+        <li><a href="#sec7" class="toc-link">7.7 Prompt Patterns สำหรับ Coding</a></li>
+        <li><a href="#sec8" class="toc-link">7.8 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <main class="lesson-content">
+
+      <!-- 7.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">7.1</span> AI กับการพัฒนาซอฟต์แวร์</h2>
+        <p>AI กำลังเปลี่ยน Software Development อย่างรุนแรง จาก GitHub รายงานว่าผู้ใช้ Copilot เขียนโค้ด <strong>เร็วขึ้น 55%</strong> และรู้สึก "มีส่วนร่วม" กับงานมากขึ้น</p>
+
+        <div class="dev-lifecycle">
+          <h3>AI ช่วยได้ในทุกขั้นตอนของ SDLC</h3>
+          <div class="dlc-steps">
+            <div class="dlc-step"><div class="dlc-icon" style="background:#6366f1"><i class="fa-solid fa-lightbulb"></i></div><div class="dlc-label">Planning</div><p>วิเคราะห์ Requirements, สร้าง User Stories, ประเมิน Effort</p></div>
+            <div class="dlc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="dlc-step"><div class="dlc-icon" style="background:#8b5cf6"><i class="fa-solid fa-drafting-compass"></i></div><div class="dlc-label">Design</div><p>สร้าง Architecture, ERD, API Design, UI/UX Wireframe</p></div>
+            <div class="dlc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="dlc-step"><div class="dlc-icon" style="background:#06b6d4"><i class="fa-solid fa-code"></i></div><div class="dlc-label">Coding</div><p>Auto-complete, Generate Function, Refactor, Convert ภาษา</p></div>
+            <div class="dlc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="dlc-step"><div class="dlc-icon" style="background:#10b981"><i class="fa-solid fa-vial"></i></div><div class="dlc-label">Testing</div><p>สร้าง Unit Test, Integration Test, Test Case จาก Requirements</p></div>
+            <div class="dlc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="dlc-step"><div class="dlc-icon" style="background:#f59e0b"><i class="fa-solid fa-bug"></i></div><div class="dlc-label">Debug</div><p>วิเคราะห์ Error, หา Root Cause, เสนอวิธีแก้ไข</p></div>
+            <div class="dlc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="dlc-step"><div class="dlc-icon" style="background:#ef4444"><i class="fa-solid fa-file-lines"></i></div><div class="dlc-label">Docs</div><p>สร้าง README, API Docs, Comment, Changelog</p></div>
+          </div>
+        </div>
+
+        <div class="info-box box-green">
+          <div class="box-icon"><i class="fa-solid fa-chart-bar"></i></div>
+          <div><strong>ข้อมูลจาก GitHub (2024)</strong><br/>
+          นักพัฒนาที่ใช้ Copilot เสร็จงาน <strong>เร็วขึ้น 55%</strong> | โค้ดที่ถูก Accept 46% มาจาก AI แนะนำ | 75% รู้สึกพอใจกับงานมากขึ้น</div>
+        </div>
+      </section>
+
+      <!-- 7.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">7.2</span> GitHub Copilot</h2>
+        <div class="tool-highlight" style="border-color:#555">
+          <div class="th-logo" style="background:#1a1a2e"><i class="fa-brands fa-github"></i></div>
+          <div class="th-info">
+            <h3>GitHub Copilot <a href="https://github.com/features/copilot" target="_blank" class="tool-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> github.com/copilot</a></h3>
+            <p>AI Coding Assistant จาก GitHub + OpenAI รองรับ VS Code, JetBrains, Neovim, Visual Studio</p>
+          </div>
+        </div>
+
+        <h3>ความสามารถหลัก</h3>
+        <div class="copilot-features">
+          <div class="cf-card">
+            <div class="cf-icon"><i class="fa-solid fa-keyboard"></i></div>
+            <h4>Inline Completion</h4>
+            <p>แนะนำโค้ดบรรทัดหรือหลายบรรทัดแบบ Real-time ขณะพิมพ์ กด Tab เพื่อ Accept</p>
+          </div>
+          <div class="cf-card">
+            <div class="cf-icon"><i class="fa-solid fa-comments"></i></div>
+            <h4>Copilot Chat</h4>
+            <p>คุยกับ AI เกี่ยวกับโค้ดได้ใน Sidebar ถามคำถาม, ขอ Explain, หรือขอ Fix</p>
+          </div>
+          <div class="cf-card">
+            <div class="cf-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <h4>Inline Chat</h4>
+            <p>กด Ctrl+I ใน Editor เพื่อสั่ง AI แก้ไขโค้ดที่เลือกไว้โดยตรง</p>
+          </div>
+          <div class="cf-card">
+            <div class="cf-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+            <h4>Workspace Agent</h4>
+            <p>ให้ AI อ่านทั้ง Project แล้วตอบคำถามเกี่ยวกับ Codebase ทั้งหมด</p>
+          </div>
+        </div>
+
+        <h3>Slash Commands ใน Copilot Chat</h3>
+        <div class="slash-cmds">
+          <div class="sc-cmd"><code>/explain</code><span>อธิบายโค้ดที่เลือก</span></div>
+          <div class="sc-cmd"><code>/fix</code><span>แก้ไข Bug ในโค้ดที่เลือก</span></div>
+          <div class="sc-cmd"><code>/tests</code><span>สร้าง Unit Tests</span></div>
+          <div class="sc-cmd"><code>/doc</code><span>สร้าง Documentation Comment</span></div>
+          <div class="sc-cmd"><code>/optimize</code><span>ปรับปรุงประสิทธิภาพโค้ด</span></div>
+          <div class="sc-cmd"><code>/new</code><span>สร้างไฟล์หรือ Project ใหม่</span></div>
+        </div>
+
+        <h3>เทคนิคใช้ Copilot ให้ได้ผลดีสุด</h3>
+        <ul class="content-list">
+          <li><strong>เขียน Comment ก่อน</strong> — พิมพ์ <code># Function to calculate compound interest</code> แล้ว Enter Copilot จะสร้างโค้ดให้</li>
+          <li><strong>ตั้งชื่อ Function ชัดเจน</strong> — <code>def validate_thai_national_id(id_number):</code> ดีกว่า <code>def check(x):</code></li>
+          <li><strong>ให้ Context ด้วยโค้ดที่มีอยู่</strong> — Copilot ดู Context ของไฟล์ทั้งหมด เปิดไฟล์ที่เกี่ยวข้องไว้ด้วย</li>
+          <li><strong>ใช้ Multiple Suggestions</strong> — กด Alt+[ และ Alt+] เพื่อเลือก Suggestion ที่ดีที่สุด</li>
+        </ul>
+      </section>
+
+      <!-- 7.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">7.3</span> Cursor AI Editor</h2>
+        <div class="tool-highlight" style="border-color:#444">
+          <div class="th-logo" style="background:#000"><i class="fa-solid fa-terminal"></i></div>
+          <div class="th-info">
+            <h3>Cursor <a href="https://cursor.sh" target="_blank" class="tool-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> cursor.sh</a></h3>
+            <p>Code Editor ที่ built-in AI (based on VS Code) ใช้ Claude + GPT-4 แก้ไขโค้ดทั้งไฟล์ได้ในคำสั่งเดียว</p>
+          </div>
+        </div>
+
+        <h3>ฟีเจอร์เด่นที่แตกต่างจาก Copilot</h3>
+        <div class="cursor-features">
+          <div class="cuf-item">
+            <div class="cuf-tag">Composer</div>
+            <p>สั่ง AI สร้างหรือแก้ไขโค้ดข้ามหลายไฟล์พร้อมกันในคำสั่งเดียว เช่น "สร้าง REST API สำหรับ User Management"</p>
+          </div>
+          <div class="cuf-item">
+            <div class="cuf-tag">Chat with Codebase</div>
+            <p>AI อ่านทั้ง Codebase แล้วตอบคำถามเชิงลึก เช่น "ฟังก์ชันนี้ถูกเรียกจากที่ไหนบ้าง?"</p>
+          </div>
+          <div class="cuf-item">
+            <div class="cuf-tag">@ References</div>
+            <p>อ้างอิงไฟล์, โฟลเดอร์, หรือ Documentation เช่น <code>@file.py</code>, <code>@docs</code>, <code>@web</code></p>
+          </div>
+          <div class="cuf-item">
+            <div class="cuf-tag">Apply Changes</div>
+            <p>AI เสนอการแก้ไขแบบ Diff แล้วคุณ Accept/Reject ได้ทีละส่วน ควบคุมได้ดี</p>
+          </div>
+        </div>
+
+        <h3>Cursor vs GitHub Copilot</h3>
+        <div class="model-table-wrap">
+          <table class="model-table">
+            <thead><tr><th>Feature</th><th>GitHub Copilot</th><th>Cursor</th></tr></thead>
+            <tbody>
+              <tr><td>Inline Completion</td><td>✅ ดีเยี่ยม</td><td>✅ ดีเยี่ยม</td></tr>
+              <tr><td>Multi-file Editing</td><td>⚠️ จำกัด</td><td>✅ Composer ดีมาก</td></tr>
+              <tr><td>Codebase Understanding</td><td>✅ Workspace Agent</td><td>✅ ดีมาก</td></tr>
+              <tr><td>Model Choice</td><td>GPT-4o / Claude</td><td>GPT-4o / Claude / Gemini</td></tr>
+              <tr><td>ราคา</td><td>$10/เดือน</td><td>$20/เดือน (Pro)</td></tr>
+              <tr><td>IDE</td><td>ทุก IDE ยอดนิยม</td><td>Cursor-only (VS Code fork)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">7.4</span> Code Generation</h2>
+        <p>การใช้ AI สร้างโค้ดต้องมีทักษะในการ <em>"บอกความต้องการให้ชัดเจน"</em> เพื่อให้ได้โค้ดที่ใช้งานได้จริง</p>
+
+        <h3>ตัวอย่าง: สร้างฟังก์ชันจาก Natural Language</h3>
+        <div class="code-block">
+          <div class="cb-header"><span><i class="fa-solid fa-comment"></i> Prompt</span></div>
+          <pre class="cb-code" style="color:#e2e8f0">สร้างฟังก์ชัน Python สำหรับตรวจสอบความถูกต้องของเลขบัตรประชาชนไทย 13 หลัก
+โดยใช้ Algorithm ตรวจสอบ Checksum ตามมาตรฐาน กรมการปกครอง
+คืนค่า True/False พร้อม Error Message ถ้าไม่ถูกต้อง</pre>
+        </div>
+        <div class="code-block">
+          <div class="cb-header"><span><i class="fa-brands fa-python"></i> Python — AI Generated</span></div>
+          <pre class="cb-code"><span class="c-keyword">def</span> validate_thai_national_id(id_number: str) -> tuple[bool, str]:
+    <span class="c-string">"""
+    ตรวจสอบความถูกต้องของเลขบัตรประชาชนไทย 13 หลัก
+    Returns: (is_valid: bool, message: str)
+    """</span>
+    <span class="c-comment"># ลบช่องว่างและขีดกลาง</span>
+    id_clean = id_number.replace(<span class="c-string">"-"</span>, <span class="c-string">""</span>).replace(<span class="c-string">" "</span>, <span class="c-string">""</span>)
+
+    <span class="c-keyword">if</span> <span class="c-keyword">not</span> id_clean.isdigit():
+        <span class="c-keyword">return</span> <span class="c-bool">False</span>, <span class="c-string">"เลขบัตรต้องเป็นตัวเลขเท่านั้น"</span>
+
+    <span class="c-keyword">if</span> len(id_clean) != <span class="c-num">13</span>:
+        <span class="c-keyword">return</span> <span class="c-bool">False</span>, <span class="c-string">f"ต้องมี 13 หลัก (ได้รับ {len(id_clean)} หลัก)"</span>
+
+    <span class="c-comment"># คำนวณ Checksum</span>
+    total = sum(
+        int(id_clean[i]) * (<span class="c-num">13</span> - i)
+        <span class="c-keyword">for</span> i <span class="c-keyword">in</span> range(<span class="c-num">12</span>)
+    )
+    checksum = (<span class="c-num">11</span> - (total % <span class="c-num">11</span>)) % <span class="c-num">10</span>
+
+    <span class="c-keyword">if</span> checksum != int(id_clean[<span class="c-num">12</span>]):
+        <span class="c-keyword">return</span> <span class="c-bool">False</span>, <span class="c-string">"Checksum ไม่ถูกต้อง เลขบัตรไม่ใช่ของจริง"</span>
+
+    <span class="c-keyword">return</span> <span class="c-bool">True</span>, <span class="c-string">"เลขบัตรประชาชนถูกต้อง"</span></pre>
+        </div>
+
+        <h3>เทคนิค Code Generation ขั้นสูง</h3>
+        <div class="codegen-tips">
+          <div class="cgt-item"><div class="cgt-icon"><i class="fa-solid fa-layer-group"></i></div><div><h4>บอก Tech Stack ให้ชัด</h4><p>"สร้าง REST API ด้วย FastAPI + SQLAlchemy + PostgreSQL รองรับ JWT Authentication"</p></div></div>
+          <div class="cgt-item"><div class="cgt-icon"><i class="fa-solid fa-shield"></i></div><div><h4>ระบุ Edge Cases</h4><p>"รองรับ Input ว่าง, ค่า null, และตัวเลขติดลบด้วย พร้อม Error Handling"</p></div></div>
+          <div class="cgt-item"><div class="cgt-icon"><i class="fa-solid fa-rotate"></i></div><div><h4>ขอ Refactor</h4><p>"Refactor โค้ดนี้ให้ใช้ Pattern Repository, เพิ่ม Type Hints, และลด Duplication"</p></div></div>
+          <div class="cgt-item"><div class="cgt-icon"><i class="fa-solid fa-exchange-alt"></i></div><div><h4>แปลงภาษา</h4><p>"แปลง JavaScript function นี้เป็น Python โดยยังคง Logic เดิม และเพิ่ม Docstring"</p></div></div>
+        </div>
+      </section>
+
+      <!-- 7.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">7.5</span> Debugging ด้วย AI</h2>
+        <p>AI ช่วย Debug ได้อย่างมีประสิทธิภาพ โดยวิเคราะห์ Error Message, Stack Trace และ Context ของโค้ด</p>
+
+        <h3>วิธี Debug ที่ได้ผลดีสุด</h3>
+        <div class="debug-steps">
+          <div class="ds-step">
+            <div class="ds-num">1</div>
+            <div class="ds-body">
+              <h4>แชร์ Error Message ครบถ้วน</h4>
+              <div class="code-block" style="margin:.5rem 0">
+                <div class="cb-header"><span>Prompt Template</span></div>
+                <pre class="cb-code" style="font-size:.8rem">ฉันพบ Error ต่อไปนี้:
+[วางตัว Error Message / Stack Trace ทั้งหมด]
+
+โค้ดที่เกี่ยวข้อง:
+[วางโค้ดที่ Error]
+
+สิ่งที่ฉันพยายามทำ: [อธิบาย]
+ช่วยวิเคราะห์สาเหตุและวิธีแก้ไข</pre>
+              </div>
+            </div>
+          </div>
+          <div class="ds-step">
+            <div class="ds-num">2</div>
+            <div class="ds-body">
+              <h4>บอก Environment</h4>
+              <p>ระบุ Python version, Library version, OS เพราะบาง Bug เกิดจาก Version Conflict</p>
+            </div>
+          </div>
+          <div class="ds-step">
+            <div class="ds-num">3</div>
+            <div class="ds-body">
+              <h4>ให้ AI อธิบายก่อน Fix</h4>
+              <p>ขอให้ AI "อธิบายว่าทำไมถึง Error ก่อน แล้วค่อยแก้" จะช่วยให้คุณเข้าใจและเรียนรู้ด้วย</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>ตัวอย่าง Debug Session</h3>
+        <div class="prompt-compare-block">
+          <div class="pcb-label"><i class="fa-solid fa-bug" style="color:#f87171"></i> Error ที่พบ</div>
+          <div class="pcb-prompt"><code style="color:#f87171">KeyError: 'user_id'
+Traceback: line 45, in get_user_data
+    return data['user_id']</code></div>
+          <div class="pcb-response-label"><i class="fa-solid fa-robot"></i> AI วิเคราะห์และแก้ไข</div>
+          <div class="pcb-response">
+            <strong>สาเหตุ:</strong> Dictionary `data` ไม่มี key 'user_id' เกิดจาก API Response มี field ชื่อต่างกัน<br/><br/>
+            <strong>วิธีแก้:</strong><br/>
+            <code style="color:#7dd3fc">
+            # ใช้ .get() พร้อม default value<br/>
+            user_id = data.get('user_id') or data.get('id') or data.get('userId')<br/>
+            if not user_id:<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;raise ValueError(f"ไม่พบ user_id ใน response: {list(data.keys())}")
+            </code>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">7.6</span> Unit Testing & Code Review</h2>
+
+        <h3>สร้าง Unit Tests อัตโนมัติ</h3>
+        <div class="code-block">
+          <div class="cb-header"><span><i class="fa-solid fa-comment"></i> Prompt</span></div>
+          <pre class="cb-code" style="color:#e2e8f0">สร้าง Unit Tests สำหรับฟังก์ชัน validate_thai_national_id() ด้วย pytest
+ครอบคลุม: Happy Path, Invalid Format, Wrong Length, Wrong Checksum, Edge Cases</pre>
+        </div>
+        <div class="code-block">
+          <div class="cb-header"><span><i class="fa-brands fa-python"></i> Python — pytest Generated</span></div>
+          <pre class="cb-code"><span class="c-keyword">import</span> pytest
+<span class="c-keyword">from</span> validator <span class="c-keyword">import</span> validate_thai_national_id
+
+<span class="c-keyword">class</span> TestThaiNationalId:
+
+    <span class="c-keyword">def</span> test_valid_id(self):
+        <span class="c-string">"""Happy Path: เลขบัตรถูกต้อง"""</span>
+        valid, msg = validate_thai_national_id(<span class="c-string">"1100600590167"</span>)
+        assert valid == <span class="c-bool">True</span>
+
+    <span class="c-keyword">def</span> test_wrong_length(self):
+        <span class="c-string">"""ความยาวไม่ถูกต้อง"""</span>
+        valid, msg = validate_thai_national_id(<span class="c-string">"12345"</span>)
+        assert valid == <span class="c-bool">False</span>
+        assert <span class="c-string">"13 หลัก"</span> <span class="c-keyword">in</span> msg
+
+    <span class="c-keyword">def</span> test_non_numeric(self):
+        <span class="c-string">"""มีตัวอักษรปนอยู่"""</span>
+        valid, msg = validate_thai_national_id(<span class="c-string">"110060059016X"</span>)
+        assert valid == <span class="c-bool">False</span>
+
+    <span class="c-keyword">def</span> test_wrong_checksum(self):
+        <span class="c-string">"""Checksum ไม่ถูกต้อง"""</span>
+        valid, msg = validate_thai_national_id(<span class="c-string">"1100600590168"</span>)
+        assert valid == <span class="c-bool">False</span>
+        assert <span class="c-string">"Checksum"</span> <span class="c-keyword">in</span> msg
+
+    <span class="c-keyword">def</span> test_with_dashes(self):
+        <span class="c-string">"""รูปแบบที่มีขีด"""</span>
+        valid, msg = validate_thai_national_id(<span class="c-string">"1-1006-00590-16-7"</span>)
+        assert valid == <span class="c-bool">True</span></pre>
+        </div>
+
+        <h3>AI Code Review</h3>
+        <div class="review-prompts">
+          <div class="rp-item"><div class="rp-tag security"><i class="fa-solid fa-shield"></i> Security</div><p>"Review โค้ดนี้หาช่องโหว่ Security เช่น SQL Injection, XSS, Insecure Direct Object Reference"</p></div>
+          <div class="rp-item"><div class="rp-tag performance"><i class="fa-solid fa-gauge-high"></i> Performance</div><p>"วิเคราะห์ Time/Space Complexity และหาจุดที่สามารถ Optimize ประสิทธิภาพได้"</p></div>
+          <div class="rp-item"><div class="rp-tag quality"><i class="fa-solid fa-star"></i> Code Quality</div><p>"Review ตาม SOLID Principles, Clean Code, และ Best Practices สำหรับ Python"</p></div>
+          <div class="rp-item"><div class="rp-tag docs"><i class="fa-solid fa-file-lines"></i> Documentation</div><p>"เพิ่ม Docstring, Type Hints, และ Inline Comment ให้ครบถ้วนตามมาตรฐาน Google Style"</p></div>
+        </div>
+      </section>
+
+      <!-- 7.7 -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">7.7</span> Prompt Patterns สำหรับ Coding</h2>
+
+        <div class="pattern-list">
+          <div class="pattern-item">
+            <div class="pi-tag">Pattern 1</div>
+            <h4>The "Act As" Pattern</h4>
+            <div class="code-block" style="margin:.6rem 0"><pre class="cb-code" style="font-size:.82rem">คุณเป็น Senior Python Developer ที่เชี่ยวชาญ Django REST Framework
+Review โค้ดต่อไปนี้และแนะนำการปรับปรุง: [โค้ด]</pre></div>
+          </div>
+          <div class="pattern-item">
+            <div class="pi-tag">Pattern 2</div>
+            <h4>The "Step-by-Step" Pattern</h4>
+            <div class="code-block" style="margin:.6rem 0"><pre class="cb-code" style="font-size:.82rem">สร้างระบบ Authentication ด้วย JWT โดยแบ่งเป็นขั้นตอน:
+1. สร้าง User Model
+2. สร้าง Register/Login Endpoint
+3. สร้าง JWT Token Generation
+4. สร้าง Auth Middleware
+ทำทีละขั้นตอน อธิบายก่อนเขียนโค้ดแต่ละส่วน</pre></div>
+          </div>
+          <div class="pattern-item">
+            <div class="pi-tag">Pattern 3</div>
+            <h4>The "Template Method" Pattern</h4>
+            <div class="code-block" style="margin:.6rem 0"><pre class="cb-code" style="font-size:.82rem">สร้าง CRUD API ตาม template นี้:
+- Model: User {id, name, email, created_at}
+- Endpoints: GET /users, POST /users, GET /users/{id}, PUT /users/{id}, DELETE /users/{id}
+- Tech: FastAPI + SQLAlchemy + Pydantic
+- รวม Error Handling และ Validation</pre></div>
+          </div>
+          <div class="pattern-item">
+            <div class="pi-tag">Pattern 4</div>
+            <h4>The "Rubber Duck" Pattern</h4>
+            <div class="code-block" style="margin:.6rem 0"><pre class="cb-code" style="font-size:.82rem">ช่วยฉัน Debug โดยการถามคำถาม ไม่ต้องให้คำตอบทันที
+ถามเกี่ยวกับ Logic ของโค้ดเพื่อช่วยให้ฉันหาปัญหาด้วยตัวเอง: [โค้ด]</pre></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7.8 -->
+      <section class="content-section" id="sec8">
+        <h2><span class="sec-num">7.8</span> สรุปและแบบฝึกหัด</h2>
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li>AI ช่วยได้ทุกขั้นตอนของ SDLC ตั้งแต่ Planning, Design, Coding, Testing, Debugging, Docs</li>
+            <li>GitHub Copilot เด่นด้าน Inline Completion ใน IDE หลายตัว | Cursor เด่นด้าน Multi-file Editing</li>
+            <li>Code Generation ได้ผลดีเมื่อระบุ Tech Stack, Edge Cases และ Requirements ชัดเจน</li>
+            <li>Debug ด้วย AI — แชร์ Error Message ครบ, บอก Environment, ขอ Explanation ก่อน Fix</li>
+            <li>AI สร้าง Unit Test ครอบคลุมได้รวดเร็ว ลดเวลาเขียน Test ลงมาก</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item"><div class="ex-num">1</div><div><strong>ติดตั้งและทดลอง GitHub Copilot</strong><p>ติดตั้ง GitHub Copilot ใน VS Code (ทดลองใช้ฟรี 30 วัน) เขียนฟังก์ชัน 5 ฟังก์ชันโดยเริ่มจาก Comment อธิบายก่อน สังเกตว่า Copilot แนะนำโค้ดอย่างไร</p></div></div>
+          <div class="exercise-item"><div class="ex-num">2</div><div><strong>AI-Assisted Debugging</strong><p>นำโค้ดที่เคย Debug ยากมา 1 ชิ้น (หรือสร้างโค้ดที่มี Bug ตั้งใจ) แล้วให้ AI ช่วย Debug พร้อมอธิบายสาเหตุ เปรียบเทียบกับการ Debug เอง</p></div></div>
+          <div class="exercise-item"><div class="ex-num">3</div><div><strong>Generate Unit Tests</strong><p>สร้างฟังก์ชัน Python อย่างน้อย 3 ฟังก์ชัน แล้วให้ AI สร้าง Unit Tests ที่ครอบคลุม Happy Path, Edge Cases และ Error Cases</p></div></div>
+          <div class="exercise-item"><div class="ex-num">4</div><div><strong>Mini Project: AI-Assisted Web App</strong><p>สร้าง Simple Web App (เช่น Todo List, Calculator, Currency Converter) โดยใช้ AI ช่วยตั้งแต่ต้นจนจบ บันทึก Prompt ที่ใช้ในแต่ละขั้นตอน</p></div></div>
+        </div>
+
+        <div class="lesson-nav">
+          <a href="lesson6.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> บทที่ 6: Image Generation</a>
+          <a href="lesson8.html" class="btn btn-primary">บทที่ 8: RAG <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-content"><div class="footer-brand"><i class="fa-solid fa-robot"></i><span>Generative AI & Prompt Engineering</span></div><p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p><p class="footer-copy">&copy; 2025 All rights reserved.</p></div></div></footer>
+  <script src="script.js"></script>
+  <script>
+    const sections=document.querySelectorAll('.content-section'),tocLinks=document.querySelectorAll('.toc-link');
+    window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)c=s.id});tocLinks.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+c)})});
+  </script>
+</body>
+</html>

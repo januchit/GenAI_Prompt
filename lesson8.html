@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 8: Retrieval-Augmented Generation (RAG)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand"><a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a></div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="tools.html">AI Tools</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">08</span> RAG</div>
+      <h1>Retrieval-Augmented Generation (RAG)</h1>
+      <p class="lesson-desc">เรียนรู้สถาปัตยกรรม RAG ที่ผสาน Vector Database กับ LLM เพื่อตอบคำถามจากเอกสารของคุณเอง พร้อมสร้าง RAG Pipeline ด้วย LangChain</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับกลาง–สูง</span>
+        <span><i class="fa-solid fa-list-check"></i> 7 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+    <aside class="toc-sidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">8.1 ปัญหาของ LLM และทางแก้</a></li>
+        <li><a href="#sec2" class="toc-link">8.2 RAG คืออะไร?</a></li>
+        <li><a href="#sec3" class="toc-link">8.3 Vector Embeddings</a></li>
+        <li><a href="#sec4" class="toc-link">8.4 Vector Databases</a></li>
+        <li><a href="#sec5" class="toc-link">8.5 RAG Pipeline</a></li>
+        <li><a href="#sec6" class="toc-link">8.6 สร้าง RAG ด้วย LangChain</a></li>
+        <li><a href="#sec7" class="toc-link">8.7 Advanced RAG Techniques</a></li>
+        <li><a href="#sec8" class="toc-link">8.8 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <main class="lesson-content">
+
+      <!-- 8.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">8.1</span> ปัญหาของ LLM และทางแก้</h2>
+        <p>LLM มีข้อจำกัดสำคัญที่ทำให้ไม่สามารถใช้งานได้ทุกสถานการณ์ โดยเฉพาะในองค์กรที่ต้องการคำตอบจากข้อมูลภายใน</p>
+
+        <div class="problem-cards">
+          <div class="prob-card">
+            <div class="prob-icon"><i class="fa-solid fa-calendar-xmark"></i></div>
+            <h4>Knowledge Cutoff</h4>
+            <p>LLM ถูกฝึกถึงวันที่หนึ่ง ไม่รู้ข้อมูลหลังจากนั้น เช่น GPT-4 cutoff ต้นปี 2024</p>
+          </div>
+          <div class="prob-card">
+            <div class="prob-icon"><i class="fa-solid fa-building-lock"></i></div>
+            <h4>Private Data</h4>
+            <p>LLM ไม่รู้ข้อมูลภายในองค์กร เช่น คู่มือ, นโยบาย, ข้อมูลลูกค้า, รายงานภายใน</p>
+          </div>
+          <div class="prob-card">
+            <div class="prob-icon"><i class="fa-solid fa-ghost"></i></div>
+            <h4>Hallucination</h4>
+            <p>เมื่อ LLM ไม่มีข้อมูล มักสร้างคำตอบที่ฟังดูถูกต้องแต่ผิดข้อเท็จจริง</p>
+          </div>
+          <div class="prob-card">
+            <div class="prob-icon"><i class="fa-solid fa-file-circle-xmark"></i></div>
+            <h4>No Source Citation</h4>
+            <p>ไม่สามารถอ้างอิงแหล่งที่มาได้ ทำให้ตรวจสอบความถูกต้องได้ยาก</p>
+          </div>
+        </div>
+
+        <div class="solution-box">
+          <div class="sb-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div>
+            <h4>RAG คือทางแก้!</h4>
+            <p>แทนที่จะ Fine-tune LLM ด้วยข้อมูลใหม่ (แพงและช้า) RAG ให้ LLM <strong>ค้นหาข้อมูลที่เกี่ยวข้องก่อน</strong> แล้วนำมาประกอบคำตอบ ได้ข้อมูลล่าสุด อ้างอิงได้ และลด Hallucination</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">8.2</span> RAG คืออะไร?</h2>
+        <p><strong>Retrieval-Augmented Generation (RAG)</strong> คือสถาปัตยกรรมที่ผสานระหว่าง <em>การค้นหาข้อมูล (Retrieval)</em> กับ <em>การสร้างคำตอบ (Generation)</em> ทำให้ LLM ตอบคำถามจากข้อมูลของคุณเองได้</p>
+
+        <div class="rag-architecture">
+          <div class="ra-title">RAG Architecture Overview</div>
+          <div class="ra-phases">
+            <div class="ra-phase">
+              <div class="ra-phase-title index-title"><i class="fa-solid fa-database"></i> Indexing Phase (ครั้งเดียว)</div>
+              <div class="ra-flow">
+                <div class="ra-node doc-node"><i class="fa-solid fa-file-lines"></i><span>Documents<br/>(PDF, TXT, Web)</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node split-node"><i class="fa-solid fa-scissors"></i><span>Chunking<br/>&amp; Splitting</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node embed-node"><i class="fa-solid fa-vector-square"></i><span>Embedding<br/>Model</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node vdb-node"><i class="fa-solid fa-database"></i><span>Vector<br/>Database</span></div>
+              </div>
+            </div>
+            <div class="ra-phase" style="margin-top:1.5rem">
+              <div class="ra-phase-title query-title"><i class="fa-solid fa-search"></i> Query Phase (ทุกคำถาม)</div>
+              <div class="ra-flow">
+                <div class="ra-node user-node"><i class="fa-solid fa-user"></i><span>User<br/>Question</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node embed-node"><i class="fa-solid fa-vector-square"></i><span>Query<br/>Embedding</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node vdb-node"><i class="fa-solid fa-magnifying-glass"></i><span>Semantic<br/>Search</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node context-node"><i class="fa-solid fa-file-lines"></i><span>Retrieved<br/>Context</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node llm-node"><i class="fa-solid fa-robot"></i><span>LLM +<br/>Prompt</span></div>
+                <div class="ra-arrow-h"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="ra-node answer-node"><i class="fa-solid fa-comment-dots"></i><span>Answer +<br/>Sources</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3>RAG vs Fine-tuning</h3>
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-database"></i> RAG</h4>
+            <ul>
+              <li>อัปเดตข้อมูลได้ง่าย</li>
+              <li>อ้างอิงแหล่งข้อมูลได้</li>
+              <li>ราคาถูกกว่ามาก</li>
+              <li>เริ่มใช้งานได้เร็ว</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-graduation-cap"></i> Fine-tuning</h4>
+            <ul>
+              <li>AI เรียนรู้ Style ของข้อมูล</li>
+              <li>ตอบสนองเร็วกว่าใน Inference</li>
+              <li>เหมาะกับ Task เฉพาะทาง</li>
+              <li>ราคาแพง ใช้เวลานาน</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">8.3</span> Vector Embeddings</h2>
+        <p><strong>Embedding</strong> คือการแปลงข้อความให้เป็น Vector ตัวเลขหลายมิติ เพื่อให้สามารถวัด <em>ความคล้ายคลึงเชิงความหมาย</em> (Semantic Similarity) ได้ด้วยการคำนวณทางคณิตศาสตร์</p>
+
+        <div class="embed-concept">
+          <div class="ec-visual">
+            <div class="ec-pair similar">
+              <div class="ec-text">"สุนัขกินอาหาร"</div>
+              <div class="ec-vec">[0.82, 0.14, 0.93, ...]</div>
+              <div class="ec-sim">Cosine Similarity = <strong class="high-sim">0.94</strong></div>
+              <div class="ec-text">"หมากำลังทานข้าว"</div>
+              <div class="ec-vec">[0.79, 0.18, 0.91, ...]</div>
+            </div>
+            <div class="ec-pair different">
+              <div class="ec-text">"สุนัขกินอาหาร"</div>
+              <div class="ec-vec">[0.82, 0.14, 0.93, ...]</div>
+              <div class="ec-sim">Cosine Similarity = <strong class="low-sim">0.12</strong></div>
+              <div class="ec-text">"ตลาดหุ้นปิดบวก"</div>
+              <div class="ec-vec">[0.21, 0.88, 0.05, ...]</div>
+            </div>
+          </div>
+        </div>
+
+        <h3>Embedding Models ยอดนิยม</h3>
+        <div class="model-table-wrap">
+          <table class="model-table">
+            <thead><tr><th>Model</th><th>ผู้พัฒนา</th><th>Dimensions</th><th>ภาษาไทย</th><th>ราคา</th></tr></thead>
+            <tbody>
+              <tr><td><strong>text-embedding-3-large</strong></td><td>OpenAI</td><td>3,072</td><td>✅ ดี</td><td>$0.13 / 1M tokens</td></tr>
+              <tr><td><strong>text-embedding-3-small</strong></td><td>OpenAI</td><td>1,536</td><td>✅ ดี</td><td>$0.02 / 1M tokens</td></tr>
+              <tr><td><strong>voyage-3</strong></td><td>Voyage AI</td><td>1,024</td><td>✅ ดีมาก</td><td>$0.06 / 1M tokens</td></tr>
+              <tr><td><strong>multilingual-e5-large</strong></td><td>Microsoft</td><td>1,024</td><td>✅ ดี</td><td>ฟรี (Open Source)</td></tr>
+              <tr><td><strong>bge-m3</strong></td><td>BAAI</td><td>1,024</td><td>✅ ดีมาก</td><td>ฟรี (Open Source)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Chunking Strategy</h3>
+        <p>ก่อน Embed ต้องแบ่งเอกสารเป็น Chunk เล็กๆ การเลือก Chunk Size ส่งผลต่อคุณภาพการค้นหามาก</p>
+        <div class="chunking-visual">
+          <div class="cv-item"><div class="cv-label">Chunk ใหญ่เกิน (1000+ tokens)</div><div class="cv-bar chunk-big"></div><p>Context เยอะ แต่ค้นหาไม่แม่นยำ ดึงข้อมูลที่ไม่เกี่ยวข้องมาด้วย</p></div>
+          <div class="cv-item"><div class="cv-label">Chunk พอดี (256–512 tokens) ✅</div><div class="cv-bar chunk-good"></div><p>สมดุลระหว่าง Context และความแม่นยำ เหมาะกับงานส่วนใหญ่</p></div>
+          <div class="cv-item"><div class="cv-label">Chunk เล็กเกิน (50 tokens)</div><div class="cv-bar chunk-small"></div><p>ค้นหาแม่นยำ แต่ Context น้อยเกินไป AI ไม่มีข้อมูลพอตอบ</p></div>
+        </div>
+      </section>
+
+      <!-- 8.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">8.4</span> Vector Databases</h2>
+        <p><strong>Vector Database</strong> คือฐานข้อมูลที่ออกแบบมาเพื่อเก็บและค้นหา Vector ด้วย <em>Approximate Nearest Neighbor (ANN)</em> Search ได้อย่างรวดเร็วแม้ข้อมูลมีหลายล้าน Vectors</p>
+
+        <div class="vdb-comparison">
+          <div class="vdb-card featured">
+            <div class="vdb-header" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+              <h4>Chroma</h4><span class="vdb-badge">แนะนำสำหรับเริ่มต้น</span>
+            </div>
+            <div class="vdb-body">
+              <p>Open Source, ใช้งานง่าย รันได้ใน Python ไม่ต้องติดตั้ง Server แยก</p>
+              <div class="vdb-tags"><span>Open Source</span><span>In-memory / Persistent</span><span>Python</span></div>
+              <a href="https://www.trychroma.com" target="_blank" class="vdb-link">trychroma.com <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
+          <div class="vdb-card">
+            <div class="vdb-header" style="background:#1a1a2e">
+              <h4>Pinecone</h4><span class="vdb-badge">Cloud Managed</span>
+            </div>
+            <div class="vdb-body">
+              <p>Managed Vector DB ใน Cloud ไม่ต้องดูแล Server เหมาะกับ Production</p>
+              <div class="vdb-tags"><span>Cloud</span><span>Managed</span><span>High Scale</span></div>
+              <a href="https://www.pinecone.io" target="_blank" class="vdb-link">pinecone.io <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
+          <div class="vdb-card">
+            <div class="vdb-header" style="background:#1c5080">
+              <h4>Weaviate</h4><span class="vdb-badge">Open Source / Cloud</span>
+            </div>
+            <div class="vdb-body">
+              <p>Open Source Vector DB มี GraphQL API รองรับ Multi-modal Hybrid Search</p>
+              <div class="vdb-tags"><span>Open Source</span><span>GraphQL</span><span>Multi-modal</span></div>
+              <a href="https://weaviate.io" target="_blank" class="vdb-link">weaviate.io <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
+          <div class="vdb-card">
+            <div class="vdb-header" style="background:#0d7a5f">
+              <h4>Qdrant</h4><span class="vdb-badge">High Performance</span>
+            </div>
+            <div class="vdb-body">
+              <p>เขียนด้วย Rust เร็วสุดในกลุ่ม รองรับ Payload Filtering และ Sparse Vectors</p>
+              <div class="vdb-tags"><span>Rust</span><span>Fast</span><span>Self-hosted</span></div>
+              <a href="https://qdrant.tech" target="_blank" class="vdb-link">qdrant.tech <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
+          <div class="vdb-card">
+            <div class="vdb-header" style="background:#2d3748">
+              <h4>pgvector</h4><span class="vdb-badge">PostgreSQL Extension</span>
+            </div>
+            <div class="vdb-body">
+              <p>Extension ของ PostgreSQL เหมาะถ้าใช้ Postgres อยู่แล้ว ไม่ต้องเพิ่ม Infrastructure</p>
+              <div class="vdb-tags"><span>PostgreSQL</span><span>SQL</span><span>Free</span></div>
+              <a href="https://github.com/pgvector/pgvector" target="_blank" class="vdb-link">GitHub <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
+          <div class="vdb-card">
+            <div class="vdb-header" style="background:#4a1d96">
+              <h4>Milvus</h4><span class="vdb-badge">Enterprise Scale</span>
+            </div>
+            <div class="vdb-body">
+              <p>รองรับ Billion-scale Vectors เหมาะกับ Enterprise มี Cloud Version (Zilliz)</p>
+              <div class="vdb-tags"><span>Billion Scale</span><span>Distributed</span><span>Enterprise</span></div>
+              <a href="https://milvus.io" target="_blank" class="vdb-link">milvus.io <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">8.5</span> RAG Pipeline ทีละขั้นตอน</h2>
+
+        <div class="pipeline-steps">
+          <div class="pl-step">
+            <div class="pl-num">1</div>
+            <div class="pl-body">
+              <h4><i class="fa-solid fa-file-import" style="color:#6366f1"></i> Document Loading</h4>
+              <p>โหลดเอกสารจากแหล่งต่างๆ: PDF, Word, Excel, Web Pages, YouTube, GitHub</p>
+              <div class="code-block" style="margin:.5rem 0"><pre class="cb-code" style="font-size:.8rem"><span class="c-keyword">from</span> langchain_community.document_loaders <span class="c-keyword">import</span> PyPDFLoader
+
+loader = PyPDFLoader(<span class="c-string">"company_handbook.pdf"</span>)
+documents = loader.load()  <span class="c-comment"># โหลดทุกหน้า</span></pre></div>
+            </div>
+          </div>
+          <div class="pl-connector"></div>
+          <div class="pl-step">
+            <div class="pl-num">2</div>
+            <div class="pl-body">
+              <h4><i class="fa-solid fa-scissors" style="color:#8b5cf6"></i> Text Splitting</h4>
+              <p>แบ่งเอกสารเป็น Chunk เล็กๆ พร้อม Overlap เพื่อไม่ให้ขาดบริบท</p>
+              <div class="code-block" style="margin:.5rem 0"><pre class="cb-code" style="font-size:.8rem"><span class="c-keyword">from</span> langchain.text_splitter <span class="c-keyword">import</span> RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=<span class="c-num">512</span>,      <span class="c-comment"># ขนาด Chunk</span>
+    chunk_overlap=<span class="c-num">50</span>,   <span class="c-comment"># Overlap ระหว่าง Chunk</span>
+)
+chunks = splitter.split_documents(documents)</pre></div>
+            </div>
+          </div>
+          <div class="pl-connector"></div>
+          <div class="pl-step">
+            <div class="pl-num">3</div>
+            <div class="pl-body">
+              <h4><i class="fa-solid fa-vector-square" style="color:#06b6d4"></i> Embedding & Storing</h4>
+              <p>แปลง Chunk เป็น Embedding Vector แล้วเก็บใน Vector Database</p>
+              <div class="code-block" style="margin:.5rem 0"><pre class="cb-code" style="font-size:.8rem"><span class="c-keyword">from</span> langchain_openai <span class="c-keyword">import</span> OpenAIEmbeddings
+<span class="c-keyword">from</span> langchain_chroma <span class="c-keyword">import</span> Chroma
+
+embeddings = OpenAIEmbeddings(model=<span class="c-string">"text-embedding-3-small"</span>)
+vectorstore = Chroma.from_documents(
+    documents=chunks,
+    embedding=embeddings,
+    persist_directory=<span class="c-string">"./chroma_db"</span>
+)</pre></div>
+            </div>
+          </div>
+          <div class="pl-connector"></div>
+          <div class="pl-step">
+            <div class="pl-num">4</div>
+            <div class="pl-body">
+              <h4><i class="fa-solid fa-magnifying-glass" style="color:#10b981"></i> Retrieval</h4>
+              <p>เมื่อมีคำถาม ค้นหา Chunk ที่ใกล้เคียงที่สุดใน Vector DB</p>
+              <div class="code-block" style="margin:.5rem 0"><pre class="cb-code" style="font-size:.8rem">retriever = vectorstore.as_retriever(
+    search_type=<span class="c-string">"similarity"</span>,
+    search_kwargs={<span class="c-string">"k"</span>: <span class="c-num">5</span>}  <span class="c-comment"># ดึง Top-5 Chunks</span>
+)
+
+query = <span class="c-string">"นโยบายการลาป่วยมีกี่วัน?"</span>
+relevant_docs = retriever.invoke(query)</pre></div>
+            </div>
+          </div>
+          <div class="pl-connector"></div>
+          <div class="pl-step">
+            <div class="pl-num">5</div>
+            <div class="pl-body">
+              <h4><i class="fa-solid fa-robot" style="color:#f59e0b"></i> Generation</h4>
+              <p>ส่ง Context ที่ค้นมา + คำถาม ไปยัง LLM เพื่อสร้างคำตอบ</p>
+              <div class="code-block" style="margin:.5rem 0"><pre class="cb-code" style="font-size:.8rem"><span class="c-keyword">from</span> langchain_openai <span class="c-keyword">import</span> ChatOpenAI
+<span class="c-keyword">from</span> langchain.chains <span class="c-keyword">import</span> RetrievalQA
+
+llm = ChatOpenAI(model=<span class="c-string">"gpt-4o-mini"</span>, temperature=<span class="c-num">0</span>)
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    retriever=retriever,
+    return_source_documents=<span class="c-bool">True</span>  <span class="c-comment"># อ้างอิงแหล่งที่มา</span>
+)
+
+result = qa_chain.invoke({<span class="c-string">"query"</span>: query})
+print(result[<span class="c-string">"result"</span>])
+print(result[<span class="c-string">"source_documents"</span>])  <span class="c-comment"># แหล่งอ้างอิง</span></pre></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">8.6</span> สร้าง RAG ด้วย LangChain (Full Example)</h2>
+
+        <div class="code-block">
+          <div class="cb-header"><span><i class="fa-brands fa-python"></i> Python — RAG System Complete</span><span class="cb-filename">rag_system.py</span></div>
+          <pre class="cb-code"><span class="c-keyword">from</span> langchain_community.document_loaders <span class="c-keyword">import</span> PyPDFLoader, WebBaseLoader
+<span class="c-keyword">from</span> langchain.text_splitter <span class="c-keyword">import</span> RecursiveCharacterTextSplitter
+<span class="c-keyword">from</span> langchain_openai <span class="c-keyword">import</span> OpenAIEmbeddings, ChatOpenAI
+<span class="c-keyword">from</span> langchain_chroma <span class="c-keyword">import</span> Chroma
+<span class="c-keyword">from</span> langchain.chains <span class="c-keyword">import</span> ConversationalRetrievalChain
+<span class="c-keyword">from</span> langchain.memory <span class="c-keyword">import</span> ConversationBufferMemory
+
+<span class="c-keyword">class</span> RAGSystem:
+    <span class="c-string">"""RAG System ที่รองรับการสนทนาต่อเนื่อง"""</span>
+
+    <span class="c-keyword">def</span> __init__(self, pdf_paths: list[str]):
+        <span class="c-comment"># 1. Load Documents</span>
+        docs = []
+        <span class="c-keyword">for</span> path <span class="c-keyword">in</span> pdf_paths:
+            loader = PyPDFLoader(path)
+            docs.extend(loader.load())
+
+        <span class="c-comment"># 2. Split</span>
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=<span class="c-num">512</span>, chunk_overlap=<span class="c-num">64</span>
+        )
+        chunks = splitter.split_documents(docs)
+
+        <span class="c-comment"># 3. Embed & Store</span>
+        embeddings = OpenAIEmbeddings(model=<span class="c-string">"text-embedding-3-small"</span>)
+        self.vectorstore = Chroma.from_documents(chunks, embeddings)
+
+        <span class="c-comment"># 4. Setup Chain with Memory</span>
+        self.memory = ConversationBufferMemory(
+            memory_key=<span class="c-string">"chat_history"</span>,
+            return_messages=<span class="c-bool">True</span>
+        )
+        self.chain = ConversationalRetrievalChain.from_llm(
+            llm=ChatOpenAI(model=<span class="c-string">"gpt-4o-mini"</span>, temperature=<span class="c-num">0</span>),
+            retriever=self.vectorstore.as_retriever(
+                search_kwargs={<span class="c-string">"k"</span>: <span class="c-num">4</span>}
+            ),
+            memory=self.memory,
+            return_source_documents=<span class="c-bool">True</span>
+        )
+
+    <span class="c-keyword">def</span> ask(self, question: str) -> dict:
+        result = self.chain.invoke({<span class="c-string">"question"</span>: question})
+        sources = list({
+            doc.metadata.get(<span class="c-string">"source"</span>, <span class="c-string">"Unknown"</span>)
+            <span class="c-keyword">for</span> doc <span class="c-keyword">in</span> result[<span class="c-string">"source_documents"</span>]
+        })
+        <span class="c-keyword">return</span> {
+            <span class="c-string">"answer"</span>: result[<span class="c-string">"answer"</span>],
+            <span class="c-string">"sources"</span>: sources
+        }
+
+<span class="c-comment"># การใช้งาน</span>
+rag = RAGSystem([<span class="c-string">"company_policy.pdf"</span>, <span class="c-string">"employee_handbook.pdf"</span>])
+result = rag.ask(<span class="c-string">"ลาพักร้อนได้กี่วันต่อปี?"</span>)
+print(<span class="c-string">f"คำตอบ: {result['answer']}"</span>)
+print(<span class="c-string">f"แหล่งอ้างอิง: {result['sources']}"</span>)</pre>
+        </div>
+      </section>
+
+      <!-- 8.7 -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">8.7</span> Advanced RAG Techniques</h2>
+
+        <div class="advanced-rag">
+          <div class="ar-item">
+            <div class="ar-tag">Hybrid Search</div>
+            <p>ผสม <strong>Semantic Search</strong> (Vector) กับ <strong>Keyword Search</strong> (BM25) ได้ผลดีกว่าใช้อย่างเดียว เหมาะกับภาษาไทยที่มีคำเฉพาะ</p>
+          </div>
+          <div class="ar-item">
+            <div class="ar-tag">Reranking</div>
+            <p>หลังดึง Top-K Chunks มา ใช้ Reranker Model (เช่น Cohere Rerank) เรียงลำดับใหม่ให้ตรงกับคำถามมากขึ้น</p>
+          </div>
+          <div class="ar-item">
+            <div class="ar-tag">Query Expansion</div>
+            <p>ให้ LLM สร้างคำถามหลายรูปแบบจากคำถามเดิม แล้ว Search ทุกรูปแบบ รวม Result ด้วย Reciprocal Rank Fusion</p>
+          </div>
+          <div class="ar-item">
+            <div class="ar-tag">Parent Document Retriever</div>
+            <p>Embed Chunk เล็ก (แม่นยำ) แต่ส่ง Parent Chunk ใหญ่กลับ (Context ครบ) ได้ทั้งความแม่นยำและบริบท</p>
+          </div>
+          <div class="ar-item">
+            <div class="ar-tag">RAPTOR</div>
+            <p>สร้าง Summary Tree แบบ Hierarchical Cluster ช่วยตอบคำถามที่ต้องการ High-level Overview</p>
+          </div>
+          <div class="ar-item">
+            <div class="ar-tag">Self-RAG</div>
+            <p>LLM ตัดสินใจเองว่าต้อง Retrieve ไหม ตรวจสอบคุณภาพ Retrieval และ Generation ด้วยตัวเอง</p>
+          </div>
+        </div>
+
+        <h3>RAG Evaluation</h3>
+        <div class="eval-metrics">
+          <div class="em-card"><div class="em-name">Context Precision</div><p>ใน Context ที่ดึงมา มีส่วนที่เกี่ยวข้องกับคำถามมากแค่ไหน</p></div>
+          <div class="em-card"><div class="em-name">Context Recall</div><p>ข้อมูลที่จำเป็นสำหรับตอบคำถามถูกดึงมาครบไหม</p></div>
+          <div class="em-card"><div class="em-name">Faithfulness</div><p>คำตอบที่ LLM สร้างขึ้นตรงกับ Context ที่ให้ไปหรือไม่ (ไม่ Hallucinate)</p></div>
+          <div class="em-card"><div class="em-name">Answer Relevancy</div><p>คำตอบตอบตรงคำถามหรือไม่ ไม่ออกนอกเรื่อง</p></div>
+        </div>
+        <div class="info-box box-blue" style="margin-top:1rem">
+          <div class="box-icon"><i class="fa-solid fa-flask"></i></div>
+          <div><strong>Framework สำหรับ Evaluate RAG</strong><br/>
+          <a href="https://docs.ragas.io" target="_blank" style="color:#818cf8">RAGAS</a> — ประเมิน RAG Pipeline อัตโนมัติด้วย LLM-as-Judge |
+          <a href="https://www.trulens.org" target="_blank" style="color:#818cf8">TruLens</a> — Observability สำหรับ LLM App</div>
+        </div>
+      </section>
+
+      <!-- 8.8 -->
+      <section class="content-section" id="sec8">
+        <h2><span class="sec-num">8.8</span> สรุปและแบบฝึกหัด</h2>
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li>RAG แก้ปัญหา Knowledge Cutoff, Private Data, Hallucination และ No Citation ของ LLM</li>
+            <li>RAG Pipeline: Load → Split → Embed → Store → Retrieve → Generate</li>
+            <li>Embedding แปลงข้อความเป็น Vector เพื่อวัด Semantic Similarity</li>
+            <li>Chunk Size 256–512 tokens มักได้ผลดีที่สุด ต้องทดลองสำหรับแต่ละ Domain</li>
+            <li>Vector DB หลัก: Chroma (เริ่มต้น), Pinecone (Cloud), Qdrant (Performance), pgvector (PostgreSQL)</li>
+            <li>Advanced: Hybrid Search, Reranking, Query Expansion ช่วยเพิ่มคุณภาพสูงมาก</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item"><div class="ex-num">1</div><div><strong>ทดลอง Semantic Search</strong><p>ใช้ OpenAI Embedding API แปลงประโยค 10 ประโยคเป็น Vector แล้วคำนวณ Cosine Similarity ระหว่างประโยค วาด Scatter Plot แสดงความสัมพันธ์</p></div></div>
+          <div class="exercise-item"><div class="ex-num">2</div><div><strong>สร้าง RAG อย่างง่าย</strong><p>สร้าง RAG System สำหรับเอกสาร PDF 1 ไฟล์ (เช่น คู่มือวิชา) ด้วย LangChain + Chroma ทดสอบด้วยคำถามอย่างน้อย 5 ข้อ</p></div></div>
+          <div class="exercise-item"><div class="ex-num">3</div><div><strong>เปรียบเทียบ Chunk Size</strong><p>ทดสอบ RAG ด้วย Chunk Size ต่างกัน (128, 256, 512, 1024) บันทึกคุณภาพคำตอบและวิเคราะห์ว่า Chunk Size ใดเหมาะกับเอกสารของคุณ</p></div></div>
+          <div class="exercise-item"><div class="ex-num">4</div><div><strong>Mini Project: Knowledge Base Chatbot</strong><p>สร้าง Chatbot ที่ตอบคำถามจากเอกสารของมหาวิทยาลัยหรือองค์กรที่สนใจ ใส่ Feature อ้างอิงแหล่งที่มา และ Conversation Memory</p></div></div>
+        </div>
+
+        <div class="lesson-nav">
+          <a href="lesson7.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> บทที่ 7: AI for Dev</a>
+          <a href="index.html#modules" class="btn btn-primary">ดูบทเรียนทั้งหมด <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-content"><div class="footer-brand"><i class="fa-solid fa-robot"></i><span>Generative AI & Prompt Engineering</span></div><p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p><p class="footer-copy">&copy; 2025 All rights reserved.</p></div></div></footer>
+  <script src="script.js"></script>
+  <script>
+    const sections=document.querySelectorAll('.content-section'),tocLinks=document.querySelectorAll('.toc-link');
+    window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)c=s.id});tocLinks.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+c)})});
+  </script>
+</body>
+</html>

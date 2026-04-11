@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 6: Image Generation & Visual AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand"><a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a></div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="tools.html">AI Tools</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">06</span> Image AI</div>
+      <h1>Image Generation & Visual AI</h1>
+      <p class="lesson-desc">เรียนรู้หลักการของ Diffusion Models และวิธีใช้งาน DALL-E 3, Midjourney, Stable Diffusion เพื่อสร้างภาพจาก Text Prompt พร้อมเทคนิค Image Prompt Engineering ขั้นสูง</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับกลาง</span>
+        <span><i class="fa-solid fa-list-check"></i> 7 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+    <aside class="toc-sidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">6.1 Visual AI คืออะไร?</a></li>
+        <li><a href="#sec2" class="toc-link">6.2 Diffusion Models</a></li>
+        <li><a href="#sec3" class="toc-link">6.3 DALL-E 3</a></li>
+        <li><a href="#sec4" class="toc-link">6.4 Midjourney</a></li>
+        <li><a href="#sec5" class="toc-link">6.5 Stable Diffusion</a></li>
+        <li><a href="#sec6" class="toc-link">6.6 Image Prompt Engineering</a></li>
+        <li><a href="#sec7" class="toc-link">6.7 Style Transfer & Editing</a></li>
+        <li><a href="#sec8" class="toc-link">6.8 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <main class="lesson-content">
+
+      <!-- 6.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">6.1</span> Visual AI คืออะไร?</h2>
+        <p><strong>Visual AI</strong> คือกลุ่ม AI ที่ทำงานกับภาพและวิดีโอ ครอบคลุมทั้งการ <em>เข้าใจ</em> (Image Understanding) และการ <em>สร้าง</em> (Image Generation) ภาพใหม่จากคำอธิบาย</p>
+
+        <div class="visual-ai-map">
+          <div class="vam-col">
+            <div class="vam-header gen-header"><i class="fa-solid fa-wand-magic-sparkles"></i> Generative Visual AI</div>
+            <div class="vam-item"><i class="fa-solid fa-text-width"></i> Text-to-Image</div>
+            <div class="vam-item"><i class="fa-solid fa-image"></i> Image-to-Image</div>
+            <div class="vam-item"><i class="fa-solid fa-eraser"></i> Inpainting / Outpainting</div>
+            <div class="vam-item"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Super Resolution</div>
+            <div class="vam-item"><i class="fa-solid fa-palette"></i> Style Transfer</div>
+          </div>
+          <div class="vam-col">
+            <div class="vam-header und-header"><i class="fa-solid fa-magnifying-glass"></i> Understanding Visual AI</div>
+            <div class="vam-item"><i class="fa-solid fa-tags"></i> Image Classification</div>
+            <div class="vam-item"><i class="fa-solid fa-vector-square"></i> Object Detection</div>
+            <div class="vam-item"><i class="fa-solid fa-face-smile"></i> Face Recognition</div>
+            <div class="vam-item"><i class="fa-solid fa-comment-dots"></i> Image Captioning</div>
+            <div class="vam-item"><i class="fa-solid fa-question"></i> Visual QA</div>
+          </div>
+        </div>
+
+        <h3>ทำไม Image Generation ถึงน่าทึ่ง?</h3>
+        <div class="awe-grid">
+          <div class="awe-card"><div class="awe-icon"><i class="fa-solid fa-bolt-lightning"></i></div><h4>เร็วมาก</h4><p>สร้างภาพระดับ Professional ได้ใน 5–30 วินาที</p></div>
+          <div class="awe-card"><div class="awe-icon"><i class="fa-solid fa-infinity"></i></div><h4>ไม่จำกัด</h4><p>สร้างได้ทุกสไตล์ ทุกธีม ทุกองค์ประกอบ</p></div>
+          <div class="awe-card"><div class="awe-icon"><i class="fa-solid fa-dollar-sign"></i></div><h4>ราคาถูก</h4><p>เสียค่าใช้จ่ายต่ำมากเทียบกับการจ้างนักออกแบบ</p></div>
+          <div class="awe-card"><div class="awe-icon"><i class="fa-solid fa-sliders"></i></div><h4>ปรับแต่งได้</h4><p>ปรับ Style, สี, องค์ประกอบ ได้ตามต้องการ</p></div>
+        </div>
+      </section>
+
+      <!-- 6.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">6.2</span> Diffusion Models — หัวใจของ Image AI</h2>
+        <p><strong>Diffusion Model</strong> คือ Neural Network ที่เรียนรู้ย้อนกลับกระบวนการ "เพิ่ม Noise" เพื่อสร้างภาพจาก Random Noise อย่างค่อยเป็นค่อยไป</p>
+
+        <div class="diffusion-process">
+          <div class="dp-title">กระบวนการ Forward Diffusion (Training)</div>
+          <div class="dp-steps">
+            <div class="dp-step"><div class="dp-img clean"><i class="fa-solid fa-cat"></i></div><div class="dp-label">ภาพต้นฉบับ</div></div>
+            <div class="dp-arrow"><i class="fa-solid fa-arrow-right"></i><span>+ Noise</span></div>
+            <div class="dp-step"><div class="dp-img noisy1"><i class="fa-solid fa-cat"></i></div><div class="dp-label">t=250</div></div>
+            <div class="dp-arrow"><i class="fa-solid fa-arrow-right"></i><span>+ Noise</span></div>
+            <div class="dp-step"><div class="dp-img noisy2"><i class="fa-solid fa-cat"></i></div><div class="dp-label">t=500</div></div>
+            <div class="dp-arrow"><i class="fa-solid fa-arrow-right"></i><span>+ Noise</span></div>
+            <div class="dp-step"><div class="dp-img noise-only"></div><div class="dp-label">Pure Noise (t=1000)</div></div>
+          </div>
+          <div class="dp-title" style="margin-top:1.5rem">กระบวนการ Reverse Diffusion (Inference)</div>
+          <div class="dp-steps reverse">
+            <div class="dp-step"><div class="dp-img noise-only"></div><div class="dp-label">Random Noise</div></div>
+            <div class="dp-arrow rev-arrow"><i class="fa-solid fa-arrow-right"></i><span>Denoise</span></div>
+            <div class="dp-step"><div class="dp-img noisy2"><i class="fa-solid fa-cat"></i></div><div class="dp-label">ยังเบลออยู่</div></div>
+            <div class="dp-arrow rev-arrow"><i class="fa-solid fa-arrow-right"></i><span>Denoise</span></div>
+            <div class="dp-step"><div class="dp-img noisy1"><i class="fa-solid fa-cat"></i></div><div class="dp-label">ชัดขึ้น</div></div>
+            <div class="dp-arrow rev-arrow"><i class="fa-solid fa-arrow-right"></i><span>Denoise</span></div>
+            <div class="dp-step"><div class="dp-img clean"><i class="fa-solid fa-cat"></i></div><div class="dp-label">ภาพสมบูรณ์</div></div>
+          </div>
+        </div>
+
+        <h3>Latent Diffusion Models (LDM)</h3>
+        <p>Stable Diffusion และ DALL-E 3 ใช้ <strong>Latent Diffusion</strong> ที่ทำ Diffusion ใน Latent Space (พื้นที่มิติต่ำ) แทน Pixel Space ทำให้เร็วและใช้หน่วยความจำน้อยกว่ามาก</p>
+        <ul class="content-list">
+          <li><strong>VAE (Variational Autoencoder)</strong> — แปลงภาพเป็น Latent Code และแปลงกลับ</li>
+          <li><strong>U-Net / DiT</strong> — Neural Network ที่ทำ Denoising ใน Latent Space</li>
+          <li><strong>CLIP / Text Encoder</strong> — แปลง Text Prompt เป็น Embedding เพื่อชี้นำการสร้างภาพ</li>
+          <li><strong>CFG (Classifier-Free Guidance)</strong> — ควบคุมว่าภาพจะ "ตรงตาม Prompt" มากแค่ไหน</li>
+        </ul>
+      </section>
+
+      <!-- 6.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">6.3</span> DALL-E 3</h2>
+        <div class="tool-highlight" style="border-color:#10a37f">
+          <div class="th-logo" style="background:#10a37f"><i class="fa-solid fa-palette"></i></div>
+          <div class="th-info">
+            <h3>DALL-E 3 <a href="https://openai.com/dall-e-3" target="_blank" class="tool-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> openai.com</a></h3>
+            <p>พัฒนาโดย OpenAI ผสานใน ChatGPT Plus ใช้งานง่ายที่สุด เข้าใจ Prompt ซับซ้อนได้ดีเยี่ยม</p>
+          </div>
+        </div>
+
+        <h3>จุดเด่น DALL-E 3</h3>
+        <div class="tool-pros">
+          <div class="tp-item good"><i class="fa-solid fa-check"></i> เข้าใจ Prompt ภาษาธรรมชาติได้ดีมาก ไม่ต้องใช้ Magic Words</div>
+          <div class="tp-item good"><i class="fa-solid fa-check"></i> ใส่ Text ในภาพได้ถูกต้องกว่ารุ่นก่อน</div>
+          <div class="tp-item good"><i class="fa-solid fa-check"></i> ใช้ผ่าน ChatGPT Plus ได้เลย ง่ายมาก</div>
+          <div class="tp-item good"><i class="fa-solid fa-check"></i> สร้างภาพ HD 1024×1024, 1792×1024, 1024×1792</div>
+          <div class="tp-item bad"><i class="fa-solid fa-xmark"></i> ควบคุม Style ได้น้อยกว่า Midjourney</div>
+          <div class="tp-item bad"><i class="fa-solid fa-xmark"></i> ไม่สามารถ Fine-tune หรือ LoRA ได้</div>
+        </div>
+
+        <h3>ตัวอย่าง Prompt DALL-E 3</h3>
+        <div class="image-prompt-examples">
+          <div class="ipe-card">
+            <div class="ipe-preview dalle"><i class="fa-solid fa-city"></i></div>
+            <div class="ipe-prompt">"A futuristic Bangkok skyline at sunset, with flying cars and neon lights reflecting on the Chao Phraya River, cinematic photography style, 8K"</div>
+          </div>
+          <div class="ipe-card">
+            <div class="ipe-preview dalle2"><i class="fa-solid fa-robot"></i></div>
+            <div class="ipe-prompt">"A friendly robot teacher explaining mathematics to Thai students in a modern classroom, digital art, warm colors, detailed"</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">6.4</span> Midjourney</h2>
+        <div class="tool-highlight" style="border-color:#8b5cf6">
+          <div class="th-logo" style="background:#1a1a2e"><i class="fa-solid fa-brush"></i></div>
+          <div class="th-info">
+            <h3>Midjourney <a href="https://midjourney.com" target="_blank" class="tool-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> midjourney.com</a></h3>
+            <p>สร้างภาพคุณภาพ Aesthetic สูงสุด ใช้งานผ่าน Discord หรือ Web App (V6.1)</p>
+          </div>
+        </div>
+
+        <h3>Commands สำคัญใน Midjourney</h3>
+        <div class="mj-commands">
+          <div class="mj-cmd"><code>/imagine prompt: [your prompt]</code><span>สร้างภาพจาก Prompt</span></div>
+          <div class="mj-cmd"><code>--ar 16:9</code><span>กำหนด Aspect Ratio (16:9, 4:3, 1:1)</span></div>
+          <div class="mj-cmd"><code>--v 6.1</code><span>เลือก Version โมเดล</span></div>
+          <div class="mj-cmd"><code>--style raw</code><span>ลด Aesthetic อัตโนมัติ ควบคุมเองได้มากขึ้น</span></div>
+          <div class="mj-cmd"><code>--q 2</code><span>เพิ่ม Quality (ช้าลง แต่ละเอียดขึ้น)</span></div>
+          <div class="mj-cmd"><code>--no [element]</code><span>ห้ามมีสิ่งที่ระบุในภาพ Negative Prompt</span></div>
+          <div class="mj-cmd"><code>--seed [number]</code><span>กำหนด Seed เพื่อให้ภาพใกล้เคียงกัน</span></div>
+          <div class="mj-cmd"><code>--sref [url]</code><span>ใช้ภาพอ้างอิง Style (V6+)</span></div>
+        </div>
+
+        <h3>ตัวอย่าง Midjourney Prompt ระดับ Pro</h3>
+        <div class="prompt-compare-block">
+          <div class="pcb-label"><i class="fa-solid fa-xmark" style="color:#f87171"></i> Prompt พื้นฐาน (ผลลัพธ์ธรรมดา)</div>
+          <div class="pcb-prompt">a woman in a garden</div>
+          <div class="pcb-response-label"><i class="fa-solid fa-check" style="color:#34d399"></i> Prompt ระดับ Pro (ผลลัพธ์สวยงาม)</div>
+          <div class="pcb-response">
+            a young Thai woman in traditional silk dress sitting in a lush tropical garden, golden hour lighting, soft bokeh background, film photography aesthetic, shot on Fujifilm XT4, f/1.8, 85mm lens, warm tones, magazine editorial style --ar 4:5 --v 6.1 --style raw --q 2
+          </div>
+        </div>
+
+        <h3>Midjourney Style Keywords</h3>
+        <div class="style-chips-wrap">
+          <div class="sc-group"><div class="sc-label">Photography</div><div class="style-chips"><span>cinematic</span><span>editorial</span><span>portrait</span><span>street photography</span><span>golden hour</span><span>bokeh</span></div></div>
+          <div class="sc-group"><div class="sc-label">Art Style</div><div class="style-chips"><span>oil painting</span><span>watercolor</span><span>digital art</span><span>anime</span><span>concept art</span><span>illustration</span></div></div>
+          <div class="sc-group"><div class="sc-label">Quality</div><div class="style-chips"><span>8K ultra HD</span><span>photorealistic</span><span>highly detailed</span><span>masterpiece</span><span>award winning</span></div></div>
+          <div class="sc-group"><div class="sc-label">Lighting</div><div class="style-chips"><span>natural light</span><span>rim light</span><span>studio lighting</span><span>neon lights</span><span>dramatic shadows</span></div></div>
+        </div>
+      </section>
+
+      <!-- 6.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">6.5</span> Stable Diffusion</h2>
+        <div class="tool-highlight" style="border-color:#7c3aed">
+          <div class="th-logo" style="background:#4a1d96"><i class="fa-solid fa-wand-sparkles"></i></div>
+          <div class="th-info">
+            <h3>Stable Diffusion <a href="https://stability.ai" target="_blank" class="tool-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> stability.ai</a></h3>
+            <p>Open Source — รันบนเครื่องตัวเองได้ ปรับแต่งสูงสุด Fine-tune ด้วย LoRA/DreamBooth</p>
+          </div>
+        </div>
+
+        <h3>วิธีใช้งาน Stable Diffusion</h3>
+        <div class="sd-options">
+          <div class="sdo-card">
+            <div class="sdo-icon" style="color:#f59e0b"><i class="fa-solid fa-cloud"></i></div>
+            <h4>Online (ง่ายสุด)</h4>
+            <p>ใช้ผ่าน <a href="https://stability.ai/stable-image" target="_blank" style="color:#818cf8">Stability AI</a>, <a href="https://civitai.com" target="_blank" style="color:#818cf8">Civitai</a>, <a href="https://leonardo.ai" target="_blank" style="color:#818cf8">Leonardo AI</a> ไม่ต้องติดตั้ง</p>
+          </div>
+          <div class="sdo-card">
+            <div class="sdo-icon" style="color:#6366f1"><i class="fa-solid fa-desktop"></i></div>
+            <h4>Local (ควบคุมสูงสุด)</h4>
+            <p><a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui" target="_blank" style="color:#818cf8">AUTOMATIC1111 WebUI</a> หรือ <a href="https://www.comfy.org/" target="_blank" style="color:#818cf8">ComfyUI</a> ต้องการ GPU 6GB+</p>
+          </div>
+          <div class="sdo-card">
+            <div class="sdo-icon" style="color:#10b981"><i class="fa-brands fa-google"></i></div>
+            <h4>Google Colab (ฟรี GPU)</h4>
+            <p>รัน WebUI บน Colab ฟรี ไม่ต้องใช้ GPU ตัวเอง เหมาะกับผู้เริ่มต้น</p>
+          </div>
+        </div>
+
+        <h3>เทคนิคพิเศษของ Stable Diffusion</h3>
+        <div class="sd-features">
+          <div class="sdf-item"><div class="sdf-tag">LoRA</div><p>Fine-tune โมเดลด้วยภาพ 20–50 รูป สร้างสไตล์หรือตัวละครเฉพาะตัว</p></div>
+          <div class="sdf-item"><div class="sdf-tag">ControlNet</div><p>ควบคุมท่าทาง, เส้นขอบ, ความลึก ด้วยภาพอ้างอิง ได้ผลแม่นยำสูงมาก</p></div>
+          <div class="sdf-item"><div class="sdf-tag">Inpainting</div><p>แก้ไขเฉพาะส่วนที่ต้องการในภาพ โดยไม่กระทบส่วนอื่น</p></div>
+          <div class="sdf-item"><div class="sdf-tag">Img2Img</div><p>ใช้ภาพเริ่มต้นแล้วให้ AI ปรับเปลี่ยนตาม Prompt ควบคุม Denoising Strength</p></div>
+          <div class="sdf-item"><div class="sdf-tag">Negative Prompt</div><p>ระบุสิ่งที่ไม่ต้องการในภาพ เช่น "blurry, deformed hands, watermark"</p></div>
+          <div class="sdf-item"><div class="sdf-tag">DreamBooth</div><p>Fine-tune โมเดลให้จำหน้าบุคคลหรือสินค้าเฉพาะ ใช้ภาพเพียง 5–10 รูป</p></div>
+        </div>
+      </section>
+
+      <!-- 6.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">6.6</span> Image Prompt Engineering</h2>
+        <p>การเขียน Prompt สำหรับ Image AI ต่างจาก Text AI — ต้องบอก <strong>สิ่งที่อยู่ในภาพ, สไตล์, แสง, กล้อง, และอารมณ์</strong> พร้อมกัน</p>
+
+        <h3>โครงสร้าง Image Prompt ที่ดี</h3>
+        <div class="img-prompt-structure">
+          <div class="ips-item"><div class="ips-num">1</div><div class="ips-label">Subject</div><div class="ips-desc">สิ่งหลักในภาพ "a majestic lion", "a Thai woman"</div></div>
+          <div class="ips-item"><div class="ips-num">2</div><div class="ips-label">Environment</div><div class="ips-desc">สภาพแวดล้อม "in a misty forest", "on a Bangkok street"</div></div>
+          <div class="ips-item"><div class="ips-num">3</div><div class="ips-label">Action / Pose</div><div class="ips-desc">ท่าทาง "running", "sitting gracefully", "looking at camera"</div></div>
+          <div class="ips-item"><div class="ips-num">4</div><div class="ips-label">Lighting</div><div class="ips-desc">แสง "golden hour", "dramatic rim lighting", "soft studio light"</div></div>
+          <div class="ips-item"><div class="ips-num">5</div><div class="ips-label">Style</div><div class="ips-desc">สไตล์ "photorealistic", "watercolor painting", "anime style"</div></div>
+          <div class="ips-item"><div class="ips-num">6</div><div class="ips-label">Camera / Lens</div><div class="ips-desc">กล้อง "shot on Canon 5D, 50mm, f/2.8", "wide angle", "macro"</div></div>
+          <div class="ips-item"><div class="ips-num">7</div><div class="ips-label">Quality</div><div class="ips-desc">คุณภาพ "8K", "highly detailed", "photorealistic", "masterpiece"</div></div>
+        </div>
+
+        <h3>ตัวอย่าง Prompt เต็มรูปแบบ</h3>
+        <div class="full-prompt-box">
+          <div class="fp-header"><i class="fa-solid fa-image"></i> Image Prompt ระดับ Professional</div>
+          <div class="fp-body" style="font-size:.86rem;line-height:2">
+            <span class="fp-tag role-tag">[Subject]</span> An elderly Thai monk in saffron robes<br/>
+            <span class="fp-tag ctx-tag">[Environment]</span> meditating inside an ancient temple in Chiang Mai at dawn<br/>
+            <span class="fp-tag task-tag">[Lighting]</span> soft golden morning light streaming through ornate wooden windows<br/>
+            <span class="fp-tag fmt-tag">[Style]</span> documentary photography, National Geographic style<br/>
+            <span class="fp-tag con-tag">[Camera]</span> shot on Leica M11, 35mm f/2, shallow depth of field, film grain<br/>
+            <span class="fp-tag role-tag">[Quality]</span> award winning photography, highly detailed, 8K resolution
+          </div>
+        </div>
+
+        <h3>Negative Prompt ที่แนะนำ (Universal)</h3>
+        <div class="neg-prompt-box">
+          <code>worst quality, low quality, blurry, deformed, ugly, bad anatomy, extra fingers, watermark, signature, text, username, error, cropped, jpeg artifacts, out of frame</code>
+        </div>
+      </section>
+
+      <!-- 6.7 -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">6.7</span> Style Transfer & Image Editing</h2>
+
+        <div class="editing-techniques">
+          <div class="et-card">
+            <div class="et-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <h4>Style Transfer</h4>
+            <p>แปลงสไตล์ภาพโดยไม่เปลี่ยน Content เช่น แปลงภาพถ่ายเป็น Oil Painting หรือ Anime</p>
+            <div class="et-tools"><span>Stable Diffusion img2img</span><span>Midjourney --sref</span></div>
+          </div>
+          <div class="et-card">
+            <div class="et-icon" style="background:linear-gradient(135deg,#ec4899,#f43f5e)"><i class="fa-solid fa-fill-drip"></i></div>
+            <h4>Inpainting</h4>
+            <p>เปลี่ยนเฉพาะส่วนที่วาด Mask ไว้ เช่น เปลี่ยนพื้นหลัง เพิ่มหรือลบวัตถุในภาพ</p>
+            <div class="et-tools"><span>Adobe Firefly</span><span>SD WebUI</span><span>DALL-E Edit</span></div>
+          </div>
+          <div class="et-card">
+            <div class="et-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><i class="fa-solid fa-expand"></i></div>
+            <h4>Outpainting</h4>
+            <p>ขยายภาพออกไปนอกขอบเขตเดิม AI จะสร้างส่วนที่เพิ่มมาให้สมจริง</p>
+            <div class="et-tools"><span>ChatGPT + DALL-E</span><span>Adobe Firefly</span></div>
+          </div>
+          <div class="et-card">
+            <div class="et-icon" style="background:linear-gradient(135deg,#10b981,#06b6d4)"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+            <h4>Upscaling</h4>
+            <p>เพิ่มความละเอียดภาพ 4× หรือ 8× โดย AI เติม Detail เพิ่มเติมให้สมจริง</p>
+            <div class="et-tools"><span>Topaz Gigapixel</span><span>Magnific AI</span><span>SD Upscaler</span></div>
+          </div>
+        </div>
+
+        <h3>เปรียบเทียบ 3 เครื่องมือหลัก</h3>
+        <div class="model-table-wrap">
+          <table class="model-table">
+            <thead><tr><th>เครื่องมือ</th><th>คุณภาพ</th><th>ง่ายของการใช้</th><th>ปรับแต่ง</th><th>ราคา</th><th>เหมาะกับ</th></tr></thead>
+            <tbody>
+              <tr><td><strong style="color:#10a37f">DALL-E 3</strong></td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐</td><td>$$ (ChatGPT Plus)</td><td>ผู้เริ่มต้น, ใช้งานเร็ว</td></tr>
+              <tr><td><strong style="color:#8b5cf6">Midjourney</strong></td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐</td><td>$$ ($10–60/เดือน)</td><td>นักออกแบบ, งาน Creative</td></tr>
+              <tr><td><strong style="color:#7c3aed">Stable Diffusion</strong></td><td>⭐⭐⭐⭐</td><td>⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>ฟรี (Local)</td><td>นักพัฒนา, งาน Custom</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 6.8 -->
+      <section class="content-section" id="sec8">
+        <h2><span class="sec-num">6.8</span> สรุปและแบบฝึกหัด</h2>
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li>Diffusion Model เรียนรู้ย้อนกระบวนการ Noise เพื่อสร้างภาพจาก Random Noise</li>
+            <li>DALL-E 3 ง่ายที่สุด เข้าใจภาษาธรรมชาติดี | Midjourney คุณภาพ Aesthetic สูงสุด | SD ปรับแต่งได้มากสุด</li>
+            <li>Image Prompt ที่ดีต้องระบุ Subject, Environment, Lighting, Style, Camera, Quality</li>
+            <li>Negative Prompt ช่วยลดปัญหาภาพผิดรูปได้มาก</li>
+            <li>เทคนิคขั้นสูง: LoRA, ControlNet, Inpainting, Outpainting, Style Transfer</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item"><div class="ex-num">1</div><div><strong>เปรียบเทียบ 3 เครื่องมือ</strong><p>สร้างภาพด้วย Prompt เดียวกันบน DALL-E 3 (ผ่าน ChatGPT), Midjourney และ Ideogram AI เปรียบเทียบคุณภาพและสไตล์</p></div></div>
+          <div class="exercise-item"><div class="ex-num">2</div><div><strong>Image Prompt Workshop</strong><p>เลือกสถานที่ในประเทศไทย 1 แห่ง เขียน Image Prompt ครบ 7 องค์ประกอบ สร้างภาพและปรับปรุงอย่างน้อย 3 รอบ</p></div></div>
+          <div class="exercise-item"><div class="ex-num">3</div><div><strong>Style Transfer</strong><p>นำภาพถ่ายของตัวเองหรือสถานที่ แล้วใช้ AI แปลงเป็นสไตล์ต่างๆ อย่างน้อย 3 สไตล์ (เช่น Anime, Oil Painting, Watercolor)</p></div></div>
+          <div class="exercise-item"><div class="ex-num">4</div><div><strong>Mini Project: AI Art Gallery</strong><p>สร้างภาพ AI 6 รูปในธีมเดียวกัน (เช่น "อนาคตของประเทศไทย" หรือ "เมืองใต้ทะเล") พร้อม Prompt ที่ใช้และคำอธิบายแต่ละรูป</p></div></div>
+        </div>
+
+        <div class="lesson-nav">
+          <a href="lesson5.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> บทที่ 5: Text Generation</a>
+          <a href="lesson7.html" class="btn btn-primary">บทที่ 7: AI for Software Dev <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-content"><div class="footer-brand"><i class="fa-solid fa-robot"></i><span>Generative AI & Prompt Engineering</span></div><p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p><p class="footer-copy">&copy; 2025 All rights reserved.</p></div></div></footer>
+  <script src="script.js"></script>
+  <script>
+    const sections=document.querySelectorAll('.content-section'),tocLinks=document.querySelectorAll('.toc-link');
+    window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)c=s.id});tocLinks.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+c)})});
+  </script>
+</body>
+</html>
