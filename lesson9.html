@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 9: Building AI Applications with API</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand"><a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a></div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="tools.html">AI Tools</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">09</span> API</div>
+      <h1>Building AI Applications with API</h1>
+      <p class="lesson-desc">เรียนรู้การเชื่อมต่อ OpenAI และ Anthropic Claude API เพื่อสร้างแอปพลิเคชัน AI จริง ตั้งแต่ Function Calling, Streaming, การสร้าง Chatbot จนถึงการ Deploy บน Cloud</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับกลาง-สูง</span>
+        <span><i class="fa-solid fa-list-check"></i> 8 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+    <aside class="toc-sidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">9.1 ทำความรู้จัก OpenAI API</a></li>
+        <li><a href="#sec2" class="toc-link">9.2 Anthropic Claude API</a></li>
+        <li><a href="#sec3" class="toc-link">9.3 Function Calling &amp; Tool Use</a></li>
+        <li><a href="#sec4" class="toc-link">9.4 Streaming Responses</a></li>
+        <li><a href="#sec5" class="toc-link">9.5 สร้าง AI Chatbot Application</a></li>
+        <li><a href="#sec6" class="toc-link">9.6 Error Handling &amp; Rate Limiting</a></li>
+        <li><a href="#sec7" class="toc-link">9.7 Cost Optimization &amp; Deployment</a></li>
+        <li><a href="#sec8" class="toc-link">9.8 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <main class="lesson-content">
+
+      <!-- 9.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">9.1</span> ทำความรู้จัก OpenAI API</h2>
+        <p>OpenAI API เป็น <strong>REST API</strong> ที่ให้คุณเรียกใช้ความสามารถของโมเดล GPT ผ่านโค้ดได้โดยตรง การยืนยันตัวตนทำผ่าน <strong>API Key</strong> ที่ส่งใน HTTP Header ทุกครั้งที่เรียก endpoint</p>
+
+        <div class="steps-flow">
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <div class="step-body">
+              <h4>1. สมัคร OpenAI</h4>
+              <p>สมัครบัญชีที่ <strong>platform.openai.com</strong> และเติม Credit เพื่อใช้งาน API</p>
+            </div>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-key"></i></div>
+            <div class="step-body">
+              <h4>2. รับ API Key</h4>
+              <p>ไปที่ <strong>API Keys</strong> ในแดชบอร์ด คลิก "Create new secret key" และบันทึกไว้ให้ดี เพราะดูได้แค่ครั้งเดียว</p>
+            </div>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-brands fa-python"></i></div>
+            <div class="step-body">
+              <h4>3. ติดตั้ง Library</h4>
+              <p>รันคำสั่ง <code>pip install openai</code> ในเทอร์มินัลของคุณ</p>
+            </div>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-rocket"></i></div>
+            <div class="step-body">
+              <h4>4. เริ่มใช้งาน</h4>
+              <p>เรียก <code>client.chat.completions.create()</code> พร้อม model และ messages แล้วรับคำตอบได้เลย</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>ตัวอย่างการเรียก OpenAI API</h3>
+        <div class="code-block">
+          <pre><span class="c-keyword">import</span> openai
+
+client = openai.OpenAI(api_key=<span class="c-string">"sk-..."</span>)
+
+response = client.chat.completions.create(
+    model=<span class="c-string">"gpt-4o"</span>,
+    messages=[
+        {<span class="c-string">"role"</span>: <span class="c-string">"system"</span>, <span class="c-string">"content"</span>: <span class="c-string">"You are a helpful assistant."</span>},
+        {<span class="c-string">"role"</span>: <span class="c-string">"user"</span>, <span class="c-string">"content"</span>: <span class="c-string">"อธิบาย Python แบบง่ายๆ"</span>}
+    ],
+    temperature=<span class="c-num">0.7</span>,
+    max_tokens=<span class="c-num">500</span>
+)
+<span class="c-keyword">print</span>(response.choices[<span class="c-num">0</span>].message.content)</pre>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="fa-solid fa-sliders"></i> พารามิเตอร์สำคัญของ API</h4>
+          <ul>
+            <li><strong>model</strong> — ชื่อโมเดลที่ต้องการใช้ เช่น <code>gpt-4o</code>, <code>gpt-4o-mini</code></li>
+            <li><strong>messages</strong> — อาร์เรย์ของบทสนทนา แต่ละรายการมี <code>role</code> (system / user / assistant) และ <code>content</code></li>
+            <li><strong>temperature</strong> — ควบคุมความสร้างสรรค์ ค่า 0–2; ต่ำ = มีระเบียบ, สูง = สร้างสรรค์กว่า</li>
+            <li><strong>max_tokens</strong> — จำนวน Token สูงสุดของคำตอบ ใช้ควบคุมค่าใช้จ่ายและความยาว</li>
+            <li><strong>top_p</strong> — Nucleus Sampling อีกวิธีควบคุม Randomness แนะนำให้ใช้แค่ temperature หรือ top_p อย่างใดอย่างหนึ่ง</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 9.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">9.2</span> Anthropic Claude API</h2>
+        <p>Anthropic Claude API มีโครงสร้างคล้าย OpenAI แต่มีความแตกต่างในการส่ง <code>system</code> prompt และ format ของ response รองรับ Claude 3 / Claude 3.5 / Claude Opus 4 series</p>
+
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-bolt"></i> OpenAI API Style</h4>
+            <ul>
+              <li>system อยู่ใน messages array</li>
+              <li>ตอบกลับที่ <code>response.choices[0].message.content</code></li>
+              <li>ใช้ <code>openai.OpenAI()</code> client</li>
+              <li>parameter: <code>temperature</code>, <code>max_tokens</code></li>
+              <li>Models: GPT-4o, GPT-4o-mini, o1, o3</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-shield-halved"></i> Claude API Style</h4>
+            <ul>
+              <li>system เป็น parameter แยกออกมา</li>
+              <li>ตอบกลับที่ <code>message.content[0].text</code></li>
+              <li>ใช้ <code>anthropic.Anthropic()</code> client</li>
+              <li>parameter: <code>max_tokens</code> (บังคับ), <code>temperature</code></li>
+              <li>Models: Claude Opus 4, Sonnet 4, Haiku 3.5</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>ตัวอย่างการเรียก Claude API</h3>
+        <div class="code-block">
+          <pre><span class="c-keyword">import</span> anthropic
+
+client = anthropic.Anthropic(api_key=<span class="c-string">"sk-ant-..."</span>)
+
+message = client.messages.create(
+    model=<span class="c-string">"claude-opus-4-5"</span>,
+    max_tokens=<span class="c-num">1024</span>,
+    system=<span class="c-string">"คุณเป็นผู้ช่วย AI ที่เชี่ยวชาญด้านวิทยาศาสตร์"</span>,
+    messages=[
+        {<span class="c-string">"role"</span>: <span class="c-string">"user"</span>, <span class="c-string">"content"</span>: <span class="c-string">"อธิบาย Quantum Computing"</span>}
+    ]
+)
+<span class="c-keyword">print</span>(message.content[<span class="c-num">0</span>].text)</pre>
+        </div>
+
+        <h3>เปรียบเทียบ OpenAI vs Anthropic</h3>
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>ด้าน</th>
+              <th>OpenAI (GPT-4o)</th>
+              <th>Anthropic (Claude Opus 4)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>โมเดลเรือธง</strong></td>
+              <td>GPT-4o, o3</td>
+              <td>Claude Opus 4, Claude Sonnet 4</td>
+            </tr>
+            <tr>
+              <td><strong>ระดับราคา</strong></td>
+              <td>$2.50 / $10 per 1M tokens (input/output)</td>
+              <td>$15 / $75 per 1M tokens (input/output)</td>
+            </tr>
+            <tr>
+              <td><strong>Context Window</strong></td>
+              <td>128K tokens</td>
+              <td>200K tokens</td>
+            </tr>
+            <tr>
+              <td><strong>จุดแข็ง</strong></td>
+              <td>Speed, Vision, Ecosystem ใหญ่</td>
+              <td>Reasoning ลึก, ความปลอดภัย, Long context</td>
+            </tr>
+            <tr>
+              <td><strong>Function Calling</strong></td>
+              <td>Tools / Function Calling</td>
+              <td>Tool Use</td>
+            </tr>
+            <tr>
+              <td><strong>Free Tier</strong></td>
+              <td>ไม่มี (ต้องเติม credit)</td>
+              <td>ไม่มี (ต้องเติม credit)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 9.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">9.3</span> Function Calling &amp; Tool Use</h2>
+        <p><strong>Function Calling</strong> คือความสามารถที่ให้ AI เรียกใช้ฟังก์ชันจริงในโค้ดของคุณได้ แทนที่จะตอบเป็นข้อความเพียงอย่างเดียว โมเดลจะตัดสินใจว่าเมื่อไหร่ควรเรียก function ใดและส่ง argument อะไรไป</p>
+
+        <div class="steps-flow">
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-user"></i></div>
+            <div class="step-body"><h4>1. User</h4><p>ส่งคำถาม เช่น "อุณหภูมิกรุงเทพวันนี้เท่าไหร่?"</p></div>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-robot"></i></div>
+            <div class="step-body"><h4>2. LLM วิเคราะห์</h4><p>โมเดลรู้จัก tools ที่มี ตัดสินใจเรียก <code>get_weather(city="Bangkok")</code></p></div>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-code"></i></div>
+            <div class="step-body"><h4>3. Execute Function</h4><p>โค้ดของคุณรับ function name + arguments แล้วเรียกฟังก์ชันจริง</p></div>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-reply"></i></div>
+            <div class="step-body"><h4>4. Return Result</h4><p>ส่งผลลัพธ์กลับไปให้โมเดลเพื่อประกอบคำตอบสุดท้าย</p></div>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="step-item">
+            <div class="step-icon"><i class="fa-solid fa-comment-dots"></i></div>
+            <div class="step-body"><h4>5. Response</h4><p>โมเดลสร้างคำตอบภาษาธรรมชาติโดยใช้ข้อมูลจริงจาก function</p></div>
+          </div>
+        </div>
+
+        <h3>ตัวอย่าง Function Calling กับ OpenAI</h3>
+        <div class="code-block">
+          <pre><span class="c-keyword">import</span> json
+
+<span class="c-keyword">def</span> get_weather(city: str, unit: str = <span class="c-string">"celsius"</span>) -> dict:
+    <span class="c-comment"># Mock weather API</span>
+    <span class="c-keyword">return</span> {<span class="c-string">"city"</span>: city, <span class="c-string">"temp"</span>: <span class="c-num">28</span>, <span class="c-string">"unit"</span>: unit, <span class="c-string">"condition"</span>: <span class="c-string">"Sunny"</span>}
+
+tools = [
+    {
+        <span class="c-string">"type"</span>: <span class="c-string">"function"</span>,
+        <span class="c-string">"function"</span>: {
+            <span class="c-string">"name"</span>: <span class="c-string">"get_weather"</span>,
+            <span class="c-string">"description"</span>: <span class="c-string">"Get current weather for a city"</span>,
+            <span class="c-string">"parameters"</span>: {
+                <span class="c-string">"type"</span>: <span class="c-string">"object"</span>,
+                <span class="c-string">"properties"</span>: {
+                    <span class="c-string">"city"</span>: {<span class="c-string">"type"</span>: <span class="c-string">"string"</span>, <span class="c-string">"description"</span>: <span class="c-string">"City name"</span>},
+                    <span class="c-string">"unit"</span>: {<span class="c-string">"type"</span>: <span class="c-string">"string"</span>, <span class="c-string">"enum"</span>: [<span class="c-string">"celsius"</span>, <span class="c-string">"fahrenheit"</span>]}
+                },
+                <span class="c-string">"required"</span>: [<span class="c-string">"city"</span>]
+            }
+        }
+    }
+]
+
+response = client.chat.completions.create(
+    model=<span class="c-string">"gpt-4o"</span>,
+    messages=[{<span class="c-string">"role"</span>: <span class="c-string">"user"</span>, <span class="c-string">"content"</span>: <span class="c-string">"อุณหภูมิกรุงเทพวันนี้เท่าไหร่?"</span>}],
+    tools=tools,
+    tool_choice=<span class="c-string">"auto"</span>
+)
+
+<span class="c-comment"># Handle tool call</span>
+<span class="c-keyword">if</span> response.choices[<span class="c-num">0</span>].message.tool_calls:
+    tool_call = response.choices[<span class="c-num">0</span>].message.tool_calls[<span class="c-num">0</span>]
+    args = json.loads(tool_call.function.arguments)
+    result = get_weather(**args)
+    <span class="c-keyword">print</span>(f<span class="c-string">"Weather result: {result}"</span>)</pre>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="fa-solid fa-lightbulb"></i> Use Cases ของ Function Calling</h4>
+          <ul>
+            <li>ดึงข้อมูล Real-time: สภาพอากาศ, ราคาหุ้น, ข่าวล่าสุด</li>
+            <li>CRUD Database: สร้าง / อ่าน / แก้ไข / ลบข้อมูลในฐานข้อมูล</li>
+            <li>เรียก External Service: ส่ง Email, สร้าง Calendar Event, โพสต์ Social Media</li>
+            <li>คำนวณและประมวลผลที่ซับซ้อน: คณิตศาสตร์, การแปลงหน่วย, Data Analysis</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 9.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">9.4</span> Streaming Responses</h2>
+        <p><strong>Streaming</strong> คือการรับ response แบบ real-time ทีละ token แทนที่จะรอจนโมเดลสร้างคำตอบครบทั้งหมด ทำให้ผู้ใช้รู้สึกว่าแอปตอบสนองเร็วขึ้นมาก</p>
+
+        <div class="tips-grid">
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-comments"></i></div>
+            <h4>Chatbot UI</h4>
+            <p>แสดงข้อความทีละตัวอักษรเหมือน ChatGPT ทำให้ UX ดูเป็นธรรมชาติและรู้สึกเร็ว</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-file-lines"></i></div>
+            <h4>Long Documents</h4>
+            <p>เมื่อโมเดลต้องสร้างเนื้อหายาว Streaming ช่วยให้ผู้ใช้เริ่มอ่านได้ทันทีโดยไม่ต้องรอนาน</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-gauge-high"></i></div>
+            <h4>Perceived Performance</h4>
+            <p>Time-to-first-token ลดลงมาก ทำให้แอปดูเร็วกว่าความเป็นจริง</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-ban"></i></div>
+            <h4>Cancel Mid-stream</h4>
+            <p>ผู้ใช้สามารถหยุดการสร้างคำตอบกลางทางได้ ประหยัด token และ cost</p>
+          </div>
+        </div>
+
+        <h3>Streaming กับ OpenAI และ FastAPI</h3>
+        <div class="code-block">
+          <pre><span class="c-comment"># Streaming with OpenAI</span>
+stream = client.chat.completions.create(
+    model=<span class="c-string">"gpt-4o"</span>,
+    messages=[{<span class="c-string">"role"</span>: <span class="c-string">"user"</span>, <span class="c-string">"content"</span>: <span class="c-string">"เขียนบทกวีเกี่ยวกับ AI"</span>}],
+    stream=<span class="c-keyword">True</span>
+)
+
+<span class="c-keyword">for</span> chunk <span class="c-keyword">in</span> stream:
+    <span class="c-keyword">if</span> chunk.choices[<span class="c-num">0</span>].delta.content <span class="c-keyword">is not None</span>:
+        <span class="c-keyword">print</span>(chunk.choices[<span class="c-num">0</span>].delta.content, end=<span class="c-string">""</span>, flush=<span class="c-keyword">True</span>)
+
+<span class="c-comment"># Streaming with FastAPI</span>
+<span class="c-keyword">from</span> fastapi <span class="c-keyword">import</span> FastAPI
+<span class="c-keyword">from</span> fastapi.responses <span class="c-keyword">import</span> StreamingResponse
+
+app = FastAPI()
+
+<span class="c-keyword">@app</span>.get(<span class="c-string">"/chat"</span>)
+<span class="c-keyword">async def</span> chat_stream(message: str):
+    <span class="c-keyword">async def</span> generate():
+        stream = client.chat.completions.create(
+            model=<span class="c-string">"gpt-4o"</span>,
+            messages=[{<span class="c-string">"role"</span>: <span class="c-string">"user"</span>, <span class="c-string">"content"</span>: message}],
+            stream=<span class="c-keyword">True</span>
+        )
+        <span class="c-keyword">for</span> chunk <span class="c-keyword">in</span> stream:
+            <span class="c-keyword">if</span> chunk.choices[<span class="c-num">0</span>].delta.content:
+                <span class="c-keyword">yield</span> f<span class="c-string">"data: {chunk.choices[0].delta.content}\n\n"</span>
+    <span class="c-keyword">return</span> StreamingResponse(generate(), media_type=<span class="c-string">"text/event-stream"</span>)</pre>
+        </div>
+
+        <div class="info-box warning">
+          <h4><i class="fa-solid fa-triangle-exclamation"></i> ข้อควรระวัง Streaming</h4>
+          <ul>
+            <li>ไม่สามารถดู <code>usage</code> (จำนวน token) ใน streaming response ได้โดยตรง ต้องนับเอง</li>
+            <li>Error จะเกิดกลางสตรีมได้ ต้องจัดการ exception ใน generator</li>
+            <li>Frontend ต้องรองรับ Server-Sent Events (SSE) หรือ WebSocket</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 9.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">9.5</span> สร้าง AI Chatbot Application</h2>
+        <p>Chatbot ที่ใช้งานได้จริงต้องจำ <strong>บทสนทนาทั้งหมด</strong> ไว้ใน conversation history และส่งไปพร้อมกันทุกครั้งที่เรียก API เพราะ LLM ไม่มี memory ระหว่างการเรียก</p>
+
+        <h3>Chatbot Class พร้อม Conversation History</h3>
+        <div class="code-block">
+          <pre><span class="c-keyword">from</span> openai <span class="c-keyword">import</span> OpenAI
+<span class="c-keyword">import</span> json
+
+<span class="c-keyword">class</span> AIChatbot:
+    <span class="c-keyword">def</span> __init__(self, system_prompt: str, model: str = <span class="c-string">"gpt-4o"</span>):
+        self.client = OpenAI()
+        self.model = model
+        self.conversation_history = [
+            {<span class="c-string">"role"</span>: <span class="c-string">"system"</span>, <span class="c-string">"content"</span>: system_prompt}
+        ]
+
+    <span class="c-keyword">def</span> chat(self, user_message: str) -> str:
+        self.conversation_history.append({
+            <span class="c-string">"role"</span>: <span class="c-string">"user"</span>,
+            <span class="c-string">"content"</span>: user_message
+        })
+
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=self.conversation_history,
+            temperature=<span class="c-num">0.7</span>,
+            max_tokens=<span class="c-num">1000</span>
+        )
+
+        assistant_message = response.choices[<span class="c-num">0</span>].message.content
+        self.conversation_history.append({
+            <span class="c-string">"role"</span>: <span class="c-string">"assistant"</span>,
+            <span class="c-string">"content"</span>: assistant_message
+        })
+
+        <span class="c-keyword">return</span> assistant_message
+
+    <span class="c-keyword">def</span> save_history(self, filename: str):
+        <span class="c-keyword">with</span> open(filename, <span class="c-string">'w'</span>, encoding=<span class="c-string">'utf-8'</span>) <span class="c-keyword">as</span> f:
+            json.dump(self.conversation_history, f, ensure_ascii=<span class="c-keyword">False</span>, indent=<span class="c-num">2</span>)
+
+    <span class="c-keyword">def</span> get_token_usage(self) -> dict:
+        <span class="c-comment"># Estimate tokens (rough calculation)</span>
+        total_chars = sum(len(m[<span class="c-string">"content"</span>]) <span class="c-keyword">for</span> m <span class="c-keyword">in</span> self.conversation_history)
+        <span class="c-keyword">return</span> {<span class="c-string">"estimated_tokens"</span>: total_chars // <span class="c-num">4</span>}
+
+<span class="c-comment"># Usage</span>
+bot = AIChatbot(
+    system_prompt=<span class="c-string">"คุณเป็นผู้ช่วยสอนวิชาคณิตศาสตร์ อธิบายเป็นภาษาไทย ใช้ตัวอย่างที่เข้าใจง่าย"</span>
+)
+
+<span class="c-keyword">print</span>(bot.chat(<span class="c-string">"อธิบาย Derivative คืออะไร"</span>))
+<span class="c-keyword">print</span>(bot.chat(<span class="c-string">"ช่วยยกตัวอย่างการใช้จริงให้หน่อย"</span>))
+bot.save_history(<span class="c-string">"conversation.json"</span>)</pre>
+        </div>
+
+        <div class="info-box success">
+          <h4><i class="fa-solid fa-circle-check"></i> Tips: การจัดการ Conversation History</h4>
+          <ul>
+            <li><strong>Token Limit Management</strong> — เมื่อ history ยาวเกินไป ให้ตัด message เก่าออก หรือสรุปเนื้อหาก่อนหน้า (Summarization)</li>
+            <li><strong>Sliding Window</strong> — เก็บเฉพาะ N รอบล่าสุด เช่น <code>self.conversation_history[-20:]</code></li>
+            <li><strong>Persistent Storage</strong> — บันทึก history ลง Database เพื่อให้ผู้ใช้กลับมาคุยต่อในเซสชันใหม่ได้</li>
+            <li><strong>System Prompt</strong> — อย่าตัด system message ออกเมื่อ trim history เพราะมันสำคัญมาก</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 9.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">9.6</span> Error Handling &amp; Rate Limiting</h2>
+        <p>การเรียก API จากภายนอกมีโอกาสเกิด error เสมอ การเขียนโค้ดที่ดีต้องดักจับ error แต่ละประเภทและจัดการอย่างเหมาะสม โดยเฉพาะ <strong>Rate Limit</strong> ที่พบบ่อยในช่วงเริ่มต้น</p>
+
+        <div class="tips-grid">
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-gauge"></i></div>
+            <h4>RateLimitError</h4>
+            <p>ส่ง request เร็วเกินที่ API กำหนด แก้ด้วย Exponential Backoff — รอ 5s, 10s, 20s…</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-lock"></i></div>
+            <h4>AuthenticationError</h4>
+            <p>API Key ผิดหรือหมดอายุ ไม่ควร retry แต่ควรแจ้ง user ให้ตรวจสอบ credentials</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-server"></i></div>
+            <h4>APIError (5xx)</h4>
+            <p>Server ของ OpenAI มีปัญหา สามารถ retry ได้หลังรอสักครู่</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-stopwatch"></i></div>
+            <h4>Timeout</h4>
+            <p>Request ใช้เวลานานเกิน limit ที่กำหนด ควรตั้ง <code>timeout=30</code> เสมอ</p>
+          </div>
+        </div>
+
+        <h3>Retry Logic ด้วย Exponential Backoff</h3>
+        <div class="code-block">
+          <pre><span class="c-keyword">import</span> time
+<span class="c-keyword">import</span> openai
+<span class="c-keyword">from</span> openai <span class="c-keyword">import</span> RateLimitError, APIError, AuthenticationError
+
+<span class="c-keyword">def</span> call_api_with_retry(messages: list, max_retries: int = <span class="c-num">3</span>) -> str:
+    client = openai.OpenAI()
+
+    <span class="c-keyword">for</span> attempt <span class="c-keyword">in</span> range(max_retries):
+        <span class="c-keyword">try</span>:
+            response = client.chat.completions.create(
+                model=<span class="c-string">"gpt-4o"</span>,
+                messages=messages,
+                timeout=<span class="c-num">30</span>
+            )
+            <span class="c-keyword">return</span> response.choices[<span class="c-num">0</span>].message.content
+
+        <span class="c-keyword">except</span> RateLimitError:
+            wait_time = (<span class="c-num">2</span> ** attempt) * <span class="c-num">5</span>  <span class="c-comment"># Exponential backoff</span>
+            <span class="c-keyword">print</span>(f<span class="c-string">"Rate limit hit. Waiting {wait_time}s..."</span>)
+            time.sleep(wait_time)
+
+        <span class="c-keyword">except</span> AuthenticationError:
+            <span class="c-keyword">raise</span> ValueError(<span class="c-string">"Invalid API Key - check your credentials"</span>)
+
+        <span class="c-keyword">except</span> APIError <span class="c-keyword">as</span> e:
+            <span class="c-keyword">print</span>(f<span class="c-string">"API Error: {e}. Retrying..."</span>)
+            time.sleep(<span class="c-num">2</span>)
+
+    <span class="c-keyword">raise</span> Exception(f<span class="c-string">"Failed after {max_retries} attempts"</span>)</pre>
+        </div>
+
+        <div class="info-box success">
+          <h4><i class="fa-solid fa-shield-halved"></i> Best Practices: Security &amp; Reliability</h4>
+          <div class="tips-grid" style="margin-top:1rem">
+            <div class="tip-item">
+              <div class="tip-icon"><i class="fa-solid fa-eye-slash"></i></div>
+              <h4>ใช้ Environment Variables</h4>
+              <p>เก็บ API Key ใน <code>.env</code> file หรือ Secret Manager ไม่ใช่ใน source code</p>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon"><i class="fa-solid fa-code-commit"></i></div>
+              <h4>ไม่ Hardcode API Key</h4>
+              <p>ไม่ commit API Key ลง Git เด็ดขาด ถ้าเผลอ commit ให้ revoke ทันที</p>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon"><i class="fa-solid fa-rotate"></i></div>
+              <h4>Implement Retry</h4>
+              <p>ทุก production code ควรมี retry logic สำหรับ RateLimitError และ APIError</p>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon"><i class="fa-solid fa-clock"></i></div>
+              <h4>Set Timeout</h4>
+              <p>กำหนด timeout เสมอ เพื่อป้องกัน request ค้างนานจนแอปหยุดตอบสนอง</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9.7 -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">9.7</span> Cost Optimization &amp; Deployment</h2>
+        <p>ค่าใช้จ่ายของ API คิดตาม <strong>Token</strong> — ทั้ง input และ output รวมกัน การเลือกโมเดลและจัดการ prompt ดีๆ ช่วยลดต้นทุนได้มาก</p>
+
+        <h3>ราคา Token ของโมเดลยอดนิยม (ราคาโดยประมาณ ปี 2025)</h3>
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>โมเดล</th>
+              <th>Input (ต่อ 1M tokens)</th>
+              <th>Output (ต่อ 1M tokens)</th>
+              <th>Context Window</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>GPT-4o</strong></td>
+              <td>$2.50</td>
+              <td>$10.00</td>
+              <td>128K</td>
+              <td>งานทั่วไป, Vision</td>
+            </tr>
+            <tr>
+              <td><strong>GPT-4o-mini</strong></td>
+              <td>$0.15</td>
+              <td>$0.60</td>
+              <td>128K</td>
+              <td>งานเบา, ประหยัดสุด</td>
+            </tr>
+            <tr>
+              <td><strong>Claude Opus 4</strong></td>
+              <td>$15.00</td>
+              <td>$75.00</td>
+              <td>200K</td>
+              <td>Reasoning ซับซ้อน</td>
+            </tr>
+            <tr>
+              <td><strong>Claude Sonnet 4</strong></td>
+              <td>$3.00</td>
+              <td>$15.00</td>
+              <td>200K</td>
+              <td>Balance ราคา/คุณภาพ</td>
+            </tr>
+            <tr>
+              <td><strong>Gemini 1.5 Pro</strong></td>
+              <td>$3.50</td>
+              <td>$10.50</td>
+              <td>1M</td>
+              <td>Long context, Multimodal</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>เทคนิคลดค่าใช้จ่าย</h3>
+        <div class="tips-grid">
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-memory"></i></div>
+            <h4>Caching</h4>
+            <p>Cache คำตอบสำหรับ prompt ที่ซ้ำกัน ด้วย Redis หรือ in-memory dict ลด API call ซ้ำซ้อน</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-scissors"></i></div>
+            <h4>Prompt Optimization</h4>
+            <p>เขียน prompt กระชับ ไม่ใส่ข้อมูลที่ไม่จำเป็น ลด input token โดยตรง</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h4>เลือกโมเดลให้เหมาะ</h4>
+            <p>ใช้ GPT-4o-mini หรือ Claude Haiku สำหรับงานง่าย ประหยัดได้ถึง 90% เทียบกับ flagship</p>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon"><i class="fa-solid fa-list-ol"></i></div>
+            <h4>Batch Processing</h4>
+            <p>รวม request หลายอันให้เป็น batch เดียวเมื่อเป็นไปได้ ลดจำนวนการเรียก API</p>
+          </div>
+        </div>
+
+        <h3>การ Deploy: ตัวเลือกยอดนิยม</h3>
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-cloud"></i> Cloud Platforms</h4>
+            <ul>
+              <li><strong>Railway</strong> — Deploy ง่ายที่สุด push จาก GitHub</li>
+              <li><strong>Render</strong> — Free tier มี, เหมาะสำหรับ prototype</li>
+              <li><strong>Heroku</strong> — Classic, ง่ายแต่ราคาสูงกว่า</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-server"></i> Serverless</h4>
+            <ul>
+              <li><strong>AWS Lambda</strong> — Pay-per-use เหมาะ traffic ไม่สม่ำเสมอ</li>
+              <li><strong>Google Cloud Run</strong> — Container-based, scale to zero</li>
+              <li><strong>Vercel Functions</strong> — เหมาะมากกับ Next.js</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>จัดการ API Key ด้วย Environment Variables</h3>
+        <div class="code-block">
+          <pre><span class="c-comment"># .env file (ห้าม commit ลง Git!)</span>
+<span class="c-string">OPENAI_API_KEY</span>=sk-proj-xxxxxxxxxxxxx
+<span class="c-string">ANTHROPIC_API_KEY</span>=sk-ant-xxxxxxxxxxxxx
+<span class="c-string">APP_ENV</span>=production</pre>
+        </div>
+        <div class="code-block">
+          <pre><span class="c-comment"># .gitignore — ต้องเพิ่มบรรทัดนี้!</span>
+.env
+*.env
+.env.local</pre>
+        </div>
+        <div class="code-block">
+          <pre><span class="c-keyword">from</span> dotenv <span class="c-keyword">import</span> load_dotenv
+<span class="c-keyword">import</span> os
+
+load_dotenv()  <span class="c-comment"># loads .env file</span>
+
+openai_key = os.getenv(<span class="c-string">"OPENAI_API_KEY"</span>)
+claude_key = os.getenv(<span class="c-string">"ANTHROPIC_API_KEY"</span>)
+
+<span class="c-comment"># Never hardcode API keys!</span>
+<span class="c-comment"># Always use environment variables</span></pre>
+        </div>
+
+        <div class="info-box warning">
+          <h4><i class="fa-solid fa-triangle-exclamation"></i> ระวัง: หาก API Key หลุดออกไป</h4>
+          <ul>
+            <li>Revoke key ทันทีในแดชบอร์ดของ OpenAI / Anthropic</li>
+            <li>สร้าง key ใหม่และอัปเดตใน server</li>
+            <li>ตรวจสอบ usage history ว่ามีการใช้งานผิดปกติหรือไม่</li>
+            <li>ตั้ง <strong>Usage Limits</strong> ในแดชบอร์ดเพื่อจำกัดค่าใช้จ่ายสูงสุด</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 9.8 -->
+      <section class="content-section" id="sec8">
+        <h2><span class="sec-num">9.8</span> สรุปและแบบฝึกหัด</h2>
+
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-star"></i> สรุปสิ่งที่เรียนในบทนี้</h3>
+          <ul>
+            <li><strong>OpenAI API</strong> — ใช้ <code>client.chat.completions.create()</code> พร้อม API Key สำหรับ Authentication</li>
+            <li><strong>Claude API</strong> — โครงสร้างคล้ายกัน แต่ system prompt แยกเป็น parameter และตอบกลับที่ <code>message.content[0].text</code></li>
+            <li><strong>Function Calling</strong> — ให้ AI ตัดสินใจเรียกฟังก์ชันในโค้ดของคุณเพื่อดึงข้อมูล Real-time หรือทำ Action ต่างๆ</li>
+            <li><strong>Streaming</strong> — รับ response ทีละ token ด้วย <code>stream=True</code> เหมาะกับ chatbot UI และเนื้อหายาว</li>
+            <li><strong>Conversation History</strong> — ต้องส่ง history ทั้งหมดทุกครั้งที่เรียก API เพราะ LLM ไม่มี memory ในตัว</li>
+            <li><strong>Error Handling</strong> — ดักจับ RateLimitError, AuthenticationError, APIError และ implement Exponential Backoff</li>
+            <li><strong>Cost Optimization</strong> — เลือกโมเดลให้เหมาะ, ใช้ caching, optimize prompt และ set usage limits</li>
+            <li><strong>Security</strong> — เก็บ API Key ใน environment variables เสมอ ห้าม hardcode ใน source code</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item">
+            <div class="ex-num">1</div>
+            <div>
+              <strong>Simple Chatbot with Memory</strong>
+              <p>สร้าง simple chatbot ด้วย OpenAI API ที่จำบทสนทนาได้ โดยใช้ class <code>AIChatbot</code> เป็นต้นแบบ ทดสอบด้วยการสนทนาอย่างน้อย 5 รอบ และตรวจสอบว่า AI จำบริบทก่อนหน้าได้จริง</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">2</div>
+            <div>
+              <strong>Function Calling: Real Weather Data</strong>
+              <p>เพิ่ม Function Calling เพื่อดึงข้อมูลสภาพอากาศจริงจาก OpenWeatherMap API (<code>api.openweathermap.org</code>) แทนที่ Mock data แล้วทดสอบถามอุณหภูมิเมืองต่างๆ</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">3</div>
+            <div>
+              <strong>Streaming Chatbot ด้วย FastAPI</strong>
+              <p>สร้าง streaming chatbot ด้วย FastAPI ที่มี endpoint <code>/chat</code> รับ query parameter <code>message</code> และส่งกลับ Server-Sent Events ทดสอบด้วย curl หรือ Postman แล้วดู response ทีละ token</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">4</div>
+            <div>
+              <strong>Robust Error Handling</strong>
+              <p>Implement retry logic ที่ดักจับ error ได้ทุกประเภท รวมถึง <code>ConnectionError</code> และ <code>TimeoutError</code> เพิ่มการ logging ให้บันทึก attempt number และ wait time ทดสอบโดยใช้ API Key ผิดและ key ถูก</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">5</div>
+            <div>
+              <strong>Deploy บน Railway หรือ Render</strong>
+              <p>นำ chatbot จากข้อ 1 ขึ้น deploy บน Railway (<code>railway.app</code>) หรือ Render (<code>render.com</code>) ตั้งค่า environment variable <code>OPENAI_API_KEY</code> บน platform และทดสอบเรียกใช้งานจาก URL จริง</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-nav">
+          <a href="lesson8.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> บทที่ 8: RAG</a>
+          <a href="lesson10.html" class="btn btn-primary">บทที่ 10 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-content"><div class="footer-brand"><i class="fa-solid fa-robot"></i><span>Generative AI &amp; Prompt Engineering</span></div><p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p><p class="footer-copy">&copy; 2025 All rights reserved.</p></div></div></footer>
+  <script src="script.js"></script>
+  <script>
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const sections = document.querySelectorAll('.content-section');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+</body>
+</html>

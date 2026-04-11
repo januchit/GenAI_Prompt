@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 11: AI Ethics &amp; Responsible AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- Lesson Hero -->
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">11</span> Ethics</div>
+      <h1>AI Ethics &amp; Responsible AI</h1>
+      <p class="lesson-desc">ทำความเข้าใจจริยธรรมของ AI ความเสี่ยงด้าน Bias และ Hallucination การคุ้มครองความเป็นส่วนตัว กฎหมาย EU AI Act และแนวทางการใช้ AI อย่างรับผิดชอบในโลกจริง</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับพื้นฐาน</span>
+        <span><i class="fa-solid fa-list-check"></i> 8 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+
+    <!-- Sidebar TOC -->
+    <aside class="toc-sidebar" id="tocSidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">11.1 จริยธรรม AI คืออะไร?</a></li>
+        <li><a href="#sec2" class="toc-link">11.2 Bias &amp; Fairness ใน AI</a></li>
+        <li><a href="#sec3" class="toc-link">11.3 Hallucination &amp; Misinformation</a></li>
+        <li><a href="#sec4" class="toc-link">11.4 Privacy &amp; Data Protection</a></li>
+        <li><a href="#sec5" class="toc-link">11.5 ลิขสิทธิ์และทรัพย์สินทางปัญญา</a></li>
+        <li><a href="#sec6" class="toc-link">11.6 EU AI Act &amp; กฎหมาย AI</a></li>
+        <li><a href="#sec7" class="toc-link">11.7 Responsible AI Framework</a></li>
+        <li><a href="#sec8" class="toc-link">11.8 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lesson-content">
+
+      <!-- ===== Section 11.1 ===== -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">11.1</span> จริยธรรม AI คืออะไร?</h2>
+
+        <p>
+          <strong>AI Ethics (จริยธรรม AI)</strong> คือ ชุดของหลักการทางศีลธรรมและแนวทางปฏิบัติที่กำกับการพัฒนา การนำไปใช้งาน
+          และการกำกับดูแลระบบปัญญาประดิษฐ์ โดยมุ่งเน้นให้ AI ก่อให้เกิดประโยชน์ต่อมนุษย์และสังคม โดยไม่ก่อให้เกิดความเสียหายหรือความไม่เป็นธรรม
+        </p>
+
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+          <div>
+            <strong>ทำไม AI Ethics ถึงสำคัญ?</strong><br/>
+            AI ไม่ใช่แค่เครื่องมือ — มันกำลังตัดสินใจเรื่องที่มีผลต่อชีวิตจริงของมนุษย์ ตั้งแต่การอนุมัติสินเชื่อ การคัดกรองผู้สมัครงาน
+            ไปจนถึงระบบยุติธรรมทางอาญา การขาด Ethics ในการออกแบบ AI อาจขยายความไม่เท่าเทียมในสังคมได้อย่างรวดเร็ว
+          </div>
+        </div>
+
+        <h3>Core Pillars of AI Ethics</h3>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-balance-scale"></i></div>
+            <h4>Fairness</h4>
+            <p>ความเป็นธรรม — AI ต้องไม่เลือกปฏิบัติต่อบุคคลหรือกลุ่มใด ไม่ว่าจะเป็นเรื่องเชื้อชาติ เพศ อายุ หรือฐานะทางสังคม</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-eye"></i></div>
+            <h4>Transparency</h4>
+            <p>ความโปร่งใส — AI ต้องอธิบายได้ว่าตัดสินใจอย่างไร ผู้ใช้และผู้ได้รับผลกระทบต้องเข้าใจเหตุผลของระบบ</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-lock"></i></div>
+            <h4>Privacy</h4>
+            <p>ความเป็นส่วนตัว — AI ต้องปกป้องข้อมูลส่วนบุคคล ไม่เก็บรวบรวมหรือใช้ข้อมูลเกินความจำเป็น</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-shield-halved"></i></div>
+            <h4>Safety</h4>
+            <p>ความปลอดภัย — AI ต้องไม่ก่อให้เกิดอันตรายทางกายภาพ จิตใจ หรือสังคม ทั้งโดยตั้งใจและไม่ตั้งใจ</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-user-check"></i></div>
+            <h4>Accountability</h4>
+            <p>ความรับผิดชอบ — ต้องมีผู้รับผิดชอบต่อการตัดสินใจของ AI สามารถตรวจสอบและแก้ไขได้เมื่อเกิดข้อผิดพลาด</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-people-group"></i></div>
+            <h4>Inclusivity</h4>
+            <p>ครอบคลุมและไม่กีดกัน — AI ต้องออกแบบมาเพื่อทุกคน รวมถึงผู้ที่มีความพิการ ความหลากหลายทางวัฒนธรรม และกลุ่มเปราะบาง</p>
+          </div>
+        </div>
+
+        <h3>ผลกระทบในชีวิตจริง</h3>
+        <p>AI กำลังถูกนำไปใช้ในการตัดสินใจที่มีผลต่อชีวิตมนุษย์อย่างจริงจัง:</p>
+        <ul class="content-list">
+          <li><strong>การตัดสินใจสินเชื่อ</strong> — AI ของธนาคารอนุมัติหรือปฏิเสธสินเชื่อบ้าน บัตรเครดิต โดยอิงจากข้อมูลที่อาจมี Bias ต่อกลุ่มชนกลุ่มน้อย</li>
+          <li><strong>การคัดกรองใบสมัครงาน</strong> — ATS (Applicant Tracking System) ใช้ AI กรองผู้สมัคร ซึ่งอาจเลือกปฏิบัติตามเพศหรือเชื้อชาติโดยไม่รู้ตัว</li>
+          <li><strong>ระบบยุติธรรมทางอาญา</strong> — AI ช่วยพิจารณาคดี ทำนายความเสี่ยงการกระทำผิดซ้ำ ซึ่งมีผลต่อการปล่อยตัวประกัน</li>
+          <li><strong>การวินิจฉัยโรค</strong> — AI ทางการแพทย์ที่ฝึกด้วยข้อมูลจากกลุ่มประชากรเฉพาะอาจให้ผลที่ไม่แม่นยำสำหรับกลุ่มอื่น</li>
+          <li><strong>ระบบ Content Moderation</strong> — AI กรองเนื้อหาบนโซเชียลมีเดีย ซึ่งอาจเซ็นเซอร์เนื้อหาบางภาษาหรือวัฒนธรรมมากกว่าอื่น</li>
+        </ul>
+
+        <div class="info-box box-orange">
+          <div class="box-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <strong>ข้อเท็จจริงที่น่าตกใจ</strong><br/>
+            จากการสำรวจของ MIT (2023) พบว่าระบบ Facial Recognition ของ AI หลายตัวมีความแม่นยำต่ำกว่า <strong>65%</strong>
+            สำหรับผู้หญิงผิวดำ เมื่อเทียบกับ <strong>99%</strong> สำหรับผู้ชายผิวขาว — ความเหลื่อมล้ำนี้เกิดจากข้อมูล Training ที่ไม่สมดุล
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Section 11.2 ===== -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">11.2</span> Bias &amp; Fairness ใน AI</h2>
+
+        <p>
+          <strong>AI Bias (อคติใน AI)</strong> คือ อคติที่ฝังอยู่ในโมเดล AI ทำให้ระบบตัดสินใจอย่างไม่เป็นธรรมหรือไม่สอดคล้องกับความเป็นจริง
+          Bias ไม่ได้เกิดจาก "เจตนาร้าย" แต่เกิดจากข้อบกพร่องในข้อมูล กระบวนการพัฒนา หรือการออกแบบระบบ
+        </p>
+
+        <h3>ประเภทของ Bias ใน AI</h3>
+        <div class="method-list">
+          <div class="method-item">
+            <div class="method-icon purple"><i class="fa-solid fa-database"></i></div>
+            <div>
+              <h4>Data Bias — อคติในข้อมูล</h4>
+              <p>ข้อมูล Training ไม่ครอบคลุมหรือไม่สมดุล เช่น ชุดภาพใบหน้าที่ใช้ฝึก Facial Recognition ส่วนใหญ่เป็นคนผิวขาว ทำให้ระบบทำงานได้แย่กับคนผิวสีอื่น ตัวอย่างที่เห็นชัด: ImageNet dataset ในยุคแรกมีภาพคนจากประเทศตะวันตกมากถึง 45%</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon blue"><i class="fa-solid fa-filter"></i></div>
+            <div>
+              <h4>Selection Bias — อคติจากการเลือกข้อมูล</h4>
+              <p>ข้อมูลที่เก็บรวบรวมไม่ได้เป็นตัวแทนของประชากรจริง เช่น แบบสำรวจออนไลน์ที่เข้าถึงได้เฉพาะผู้ที่มีอินเทอร์เน็ต ทำให้โมเดลที่ฝึกด้วยข้อมูลนี้ไม่แม่นยำสำหรับผู้ที่ไม่มีอินเทอร์เน็ต</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon green"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <div>
+              <h4>Confirmation Bias — อคติยืนยัน</h4>
+              <p>โมเดลเรียนรู้ที่จะยืนยันความเชื่อที่มีอยู่ในข้อมูล เช่น ถ้าข้อมูลประวัติแสดงว่า "CEO มักเป็นผู้ชาย" โมเดลจะมีแนวโน้มแนะนำผู้ชายสำหรับตำแหน่งผู้นำโดยอัตโนมัติ</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div>
+              <h4>Historical Bias — อคติทางประวัติศาสตร์</h4>
+              <p>ข้อมูลสะท้อนความไม่เท่าเทียมในอดีต เช่น ประวัติการจ้างงานที่ผ่านมาเลือกปฏิบัติต่อผู้หญิง เมื่อนำมาฝึก AI จะทำให้ AI สืบทอดอคตินั้น แม้ว่าสังคมจะเปลี่ยนแปลงไปแล้ว</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>กรณีศึกษา: Amazon HR AI (2018)</h3>
+        <div class="info-box box-orange">
+          <div class="box-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <strong>Amazon ยกเลิก AI คัดกรอง CV เพราะเลือกปฏิบัติต่อผู้หญิง</strong><br/>
+            Amazon พัฒนา AI ระบบหนึ่งเพื่อให้คะแนนใบสมัครงาน โดยฝึกกับ CV ของพนักงานที่ได้รับการว่าจ้างในช่วง 10 ปีที่ผ่านมา
+            ซึ่งส่วนใหญ่เป็นผู้ชาย ผลคือ AI เรียนรู้ที่จะ "ลงคะแนนลบ" ให้ CV ที่มีคำว่า "women's" หรือชื่อมหาวิทยาลัยสตรี
+            Amazon ค้นพบปัญหานี้และยกเลิกโครงการในปี 2018
+          </div>
+        </div>
+
+        <h3>กรณีศึกษา: COMPAS Recidivism Algorithm</h3>
+        <div class="info-box box-orange">
+          <div class="box-icon"><i class="fa-solid fa-gavel"></i></div>
+          <div>
+            <strong>AI ทำนายการกระทำผิดซ้ำในระบบยุติธรรมสหรัฐฯ มี Racial Bias</strong><br/>
+            COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) ถูกใช้ในศาลหลายรัฐเพื่อทำนาย
+            ความเสี่ยงการกระทำผิดซ้ำ การวิจัยของ ProPublica (2016) พบว่า ระบบนี้ทำนายผิดพลาดต่อคนดำ <strong>2 เท่า</strong>
+            โดยจัดให้อยู่ใน "ความเสี่ยงสูง" มากกว่าคนขาว ทั้งที่ในความเป็นจริงไม่ได้กระทำผิดซ้ำ
+          </div>
+        </div>
+
+        <h3>วิธีแก้ไขและลด Bias</h3>
+        <div class="steps-flow">
+          <div class="step-box">
+            <div class="step-num">1</div>
+            <div class="step-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <h4>Diverse Data</h4>
+            <p>รวบรวมข้อมูล Training ที่หลากหลาย ครอบคลุมทุกกลุ่มประชากร</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">2</div>
+            <div class="step-icon"><i class="fa-solid fa-ruler"></i></div>
+            <h4>Fairness Metrics</h4>
+            <p>วัด Bias ด้วย metrics เช่น Demographic Parity, Equal Opportunity</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">3</div>
+            <div class="step-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+            <h4>Regular Audits</h4>
+            <p>ตรวจสอบโมเดลเป็นประจำ โดยทีมที่หลากหลาย รวมถึงผู้ที่ได้รับผลกระทบ</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">4</div>
+            <div class="step-icon"><i class="fa-solid fa-user-tie"></i></div>
+            <h4>Human Oversight</h4>
+            <p>มีมนุษย์ตรวจสอบการตัดสินใจสำคัญ ไม่ปล่อยให้ AI ตัดสินใจเดียว</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Section 11.3 ===== -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">11.3</span> Hallucination &amp; Misinformation</h2>
+
+        <p>
+          <strong>AI Hallucination</strong> คือ ปรากฏการณ์ที่ AI สร้างข้อมูลที่ผิดพลาด ไม่มีอยู่จริง หรือบิดเบือน แต่ฟังดูน่าเชื่อถือและมั่นใจ
+          Hallucination ไม่ใช่การโกหกโดยเจตนา แต่เกิดจากธรรมชาติของโมเดลภาษาที่สร้าง token ถัดไปโดยอิงจากความน่าจะเป็น ไม่ใช่ความจริง
+        </p>
+
+        <h3>ประเภทของ Hallucination</h3>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-xmark-circle"></i></div>
+            <h4>Factual Errors</h4>
+            <p>ข้อเท็จจริงผิด เช่น วันเกิด ตัวเลขสถิติ เหตุการณ์ทางประวัติศาสตร์ที่ไม่ถูกต้อง</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-book-skull"></i></div>
+            <h4>Fake Citations</h4>
+            <p>อ้างอิงบทความวิจัย หนังสือ หรือแหล่งข้อมูลที่ไม่มีอยู่จริง พร้อม DOI และชื่อผู้แต่งที่ดูสมจริง</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-code"></i></div>
+            <h4>Wrong Code</h4>
+            <p>โค้ดที่ดูถูกต้องแต่มี bug หรือใช้ API ที่ไม่มีอยู่จริง ทำให้ developer เสียเวลา debug</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-calculator"></i></div>
+            <h4>Wrong Calculations</h4>
+            <p>คำนวณตัวเลขผิด โดยเฉพาะการคำนวณที่ซับซ้อน LLM ไม่ใช่เครื่องคิดเลข</p>
+          </div>
+        </div>
+
+        <h3>กรณีศึกษาจริง: ทนายความและ ChatGPT (2023)</h3>
+        <div class="info-box box-orange">
+          <div class="box-icon"><i class="fa-solid fa-gavel"></i></div>
+          <div>
+            <strong>Mata v. Avianca — คดีที่อ้างคดีที่ไม่มีจริง</strong><br/>
+            ในปี 2023 ทนายความสองคนใน New York ใช้ ChatGPT ค้นหาคดีกฎหมายเพื่ออ้างอิงในคำร้องต่อศาล
+            ChatGPT สร้างชื่อคดี เลขที่คดี และสรุปคดีที่ฟังดูสมจริงทั้งหมด 6 คดี แต่ไม่มีคดีใดมีอยู่จริง
+            ผู้พิพากษาสั่งปรับทั้งสองคน <strong>$5,000</strong> และตำหนิต่อสาธารณะ เพราะไม่ตรวจสอบข้อมูลก่อนยื่นศาล
+          </div>
+        </div>
+
+        <h3>ผลกระทบต่อสังคม</h3>
+        <ul class="content-list">
+          <li><strong>Fake News &amp; Disinformation</strong> — AI ช่วยสร้างและแพร่กระจายข่าวปลอมในระดับที่ไม่เคยมีมาก่อน สามารถสร้างบทความข่าวที่ดูน่าเชื่อถือได้เป็นพัน ๆ ชิ้นในชั่วโมงเดียว</li>
+          <li><strong>Medical Misinformation</strong> — ข้อมูลสุขภาพที่ผิดพลาดจาก AI อาจทำให้ผู้ป่วยตัดสินใจผิดพลาดในเรื่องที่ส่งผลต่อสุขภาพหรือชีวิต</li>
+          <li><strong>Academic Fraud</strong> — นักศึกษาอาจได้รับข้อมูลผิดจากการใช้ AI ช่วยทำรายงาน โดยเฉพาะ Fake Citations ที่ดูเป็นวิชาการ</li>
+          <li><strong>Deepfakes</strong> — ภาพ วิดีโอ และเสียงปลอมที่สร้างด้วย AI สร้างความเสียหายต่อชื่อเสียงและอาจใช้หลอกลวงหรือแบล็กเมล์</li>
+        </ul>
+
+        <h3>กลยุทธ์การตรวจสอบและป้องกัน</h3>
+        <div class="info-box box-green">
+          <div class="box-icon"><i class="fa-solid fa-shield-check"></i></div>
+          <div>
+            <strong>วิธีตรวจสอบข้อมูลจาก AI</strong><br/>
+            <ul style="margin-top:0.5rem; padding-left:1.2rem; color:inherit;">
+              <li>ค้นหาข้อเท็จจริงจากแหล่งอ้างอิงอื่นเสมอ ไม่เชื่อ AI เป็นแหล่งเดียว</li>
+              <li>ตรวจสอบ citation ที่ AI ให้มาว่ามีอยู่จริงใน Google Scholar หรือ PubMed</li>
+              <li>ใช้ Retrieval-Augmented Generation (RAG) ให้ AI อิง ground truth จากเอกสารจริง</li>
+              <li>ใช้ Hallucination Detection Tools เช่น Vectara HHEM หรือ TruLens</li>
+              <li>สำหรับข้อมูลที่มีผลต่อการตัดสินใจสำคัญ ควรให้ผู้เชี่ยวชาญมนุษย์ตรวจสอบ</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Deepfakes และ Synthetic Media</h3>
+        <p>
+          <strong>Deepfake</strong> คือ เนื้อหาสังเคราะห์ที่สร้างด้วย AI — ทั้งภาพนิ่ง วิดีโอ และเสียง — ที่ถูกออกแบบให้ดูเหมือนจริง
+          เทคโนโลยีนี้มีประโยชน์ในวงการภาพยนตร์และการศึกษา แต่ก็ถูกนำไปใช้ในทางที่ผิด:
+        </p>
+        <ul class="content-list">
+          <li><strong>Non-consensual Intimate Images (NCII)</strong> — การสร้างภาพลามกปลอมของบุคคลจริงโดยไม่ได้รับอนุญาต</li>
+          <li><strong>Political Manipulation</strong> — วิดีโอปลอมของนักการเมืองที่พูดในสิ่งที่ไม่ได้พูด ส่งผลต่อการเลือกตั้ง</li>
+          <li><strong>Financial Fraud</strong> — ใช้เสียงปลอมของ CEO โทรหา CFO สั่งโอนเงิน (เกิดขึ้นจริงหลายกรณีทั่วโลก)</li>
+        </ul>
+      </section>
+
+      <!-- ===== Section 11.4 ===== -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">11.4</span> Privacy &amp; Data Protection</h2>
+
+        <p>
+          AI Systems โดยเฉพาะ LLM ขนาดใหญ่ก่อให้เกิดความเสี่ยงด้าน Privacy หลายมิติ ทั้งในช่วง Training และช่วงการใช้งานจริง
+          ความเข้าใจในประเด็นเหล่านี้เป็นสิ่งจำเป็นสำหรับทุกคนที่นำ AI ไปใช้ในองค์กร
+        </p>
+
+        <h3>ปัญหา Privacy ใน AI</h3>
+        <div class="method-list">
+          <div class="method-item">
+            <div class="method-icon purple"><i class="fa-solid fa-database"></i></div>
+            <div>
+              <h4>Training Data Privacy</h4>
+              <p>ข้อมูล Training ของ LLM อาจมีข้อมูลส่วนตัวที่ถูกดึงมาจากอินเทอร์เน็ตโดยไม่ได้รับความยินยอม ไม่ว่าจะเป็นชื่อ ที่อยู่ อีเมล หรือแม้แต่ข้อมูลทางการแพทย์</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon blue"><i class="fa-solid fa-memory"></i></div>
+            <div>
+              <h4>Memorization &amp; Data Leakage</h4>
+              <p>งานวิจัยพบว่า LLM สามารถ "จำ" และ reproduce ข้อมูลส่วนตัวจาก Training set ได้ เช่น เลขบัตรเครดิต ที่อยู่ หรือเนื้อหาอีเมล ซึ่งเรียกว่า Memorization Attack</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon green"><i class="fa-solid fa-comment-dots"></i></div>
+            <div>
+              <h4>Conversation Data Collection</h4>
+              <p>ข้อความที่พิมพ์ใน ChatGPT หรือ AI Chatbot อื่นๆ อาจถูกเก็บ บันทึก และนำไปใช้ฝึก model เพิ่มเติม โดยที่ผู้ใช้อาจไม่ทราบ</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>GDPR และ PDPA — กฎหมายคุ้มครองข้อมูล</h3>
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-brands fa-european-union"></i> GDPR (EU, 2018)</h4>
+            <ul>
+              <li>General Data Protection Regulation</li>
+              <li>ใช้บังคับในสหภาพยุโรปและ EEA</li>
+              <li>โทษสูงสุด €20 ล้าน หรือ 4% ของ Global Turnover</li>
+              <li>ต้องได้รับความยินยอมก่อนเก็บข้อมูล</li>
+              <li>สิทธิ์ลืม (Right to be Forgotten)</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-flag"></i> PDPA (ไทย, 2562)</h4>
+            <ul>
+              <li>พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562</li>
+              <li>มีผลบังคับใช้เต็มรูปแบบปี 2565</li>
+              <li>โทษอาญาสูงสุด 1 ปี / ปรับ 5 ล้านบาท</li>
+              <li>ต้องแจ้งวัตถุประสงค์การเก็บข้อมูล</li>
+              <li>Data Controller ต้องแต่งตั้ง DPO</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>สิทธิ์ของเจ้าของข้อมูลภายใต้ PDPA</h3>
+        <ul class="content-list">
+          <li><strong>สิทธิ์เข้าถึงข้อมูล (Right of Access)</strong> — ขอดูว่าองค์กรเก็บข้อมูลอะไรของเราบ้าง</li>
+          <li><strong>สิทธิ์แก้ไข (Right to Rectification)</strong> — ขอแก้ไขข้อมูลที่ไม่ถูกต้อง</li>
+          <li><strong>สิทธิ์ลบ (Right to Erasure)</strong> — ขอให้ลบข้อมูลของเราออกจากระบบ</li>
+          <li><strong>สิทธิ์คัดค้าน (Right to Object)</strong> — คัดค้านการนำข้อมูลไปประมวลผลบางประเภท</li>
+          <li><strong>สิทธิ์โอนถ่ายข้อมูล (Data Portability)</strong> — ขอรับข้อมูลของตนเองในรูปแบบที่ใช้ได้ทั่วไป</li>
+        </ul>
+
+        <h3>Best Practices สำหรับนักพัฒนาและผู้ใช้ AI</h3>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-user-secret"></i></div>
+            <h4>ไม่ใส่ข้อมูลส่วนตัวใน Prompt</h4>
+            <p>หลีกเลี่ยงการใส่ชื่อจริง เลขบัตรประชาชน ข้อมูลการแพทย์ หรือข้อมูลลูกค้าลงใน AI Chatbot สาธารณะ</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-plug"></i></div>
+            <h4>ใช้ API แทน Web UI</h4>
+            <p>การเรียกใช้ผ่าน API มักมีนโยบาย Privacy ที่ดีกว่า โดยปกติข้อมูลที่ส่งผ่าน API จะไม่ถูกนำไปฝึก model</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-server"></i></div>
+            <h4>Private Deployment</h4>
+            <p>สำหรับข้อมูลที่อ่อนไหว ควร Deploy โมเดลในเซิร์ฟเวอร์ขององค์กรเอง หรือใช้ Private Cloud</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-minimize"></i></div>
+            <h4>Data Minimization</h4>
+            <p>เก็บเฉพาะข้อมูลที่จำเป็นสำหรับวัตถุประสงค์เฉพาะเจาะจง ไม่เก็บข้อมูลเผื่อไว้ในอนาคต</p>
+          </div>
+        </div>
+
+        <h3>Use Case: โรงพยาบาลนำ AI วิเคราะห์เวชระเบียน</h3>
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-hospital"></i></div>
+          <div>
+            <strong>ข้อควรระวังสำหรับ Healthcare AI</strong><br/>
+            เมื่อโรงพยาบาลต้องการใช้ AI วิเคราะห์เวชระเบียนผู้ป่วยเพื่อช่วยวินิจฉัยโรค ต้องพิจารณา:
+            <ul style="margin-top:0.5rem; padding-left:1.2rem; color:inherit;">
+              <li>ต้องได้รับความยินยอมจากผู้ป่วยก่อนนำข้อมูลไปประมวลผลด้วย AI</li>
+              <li>เวชระเบียนเป็น "ข้อมูลอ่อนไหว" ตาม PDPA ต้องมีมาตรการรักษาความปลอดภัยพิเศษ</li>
+              <li>ควรใช้ De-identification หรือ Anonymization ก่อนนำข้อมูลไปฝึกโมเดล</li>
+              <li>โมเดลควร Deploy บน Private Infrastructure ภายในโรงพยาบาล ไม่ส่งข้อมูลออกไปนอก</li>
+              <li>ต้องมีบันทึก audit trail ทุกครั้งที่ AI เข้าถึงข้อมูลผู้ป่วย</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Section 11.5 ===== -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">11.5</span> ลิขสิทธิ์และทรัพย์สินทางปัญญา</h2>
+
+        <p>
+          การพัฒนา AI โดยเฉพาะ Generative AI ก่อให้เกิดคำถามทางกฎหมายที่ยังไม่มีคำตอบชัดเจน เกี่ยวกับลิขสิทธิ์ทั้งใน
+          ข้อมูลที่ใช้ฝึกโมเดล และผลงานที่ AI สร้างขึ้น ทำให้เกิดคดีความหลายคดีทั่วโลก
+        </p>
+
+        <h3>คดีลิขสิทธิ์ที่สำคัญ</h3>
+        <div class="method-list">
+          <div class="method-item">
+            <div class="method-icon purple"><i class="fa-solid fa-image"></i></div>
+            <div>
+              <h4>Getty Images vs. Stability AI (2023)</h4>
+              <p>Getty Images ฟ้อง Stability AI (ผู้สร้าง Stable Diffusion) ว่าใช้ภาพมากกว่า 12 ล้านภาพจากฐานข้อมูลของ Getty โดยไม่ได้รับอนุญาต หลักฐานสำคัญคือภาพที่ AI สร้างขึ้นบางครั้งมี Getty Images Watermark ติดมาด้วย</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon blue"><i class="fa-solid fa-newspaper"></i></div>
+            <div>
+              <h4>The New York Times vs. OpenAI &amp; Microsoft (2023)</h4>
+              <p>NYT ฟ้องว่า ChatGPT ถูกฝึกด้วยบทความของ NYT หลายล้านชิ้นโดยไม่จ่ายค่าลิขสิทธิ์ และ GPT-4 สามารถ reproduce บทความ NYT ได้แบบเกือบสมบูรณ์ ซึ่งเป็นหลักฐานของ Memorization</p>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-icon green"><i class="fa-brands fa-github"></i></div>
+            <div>
+              <h4>GitHub Copilot vs. Open-Source Community (2022)</h4>
+              <p>กลุ่มนักพัฒนา Open-Source ฟ้อง GitHub, Microsoft และ OpenAI ว่า Copilot ถูกฝึกด้วยโค้ด Open-Source ที่มี License GPL โดยไม่แสดง Attribution ซึ่งละเมิด License terms</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>ใครเป็นเจ้าของผลงานที่ AI สร้าง?</h3>
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-question"></i></div>
+          <div>
+            <strong>คำถามที่ยังไม่มีคำตอบสากล</strong><br/>
+            <ul style="margin-top:0.5rem; padding-left:1.2rem; color:inherit;">
+              <li><strong>สหรัฐอเมริกา:</strong> US Copyright Office ตัดสินว่า AI ไม่สามารถเป็นเจ้าของลิขสิทธิ์ได้ เฉพาะมนุษย์เท่านั้น แต่ถ้ามนุษย์มีส่วนร่วมสร้างสรรค์มากพอ อาจได้รับลิขสิทธิ์บางส่วน</li>
+              <li><strong>สหภาพยุโรป:</strong> ยังอยู่ระหว่างพัฒนากรอบกฎหมาย แนวโน้มให้สิทธิ์กับมนุษย์ที่ "prompt" และกำกับ AI</li>
+              <li><strong>ไทย:</strong> กฎหมายลิขสิทธิ์ปัจจุบัน พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 ยังไม่ครอบคลุม AI โดยตรง อยู่ระหว่างการอัปเดต</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Academic Integrity และการใช้ AI ในการศึกษา</h3>
+        <p>มหาวิทยาลัยและสถาบันการศึกษาทั่วโลกกำลังพัฒนานโยบายเกี่ยวกับการใช้ AI ซึ่งแตกต่างกันไป บางแห่งห้ามสิ้นเชิง บางแห่งอนุญาตพร้อมเปิดเผย และบางแห่งส่งเสริมการใช้อย่างรับผิดชอบ</p>
+
+        <div class="compare-box">
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-circle-check" style="color:#34d399"></i> อนุญาต (Allowed)</h4>
+            <ul>
+              <li>ใช้ AI ช่วย brainstorm ไอเดีย</li>
+              <li>ใช้ AI ตรวจ grammar และ spelling</li>
+              <li>ใช้ AI อธิบาย concept ที่ไม่เข้าใจ</li>
+              <li>ใช้ AI เป็น coding assistant (พร้อมเข้าใจโค้ดที่ได้)</li>
+              <li>เปิดเผยว่าใช้ AI ในส่วนใดบ้าง</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-circle-xmark" style="color:#f87171"></i> ไม่อนุญาต (Not Allowed)</h4>
+            <ul>
+              <li>ให้ AI เขียนรายงานทั้งฉบับแทน</li>
+              <li>ส่ง AI-generated content โดยอ้างว่าเป็นผลงานตัวเอง</li>
+              <li>ใช้ AI ตอบข้อสอบ take-home exam</li>
+              <li>อ้างอิง Fake Citations ที่ AI สร้างขึ้น</li>
+              <li>ให้ AI แปลงานภาษาต่างประเทศแล้วอ้างเป็นงานตัวเอง</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-box box-orange">
+          <div class="box-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <div>
+            <strong>AI Detection Tools</strong><br/>
+            เครื่องมืออย่าง <strong>Turnitin AI Detection</strong> และ <strong>GPTZero</strong> พยายามตรวจจับข้อความที่เขียนด้วย AI
+            แต่ยังมีข้อจำกัด: False Positive Rate สูง (อาจตรวจว่าคนเขียนเป็น AI) และนักเรียนสามารถ "paraphrase" เพื่อหลบเลี่ยงได้
+            ดังนั้น วิธีที่ดีกว่าคือออกแบบงานที่ต้องการ Original Thinking มากกว่าพึ่งพา Detection Tools
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Section 11.6 ===== -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">11.6</span> EU AI Act &amp; กฎหมาย AI</h2>
+
+        <p>
+          <strong>EU AI Act</strong> คือกฎหมายกำกับดูแล AI ฉบับแรกของโลก ผ่านการรับรองจากรัฐสภายุโรปในเดือนมีนาคม 2024
+          และจะมีผลบังคับใช้แบบค่อยเป็นค่อยไปตั้งแต่ปี 2024 ถึง 2026 โดยใช้ <em>Risk-Based Approach</em>
+          คือยิ่งความเสี่ยงสูง ยิ่งต้องถูกกำกับมาก
+        </p>
+
+        <h3>Risk-Based Classification System</h3>
+
+        <!-- Risk Pyramid -->
+        <div style="margin: 1.5rem 0; font-size: 0.88rem;">
+          <!-- Level 1: Unacceptable -->
+          <div style="background:rgba(239,68,68,0.15); border:2px solid rgba(239,68,68,0.4); border-radius:12px 12px 0 0; padding:1.1rem 1.5rem; text-align:center;">
+            <div style="font-weight:800; color:#f87171; font-size:1rem; margin-bottom:0.25rem;">
+              <i class="fa-solid fa-ban"></i> Unacceptable Risk — ห้ามใช้โดยเด็ดขาด
+            </div>
+            <div style="color:#fca5a5;">
+              Social Scoring by Government &nbsp;|&nbsp; Real-time Biometric Surveillance in Public &nbsp;|&nbsp; Subliminal Manipulation &nbsp;|&nbsp; Exploitation of Vulnerabilities
+            </div>
+          </div>
+          <!-- Level 2: High -->
+          <div style="background:rgba(245,158,11,0.12); border:2px solid rgba(245,158,11,0.35); border-top:none; padding:1.1rem 1.5rem; text-align:center;">
+            <div style="font-weight:800; color:#fbbf24; font-size:0.98rem; margin-bottom:0.25rem;">
+              <i class="fa-solid fa-triangle-exclamation"></i> High Risk — ต้องมีการกำกับดูแลเข้มข้น
+            </div>
+            <div style="color:#fde68a;">
+              Medical Devices &nbsp;|&nbsp; Education &amp; Vocational Training &nbsp;|&nbsp; Employment &amp; HR &nbsp;|&nbsp; Critical Infrastructure &nbsp;|&nbsp; Law Enforcement &nbsp;|&nbsp; Migration &amp; Asylum
+            </div>
+          </div>
+          <!-- Level 3: Limited -->
+          <div style="background:rgba(99,102,241,0.1); border:2px solid rgba(99,102,241,0.3); border-top:none; padding:1.1rem 1.5rem; text-align:center;">
+            <div style="font-weight:800; color:#a5b4fc; font-size:0.95rem; margin-bottom:0.25rem;">
+              <i class="fa-solid fa-circle-info"></i> Limited Risk — ต้องแจ้งผู้ใช้ให้ทราบ
+            </div>
+            <div style="color:#c7d2fe;">
+              Chatbots (ต้องบอกว่าเป็น AI) &nbsp;|&nbsp; Emotion Recognition &nbsp;|&nbsp; Deepfake / Synthetic Content
+            </div>
+          </div>
+          <!-- Level 4: Minimal -->
+          <div style="background:rgba(16,185,129,0.1); border:2px solid rgba(16,185,129,0.3); border-top:none; border-radius:0 0 12px 12px; padding:1.1rem 1.5rem; text-align:center;">
+            <div style="font-weight:800; color:#34d399; font-size:0.95rem; margin-bottom:0.25rem;">
+              <i class="fa-solid fa-circle-check"></i> Minimal Risk — ใช้ได้เลย ไม่ต้องมีข้อกำหนดพิเศษ
+            </div>
+            <div style="color:#a7f3d0;">
+              Spam Filters &nbsp;|&nbsp; AI in Video Games &nbsp;|&nbsp; Recommendation Systems &nbsp;|&nbsp; AI-assisted Creativity Tools
+            </div>
+          </div>
+        </div>
+
+        <h3>ข้อกำหนดสำหรับ High-Risk AI Systems</h3>
+        <ul class="content-list">
+          <li><strong>Risk Management System</strong> — ต้องมีระบบบริหารความเสี่ยงตลอดวงจรชีวิตของระบบ AI</li>
+          <li><strong>Data Governance</strong> — ข้อมูล Training ต้องมีคุณภาพ ครอบคลุม และปราศจาก Bias</li>
+          <li><strong>Technical Documentation</strong> — เอกสารทางเทคนิคที่ครบถ้วนสำหรับการกำกับดูแล</li>
+          <li><strong>Transparency &amp; Logging</strong> — บันทึก log การทำงาน สามารถตรวจสอบย้อนหลังได้</li>
+          <li><strong>Human Oversight</strong> — มีมนุษย์กำกับดูแลและสามารถ override การตัดสินใจของ AI ได้</li>
+          <li><strong>Accuracy &amp; Robustness</strong> — ต้องผ่านการทดสอบความแม่นยำและความทนทานก่อนใช้งาน</li>
+        </ul>
+
+        <h3>บทลงโทษ</h3>
+        <div class="compare-box">
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-ban"></i> ละเมิด Unacceptable Risk</h4>
+            <ul>
+              <li>โทษปรับสูงสุด <strong>€35 ล้าน</strong></li>
+              <li>หรือ 7% ของ Global Annual Turnover</li>
+              <li>สูงกว่า GDPR ถึง 75%</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-equals"></i></div>
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> ละเมิดข้อกำหนด High Risk</h4>
+            <ul>
+              <li>โทษปรับสูงสุด <strong>€15 ล้าน</strong></li>
+              <li>หรือ 3% ของ Global Annual Turnover</li>
+              <li>แล้วแต่จำนวนใดสูงกว่า</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>สถานะกฎหมาย AI ในประเทศไทย</h3>
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-flag"></i></div>
+          <div>
+            <strong>ไทยยังอยู่ระหว่างการพัฒนากรอบกฎหมาย AI</strong><br/>
+            ปัจจุบัน (2025) ประเทศไทยยังไม่มีกฎหมาย AI โดยเฉพาะ แต่มีหน่วยงานที่เกี่ยวข้อง:
+            <ul style="margin-top:0.5rem; padding-left:1.2rem; color:inherit;">
+              <li><strong>NECTEC (สวทช.)</strong> พัฒนา Thailand AI Ethics Guidelines ที่อิง UNESCO Framework</li>
+              <li><strong>ETDA</strong> (สำนักงานพัฒนาธุรกรรมทางอิเล็กทรอนิกส์) ดูแลด้านความมั่นคงปลอดภัยดิจิทัล</li>
+              <li><strong>PDPC</strong> (สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล) กำกับด้าน Data Privacy ของ AI</li>
+              <li>รัฐบาลไทยมีแผนพัฒนา National AI Strategy ให้สอดคล้องกับ ASEAN AI Governance Framework</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Section 11.7 ===== -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">11.7</span> Responsible AI Framework</h2>
+
+        <p>
+          <strong>Responsible AI</strong> คือ แนวทางปฏิบัติในการพัฒนาและใช้งาน AI ที่คำนึงถึงผลกระทบต่อมนุษย์และสังคม
+          องค์กรเทคโนโลยีชั้นนำได้พัฒนา Framework เพื่อเป็นแนวทางให้นักพัฒนาและผู้ใช้งาน AI
+        </p>
+
+        <h3>Microsoft Responsible AI Principles</h3>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-balance-scale"></i></div>
+            <h4>Fairness</h4>
+            <p>ระบบ AI ต้องปฏิบัติต่อทุกคนอย่างเท่าเทียม ไม่เลือกปฏิบัติตาม race, gender, age หรือ socioeconomic status</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-heart-pulse"></i></div>
+            <h4>Reliability &amp; Safety</h4>
+            <p>AI ต้องทำงานได้อย่างน่าเชื่อถือ ปลอดภัย และคาดการณ์ได้ ทั้งใน normal และ edge cases</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-lock"></i></div>
+            <h4>Privacy &amp; Security</h4>
+            <p>ปกป้องข้อมูลส่วนตัว ป้องกันการเข้าถึงโดยไม่ได้รับอนุญาต และ resist adversarial attacks</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-universal-access"></i></div>
+            <h4>Inclusiveness</h4>
+            <p>ออกแบบ AI สำหรับทุกคน รวมถึงผู้ที่มีความพิการ ภาษา วัฒนธรรม และระดับความชำนาญที่หลากหลาย</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-eye"></i></div>
+            <h4>Transparency</h4>
+            <p>อธิบายได้ว่า AI ทำงานอย่างไร ตัดสินใจอะไรและทำไม ผู้ใช้ต้องรู้ว่ากำลังโต้ตอบกับ AI</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-user-check"></i></div>
+            <h4>Accountability</h4>
+            <p>มีระบบรับผิดชอบชัดเจน ตรวจสอบได้ และสามารถแก้ไขข้อผิดพลาดหรือผลเสียที่เกิดขึ้นได้</p>
+          </div>
+        </div>
+
+        <h3>Google AI Principles (2018)</h3>
+        <ul class="content-list">
+          <li>AI ควรเป็นประโยชน์ต่อสังคมและไม่ก่อให้เกิดอันตราย</li>
+          <li>หลีกเลี่ยงการสร้างหรือเสริม Bias ที่ไม่เป็นธรรม</li>
+          <li>สร้างและทดสอบด้วยมาตรฐานความปลอดภัยสูง</li>
+          <li>รับผิดชอบต่อผู้ใช้และผู้ได้รับผลกระทบ</li>
+          <li>ผสมผสาน Privacy Principles ในการออกแบบ</li>
+          <li>ส่งเสริมความเป็นเลิศทางวิทยาศาสตร์</li>
+          <li>ใช้ให้สอดคล้องกับหลักการสิทธิมนุษยชน</li>
+        </ul>
+
+        <h3>วิธีประยุกต์ใช้ Responsible AI ในทางปฏิบัติ</h3>
+
+        <div class="train-steps">
+          <div class="train-step">
+            <div class="train-num">1</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-clipboard-list"></i> AI Impact Assessment</h4>
+              <p>ก่อนพัฒนาหรือ deploy AI ให้ทำการประเมินผลกระทบก่อนเสมอ: ใครจะได้รับผลกระทบ? ความเสี่ยงใดบ้างที่อาจเกิดขึ้น? มีทางเลือกอื่นที่ดีกว่าไหม?</p>
+              <span class="train-tag">Pre-development</span>
+            </div>
+          </div>
+          <div class="train-connector"></div>
+          <div class="train-step">
+            <div class="train-num">2</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-people-group"></i> Diverse Team in AI Development</h4>
+              <p>ทีมพัฒนา AI ควรประกอบด้วยผู้คนที่หลากหลาย ทั้งเพศ เชื้อชาติ วัย และสาขาวิชา รวมถึงผู้เชี่ยวชาญด้านจริยธรรมและสังคมศาสตร์ ไม่ใช่แค่วิศวกรและนักวิทยาศาสตร์ข้อมูล</p>
+              <span class="train-tag">Development</span>
+            </div>
+          </div>
+          <div class="train-connector"></div>
+          <div class="train-step">
+            <div class="train-num">3</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-file-alt"></i> Model Cards &amp; Documentation</h4>
+              <p>สร้าง Model Card ที่ครอบคลุม: วัตถุประสงค์ของโมเดล, ข้อมูลที่ใช้ฝึก, ประสิทธิภาพในกลุ่มประชากรต่างๆ, ข้อจำกัด และกรณีที่ไม่ควรใช้</p>
+              <span class="train-tag">Documentation</span>
+            </div>
+          </div>
+          <div class="train-connector"></div>
+          <div class="train-step">
+            <div class="train-num">4</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-chart-line"></i> Regular Monitoring &amp; Auditing</h4>
+              <p>ตรวจสอบประสิทธิภาพของโมเดลอย่างต่อเนื่องหลัง deploy ไม่ใช่แค่ตอนพัฒนา เพราะ Data Distribution อาจเปลี่ยนแปลงไปตามเวลา (Concept Drift)</p>
+              <span class="train-tag">Post-deployment</span>
+            </div>
+          </div>
+          <div class="train-connector"></div>
+          <div class="train-step">
+            <div class="train-num">5</div>
+            <div class="train-body">
+              <h4><i class="fa-solid fa-comment-dots"></i> Feedback Mechanisms</h4>
+              <p>มีช่องทางให้ผู้ใช้รายงานปัญหา ข้อผิดพลาด และความกังวล พร้อมกระบวนการตอบสนองและแก้ไขที่ชัดเจน</p>
+              <span class="train-tag">Ongoing</span>
+            </div>
+          </div>
+        </div>
+
+        <h3>Checklist: Responsible AI</h3>
+        <div class="info-box box-green">
+          <div class="box-icon"><i class="fa-solid fa-list-check"></i></div>
+          <div>
+            <strong>ก่อน Deploy AI ในองค์กร ตรวจสอบให้ครบ:</strong>
+            <ul style="margin-top:0.5rem; padding-left:0; list-style:none; color:inherit;">
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> ทำ AI Impact Assessment แล้ว</li>
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> ทดสอบ Bias ในกลุ่มประชากรที่หลากหลาย</li>
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> มีเอกสาร Model Card ครบถ้วน</li>
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> ระบบ Privacy compliant ตาม PDPA/GDPR</li>
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> มีกลไก Human Oversight และ override</li>
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> มีช่องทาง feedback สำหรับผู้ใช้</li>
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> วางแผน Monitoring หลัง deploy แล้ว</li>
+              <li style="padding:0.3rem 0;"><span style="color:#34d399; font-weight:700; margin-right:0.5rem;">✓</span> แจ้งผู้ใช้ว่ากำลังโต้ตอบกับ AI (ถ้าเป็น chatbot)</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Tools สำหรับ Responsible AI</h3>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-scale-unbalanced"></i></div>
+            <h4>IBM AI Fairness 360</h4>
+            <p>Open-source toolkit วัด Bias ใน datasets และโมเดล ML รองรับ fairness metrics มากกว่า 70 ตัว</p>
+            <span class="type-label current">Open Source</span>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-brands fa-google"></i></div>
+            <h4>Google What-If Tool</h4>
+            <p>Visualize และ probe โมเดล ML โดยไม่ต้องเขียนโค้ด ช่วยเข้าใจ model behavior และ fairness</p>
+            <span class="type-label current">Open Source</span>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-brands fa-microsoft"></i></div>
+            <h4>Microsoft Fairlearn</h4>
+            <p>Python package สำหรับประเมินและปรับปรุง fairness ของโมเดล ML รองรับ classification และ regression</p>
+            <span class="type-label current">Open Source</span>
+          </div>
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-chart-pie"></i></div>
+            <h4>SHAP &amp; LIME</h4>
+            <p>Explainable AI tools ที่อธิบายว่า feature ใดมีอิทธิพลต่อการตัดสินใจของโมเดลแต่ละครั้ง</p>
+            <span class="type-label current">Open Source</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Section 11.8 ===== -->
+      <section class="content-section" id="sec8">
+        <h2><span class="sec-num">11.8</span> สรุปและแบบฝึกหัด</h2>
+
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li>AI Ethics ประกอบด้วย 6 หลักการหลัก: Fairness, Transparency, Privacy, Safety, Accountability และ Inclusivity</li>
+            <li>AI Bias เกิดจากข้อมูล กระบวนการพัฒนา และบริบทสังคม — ไม่ใช่เจตนาร้าย แต่ต้องระวังและแก้ไขอย่างจริงจัง</li>
+            <li>Hallucination คือความเสี่ยงสำคัญของ LLM — ต้องตรวจสอบข้อเท็จจริงเสมอ ไม่เชื่อ AI เป็นแหล่งเดียว</li>
+            <li>PDPA ในไทยและ GDPR ในยุโรปกำกับดูแลการใช้ข้อมูลส่วนตัวใน AI — ผู้พัฒนาต้องปฏิบัติตาม</li>
+            <li>EU AI Act แบ่งความเสี่ยงเป็น 4 ระดับ — High Risk AI ต้องผ่านกระบวนการรับรองและมี Human Oversight</li>
+            <li>Responsible AI ไม่ใช่แค่ compliance แต่เป็นแนวทางสร้าง AI ที่ยั่งยืนและสร้างความไว้วางใจ</li>
+            <li>ทุกคนที่ใช้ AI มีความรับผิดชอบ — ตรวจสอบข้อมูล เปิดเผยการใช้ AI และไม่ใช้ AI สร้างอันตรายให้ผู้อื่น</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem; margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item">
+            <div class="ex-num">1</div>
+            <div>
+              <strong>AI Risk Assessment</strong>
+              <p>เลือก Use Case หนึ่งที่คุณต้องการนำ AI มาใช้ในชีวิตจริงหรือการทำงาน แล้วทำ AI Impact Assessment โดยระบุ: กลุ่มผู้ใช้, ข้อมูลที่ต้องใช้, ความเสี่ยงด้านจริยธรรมที่อาจเกิดขึ้น และวิธีลดความเสี่ยงเหล่านั้น</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">2</div>
+            <div>
+              <strong>ทดสอบ Bias ใน LLM</strong>
+              <p>ทดลองถาม LLM (เช่น ChatGPT, Claude) ด้วยคำถามที่อาจมี Bias เช่น "ใครเหมาะสมกับตำแหน่ง CEO มากกว่า?" หรือ "บรรยายลักษณะของ nurse ทั่วไป" แล้ววิเคราะห์คำตอบ: มีอคติหรือไม่? เกิดจากอะไร? ควรแก้ไขอย่างไร?</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">3</div>
+            <div>
+              <strong>จัดหมวด EU AI Act Risk Level</strong>
+              <p>ศึกษา EU AI Act เพิ่มเติมจาก eu.ai แล้วนำ AI Application ที่คุณสนใจ 5 ตัว จัดหมวดหมู่ว่าอยู่ใน Risk Level ใด (Unacceptable / High / Limited / Minimal) พร้อมให้เหตุผล และถ้าเป็น High Risk ต้องทำอะไรบ้างเพื่อ comply?</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">4</div>
+            <div>
+              <strong>สร้าง AI Policy สำหรับองค์กร</strong>
+              <p>สมมติคุณเป็น CTO ของบริษัท Startup ที่มีพนักงาน 50 คน เขียน AI Policy ง่ายๆ 1 หน้า ที่ระบุ: AI ใดที่พนักงานใช้ได้/ไม่ได้, ข้อมูลใดที่ห้ามใส่ใน AI, วิธีตรวจสอบผลลัพธ์จาก AI และขั้นตอนรายงานปัญหา</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">5</div>
+            <div>
+              <strong>อภิปราย: ขอบเขตการตัดสินใจของ AI</strong>
+              <p>เขียนเรียงความสั้น 400-500 คำ ตอบคำถาม: "AI ควรถูกให้สิทธิ์ตัดสินใจชีวิตมนุษย์ได้ในกรณีใดบ้าง และไม่ควรตัดสินใจโดยไม่มีมนุษย์กำกับในกรณีใด?" โดยยกตัวอย่างจริงประกอบอย่างน้อย 2 กรณี</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lesson Nav -->
+        <div class="lesson-nav">
+          <a href="lesson10.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> บทที่ 10</a>
+          <a href="lesson12.html" class="btn btn-primary">บทที่ 12 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i class="fa-solid fa-robot"></i>
+          <span>Generative AI &amp; Prompt Engineering</span>
+        </div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const sections = document.querySelectorAll('.content-section');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+
+</body>
+</html>

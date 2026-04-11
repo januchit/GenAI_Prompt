@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 10: AI Workflow &amp; Automation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- Lesson Hero -->
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">10</span> Automation</div>
+      <h1>AI Workflow &amp; Automation</h1>
+      <p class="lesson-desc">เรียนรู้การสร้าง AI Agents, Multi-Agent Systems และการออกแบบ Workflow อัตโนมัติด้วยเครื่องมืออย่าง LangChain, CrewAI, n8n, Make และ Zapier เพื่อเพิ่มประสิทธิภาพการทำงานในองค์กร</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับกลาง</span>
+        <span><i class="fa-solid fa-list-check"></i> 8 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+
+    <!-- Sidebar TOC -->
+    <aside class="toc-sidebar" id="tocSidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">10.1 AI Agents คืออะไร?</a></li>
+        <li><a href="#sec2" class="toc-link">10.2 LangChain Agents</a></li>
+        <li><a href="#sec3" class="toc-link">10.3 Multi-Agent Systems</a></li>
+        <li><a href="#sec4" class="toc-link">10.4 n8n: Visual AI Automation</a></li>
+        <li><a href="#sec5" class="toc-link">10.5 Make &amp; Zapier with AI</a></li>
+        <li><a href="#sec6" class="toc-link">10.6 AutoGPT &amp; Autonomous Agents</a></li>
+        <li><a href="#sec7" class="toc-link">10.7 Best Practices &amp; Design Patterns</a></li>
+        <li><a href="#sec8" class="toc-link">10.8 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lesson-content">
+
+      <!-- Section 10.1 -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">10.1</span> AI Agents คืออะไร?</h2>
+
+        <p>
+          <strong>AI Agent</strong> คือระบบ AI ที่สามารถ <em>รับรู้สภาพแวดล้อม ตัดสินใจ และลงมือกระทำ</em> เพื่อบรรลุเป้าหมายได้อย่างอิสระ
+          แตกต่างจาก AI Model ทั่วไปที่แค่รับ Input และให้ Output โดย Agent จะวางแผน เลือกใช้เครื่องมือ และวนซ้ำจนกว่างานจะสำเร็จ
+        </p>
+
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-microchip"></i> AI Model (แบบเดิม)</h4>
+            <ul>
+              <li>รับ Input → ให้ Output ครั้งเดียว</li>
+              <li>ไม่มีความจำระหว่าง Session</li>
+              <li>ไม่สามารถใช้เครื่องมือภายนอก</li>
+              <li>ไม่วางแผนหรือแก้ปัญหาหลายขั้นตอน</li>
+              <li>ตัวอย่าง: ChatGPT แบบ Single Turn</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-robot"></i> AI Agent (ใหม่)</h4>
+            <ul>
+              <li>วนซ้ำหลายรอบจนบรรลุเป้าหมาย</li>
+              <li>มี Memory ทั้งระยะสั้นและระยะยาว</li>
+              <li>ใช้ Tools ภายนอก (Search, Code, API)</li>
+              <li>วางแผนและแบ่งงานเป็นขั้นตอนย่อย</li>
+              <li>ตัวอย่าง: GitHub Copilot Agent, Devin</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>สูตรของ AI Agent</h3>
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-equals"></i></div>
+          <div>
+            <strong>AI Agent = LLM + Tools + Memory + Planning + Action</strong><br/>
+            การผสมผสานของโมเดลภาษา เครื่องมือภายนอก ความจำ ความสามารถในการวางแผน และการลงมือกระทำ
+            คือสิ่งที่ทำให้ Agent ทรงพลังกว่า AI Model ธรรมดา
+          </div>
+        </div>
+
+        <h3>Agent Loop: วงจรการทำงานของ Agent</h3>
+        <div class="dev-lifecycle">
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+              <i class="fa-solid fa-eye"></i>
+            </div>
+            <h4>Perceive</h4>
+            <p>รับรู้ Input จากผู้ใช้ สภาพแวดล้อม หรือผลลัพธ์ก่อนหน้า</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <h4>Think (LLM)</h4>
+            <p>ประมวลผลด้วย LLM วิเคราะห์ วางแผน และตัดสินใจว่าจะทำอะไรต่อ</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+              <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <h4>Act (Tools)</h4>
+            <p>เรียกใช้ Tools เช่น ค้นหาเว็บ รันโค้ด เรียก API หรืออ่านไฟล์</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+              <i class="fa-solid fa-magnifying-glass-chart"></i>
+            </div>
+            <h4>Observe</h4>
+            <p>รับผลลัพธ์จาก Tools แล้วนำกลับไปเป็น Input ในรอบถัดไป</p>
+          </div>
+          <div class="lc-arrow lc-loop"><i class="fa-solid fa-rotate-left"></i> วนซ้ำ</div>
+        </div>
+
+        <h3>ประเภทของ AI Agents</h3>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon purple"><i class="fa-solid fa-bolt"></i></div>
+            <h4>Reactive Agent</h4>
+            <p>ตอบสนองต่อ Input โดยตรง ไม่มีการวางแผนล่วงหน้า เร็วแต่ขาดความยืดหยุ่น เหมาะกับงาน Rule-based</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon blue"><i class="fa-solid fa-map"></i></div>
+            <h4>Deliberative Agent</h4>
+            <p>วางแผนก่อนลงมือ ใช้ Model ของโลกภายใน คำนวณลำดับขั้นตอนเพื่อบรรลุเป้าหมาย</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon orange"><i class="fa-solid fa-layer-group"></i></div>
+            <h4>Hybrid Agent</h4>
+            <p>ผสมผสาน Reactive และ Deliberative ตอบสนองเร็วสำหรับงานง่าย วางแผนสำหรับงานซับซ้อน</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon green"><i class="fa-solid fa-users"></i></div>
+            <h4>Multi-Agent System</h4>
+            <p>หลาย Agent ทำงานร่วมกัน แต่ละตัวมีความเชี่ยวชาญต่างกัน ประสานงานเพื่อแก้ปัญหาที่ซับซ้อน</p>
+          </div>
+        </div>
+
+        <h3>ตัวอย่าง AI Agents ในโลกจริง</h3>
+        <div class="gen-types">
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+              <i class="fa-brands fa-github"></i>
+            </div>
+            <h4>GitHub Copilot Agent</h4>
+            <p>Agent ที่ช่วยเขียนโค้ด ค้นหา Bug แนะนำ Refactoring และสร้าง PR อัตโนมัติใน Repository</p>
+            <div class="gen-examples">
+              <span>Code Gen</span><span>Bug Fix</span><span>PR Review</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+              <i class="fa-solid fa-gears"></i>
+            </div>
+            <h4>AutoGPT</h4>
+            <p>Autonomous Agent ที่รับเป้าหมายระยะยาวแล้วแบ่งงานและดำเนินการเองโดยใช้ Tools หลากหลาย</p>
+            <div class="gen-examples">
+              <span>Web Search</span><span>File Ops</span><span>Code Exec</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#059669,#10b981)">
+              <i class="fa-solid fa-terminal"></i>
+            </div>
+            <h4>Devin AI</h4>
+            <p>Software Engineer Agent ที่เขียนโค้ด รัน Test Deploy และแก้ Bug ได้ทั้งกระบวนการพัฒนา</p>
+            <div class="gen-examples">
+              <span>Full Stack</span><span>DevOps</span><span>Testing</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10.2 -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">10.2</span> LangChain Agents</h2>
+
+        <p>
+          <strong>LangChain</strong> คือ Framework โอเพนซอร์สสำหรับสร้าง Application ที่ใช้ LLM เป็นแกนหลัก
+          มีโครงสร้างหลักประกอบด้วย Chains, Agents, Tools และ Memory ทำให้การสร้าง AI Application ซับซ้อนเป็นเรื่องง่าย
+        </p>
+
+        <h3>สถาปัตยกรรม LangChain Agent</h3>
+        <div class="dev-lifecycle">
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <h4>Agent</h4>
+            <p>ตัวควบคุมหลัก ตัดสินใจว่าจะใช้ Tool ใด และเมื่อใดจะหยุด</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <h4>LLM</h4>
+            <p>โมเดลภาษา (GPT-4o, Claude ฯลฯ) ที่ใช้ reason และตัดสินใจ</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+              <i class="fa-solid fa-toolbox"></i>
+            </div>
+            <h4>Tools</h4>
+            <p>Search, Calculator, Python REPL, File System, API Calls</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+              <i class="fa-solid fa-memory"></i>
+            </div>
+            <h4>Memory</h4>
+            <p>บันทึกบทสนทนาและผลลัพธ์เพื่อใช้ใน Context ถัดไป</p>
+          </div>
+        </div>
+
+        <h3>ตัวอย่างโค้ด: LangChain ReAct Agent</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span><i class="fa-brands fa-python"></i> Python — LangChain Agent with Custom Tools</span>
+            <span class="code-lang">Python</span>
+          </div>
+          <pre><code>from langchain_openai import ChatOpenAI
+from langchain.agents import create_react_agent, AgentExecutor
+from langchain.tools import tool
+from langchain import hub
+
+# Define custom tools
+@tool
+def calculate(expression: str) -&gt; str:
+    """Calculate a mathematical expression. Input: math expression as string"""
+    try:
+        result = eval(expression)  # Note: use safer eval in production
+        return str(result)
+    except Exception as e:
+        return f"Error: {e}"
+
+@tool
+def search_web(query: str) -&gt; str:
+    """Search for information on the web"""
+    # Mock implementation - use actual search API
+    return f"Search results for: {query}"
+
+# Create agent
+llm = ChatOpenAI(model="gpt-4o", temperature=0)
+tools = [calculate, search_web]
+prompt = hub.pull("hwchase17/react")
+
+agent = create_react_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
+    verbose=True,
+    max_iterations=5
+)
+
+result = agent_executor.invoke({
+    "input": "คำนวณ 15% ของ 2500 บาท แล้วบอกว่าเพียงพอสำหรับอาหารกี่มื้อ"
+})
+print(result["output"])</code></pre>
+        </div>
+
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <div>
+            <strong>ReAct Pattern = Reasoning + Acting</strong><br/>
+            ReAct คือ Pattern การทำงานของ Agent ที่สลับระหว่าง <em>การคิด (Thought)</em> และ <em>การกระทำ (Action)</em>
+            Agent จะอธิบายเหตุผลก่อน จากนั้นเลือก Tool ที่เหมาะสม ดูผลลัพธ์ แล้วตัดสินใจในรอบถัดไปจนกว่างานจะสำเร็จ
+            ทำให้ง่ายต่อการ Debug และเข้าใจการทำงานของ Agent
+          </div>
+        </div>
+
+        <h3>Components หลักของ LangChain</h3>
+        <div class="pattern-list">
+          <div class="pattern-item">
+            <div class="pattern-icon"><i class="fa-solid fa-link"></i></div>
+            <div class="pattern-body">
+              <h4>Chains</h4>
+              <p>การเชื่อมต่อ Components หลายตัวเข้าด้วยกัน เช่น Prompt → LLM → Parser หรือการสร้าง Pipeline ที่ซับซ้อน ใช้สำหรับ Workflow ที่กำหนดขั้นตอนล่วงหน้า</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon"><i class="fa-solid fa-robot"></i></div>
+            <div class="pattern-body">
+              <h4>Agents</h4>
+              <p>ใช้ LLM ในการตัดสินใจว่าจะทำอะไรต่อ เลือก Tool เหมาะสม ทำงานแบบ Dynamic ต่างจาก Chain ที่กำหนดขั้นตอนตายตัว</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon"><i class="fa-solid fa-wrench"></i></div>
+            <div class="pattern-body">
+              <h4>Tools</h4>
+              <p>ฟังก์ชันที่ Agent เรียกใช้ได้ เช่น ค้นหาเว็บ คำนวณ รันโค้ด Python อ่านไฟล์ เรียก API ภายนอก ฯลฯ ต้องมี Docstring อธิบายวิธีใช้</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon"><i class="fa-solid fa-memory"></i></div>
+            <div class="pattern-body">
+              <h4>Memory</h4>
+              <p>ระบบความจำของ Agent มีทั้ง Buffer Memory (จำบทสนทนาล่าสุด) Summary Memory (สรุปประวัติ) และ Vector Store Memory (ค้นหาจาก Long-term memory)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10.3 -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">10.3</span> Multi-Agent Systems</h2>
+
+        <p>
+          <strong>Multi-Agent System (MAS)</strong> คือระบบที่มี AI Agent หลายตัวทำงานร่วมกัน แต่ละตัวมีความเชี่ยวชาญเฉพาะด้าน
+          ช่วยแก้ปัญหาที่ซับซ้อนเกินกว่า Agent เดี่ยวจะรับมือได้ด้วยการแบ่งงานและประสานงาน
+        </p>
+
+        <h3>รูปแบบ Multi-Agent Systems</h3>
+        <div class="pattern-list">
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><i class="fa-solid fa-sitemap"></i></div>
+            <div class="pattern-body">
+              <h4>Hierarchical (Manager + Workers)</h4>
+              <p>มี Manager Agent ที่รับงานจากผู้ใช้ แบ่งงานให้ Worker Agents ที่เชี่ยวชาญแต่ละด้าน แล้วรวมผลลัพธ์ เหมาะกับงาน Complex ที่แบ่งได้ชัดเจน เช่น Research → Write → Edit</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#10b981,#059669)"><i class="fa-solid fa-handshake"></i></div>
+            <div class="pattern-body">
+              <h4>Collaborative</h4>
+              <p>Agent หลายตัวทำงานร่วมกันในฐานะเพื่อนร่วมทีม แลกเปลี่ยนข้อมูล ช่วยตรวจสอบงานกัน ไม่มีลำดับชั้น เหมาะสำหรับงานที่ต้องการมุมมองหลากหลาย</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><i class="fa-solid fa-trophy"></i></div>
+            <div class="pattern-body">
+              <h4>Competitive</h4>
+              <p>Agent แข่งขันกันเสนอคำตอบ ระบบเลือกคำตอบที่ดีที่สุด ใช้หลัก Diversity เพื่อหลีกเลี่ยง Bias จาก Agent เดี่ยว เช่น ระบบ Debate ระหว่าง Agent</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>ตัวอย่างโค้ด: Multi-Agent ด้วย CrewAI</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span><i class="fa-brands fa-python"></i> Python — CrewAI Multi-Agent System</span>
+            <span class="code-lang">Python</span>
+          </div>
+          <pre><code>from crewai import Agent, Task, Crew
+
+# Define specialized agents
+researcher = Agent(
+    role="Research Analyst",
+    goal="Research and gather accurate information",
+    backstory="Expert researcher with access to internet",
+    llm=ChatOpenAI(model="gpt-4o"),
+    verbose=True
+)
+
+writer = Agent(
+    role="Content Writer",
+    goal="Write clear and engaging content in Thai",
+    backstory="Professional Thai content writer",
+    llm=ChatOpenAI(model="gpt-4o"),
+    verbose=True
+)
+
+editor = Agent(
+    role="Editor",
+    goal="Review and improve content quality",
+    backstory="Experienced editor ensuring accuracy",
+    llm=ChatOpenAI(model="gpt-4o"),
+    verbose=True
+)
+
+# Define tasks
+research_task = Task(
+    description="Research the latest trends in Generative AI for 2025",
+    agent=researcher
+)
+
+write_task = Task(
+    description="Write a 500-word Thai article based on research",
+    agent=writer
+)
+
+edit_task = Task(
+    description="Review and polish the article",
+    agent=editor
+)
+
+# Create crew and run
+crew = Crew(
+    agents=[researcher, writer, editor],
+    tasks=[research_task, write_task, edit_task],
+    verbose=True
+)
+
+result = crew.kickoff()
+print(result)</code></pre>
+        </div>
+
+        <h3>เปรียบเทียบ Frameworks สำหรับ Multi-Agent</h3>
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-link"></i> LangChain / LangGraph</h4>
+            <ul>
+              <li>Graph-based Agent Orchestration</li>
+              <li>ควบคุมได้ละเอียด (Low-level)</li>
+              <li>Community ใหญ่ เอกสารครบ</li>
+              <li>เหมาะกับนักพัฒนา Python</li>
+              <li>รองรับ Stateful Workflows</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-users-gear"></i> CrewAI</h4>
+            <ul>
+              <li>Role-based Agent Design</li>
+              <li>ใช้งานง่าย Abstraction สูง</li>
+              <li>เน้น Team Collaboration</li>
+              <li>เหมาะกับ Business Use Case</li>
+              <li>Built-in Task Management</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-box box-green">
+          <div class="box-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div>
+            <strong>เมื่อไหร่ควรใช้ Multi-Agent?</strong><br/>
+            ใช้ Multi-Agent เมื่องานซับซ้อนจนยากสำหรับ Agent เดียว งานต้องการความเชี่ยวชาญหลายด้านพร้อมกัน
+            ต้องการระบบตรวจสอบและ Review ในตัว หรือต้องการให้ Agent ทำงานขนานกันเพื่อประหยัดเวลา
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10.4 -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">10.4</span> n8n: Visual AI Automation</h2>
+
+        <p>
+          <strong>n8n</strong> (pronounced "n-eight-n") คือ Low-code Workflow Automation Platform แบบ Open Source
+          ที่สามารถ Self-host ได้ ช่วยให้สร้าง Workflow อัตโนมัติโดยเชื่อมต่อ Apps และ APIs หลายร้อยตัวผ่าน
+          Visual Interface แบบ Node-based โดยไม่ต้องเขียนโค้ดมาก
+        </p>
+
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-server"></i></div>
+          <div>
+            <strong>n8n คืออะไร?</strong><br/>
+            n8n เป็น Fair-code Licensed Automation Tool ที่รัน Self-hosted บน Server ของคุณได้ ไม่มีค่า Subscription
+            รองรับ Integrations กว่า 350+ Apps มี AI Nodes ในตัว (OpenAI, Anthropic, Google AI) และสามารถรัน JavaScript
+            หรือ Python Code ได้ภายใน Workflow
+          </div>
+        </div>
+
+        <h3>Visual Workflow: ตัวอย่าง AI Email Automation</h3>
+        <div class="agent-flow">
+          <div class="af-node af-trigger">
+            <div class="af-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div class="af-label">Trigger</div>
+            <div class="af-sub">Gmail / Outlook</div>
+          </div>
+          <div class="af-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="af-node af-http">
+            <div class="af-icon"><i class="fa-solid fa-globe"></i></div>
+            <div class="af-label">HTTP Request</div>
+            <div class="af-sub">Fetch Data / API</div>
+          </div>
+          <div class="af-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="af-node af-ai">
+            <div class="af-icon"><i class="fa-solid fa-brain"></i></div>
+            <div class="af-label">AI (OpenAI)</div>
+            <div class="af-sub">สรุป / ตอบกลับ</div>
+          </div>
+          <div class="af-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="af-node af-transform">
+            <div class="af-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <div class="af-label">Transform</div>
+            <div class="af-sub">แปลง Format</div>
+          </div>
+          <div class="af-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="af-node af-output">
+            <div class="af-icon"><i class="fa-brands fa-slack"></i></div>
+            <div class="af-label">Send Slack</div>
+            <div class="af-sub">แจ้งเตือนทีม</div>
+          </div>
+        </div>
+
+        <h3>Use Cases ยอดนิยมของ n8n + AI</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <h4>อัตโนมัติตอบ Email ด้วย AI</h4>
+            <p>รับ Email ใหม่ → ให้ AI อ่านและเข้าใจเนื้อหา → สร้างคำตอบที่เหมาะสม → ส่งกลับอัตโนมัติ</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-brands fa-twitter"></i></div>
+            <h4>Monitor Social Media + สรุปข่าว</h4>
+            <p>ดึงข้อมูล Twitter/Reddit/News → ให้ AI สรุปและวิเคราะห์ Sentiment → ส่งรายงานรายวัน</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-brands fa-whatsapp"></i></div>
+            <h4>Chatbot เชื่อมต่อ WhatsApp/LINE</h4>
+            <p>รับข้อความจาก WhatsApp/LINE → ประมวลผลด้วย AI → ตอบกลับอัตโนมัติแบบ Context-aware</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-file-chart-column"></i></div>
+            <h4>Auto-generate Reports</h4>
+            <p>รวบรวมข้อมูลจาก Database/Sheets → ให้ AI วิเคราะห์ → สร้างรายงาน PDF ส่ง Email รายสัปดาห์</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-eye"></i></div>
+            <h4>Monitor Website Changes</h4>
+            <p>ตรวจสอบ Website/Competitor ทุกชั่วโมง → ให้ AI เปรียบเทียบการเปลี่ยนแปลง → แจ้งเตือนทันที</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-database"></i></div>
+            <h4>Data Pipeline + AI Enrichment</h4>
+            <p>รับข้อมูล Raw จาก Forms/API → ให้ AI จัดหมวดหมู่/เติมข้อมูล → บันทึกลง CRM/Database</p>
+          </div>
+        </div>
+
+        <h3>เปรียบเทียบ n8n vs Make vs Zapier</h3>
+        <div class="table-wrapper">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>คุณสมบัติ</th>
+                <th><i class="fa-solid fa-cube"></i> n8n</th>
+                <th><i class="fa-solid fa-diagram-project"></i> Make</th>
+                <th><i class="fa-solid fa-bolt"></i> Zapier</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ราคา (เริ่มต้น)</td>
+                <td class="highlight-cell">Free (Self-host)</td>
+                <td>Free tier มี</td>
+                <td>Free tier จำกัด</td>
+              </tr>
+              <tr>
+                <td>Self-hosting</td>
+                <td class="highlight-cell">รองรับเต็มรูปแบบ</td>
+                <td>ไม่รองรับ</td>
+                <td>ไม่รองรับ</td>
+              </tr>
+              <tr>
+                <td>AI Integrations</td>
+                <td class="highlight-cell">Built-in AI Nodes</td>
+                <td>OpenAI Module</td>
+                <td>OpenAI Action</td>
+              </tr>
+              <tr>
+                <td>Code Support</td>
+                <td class="highlight-cell">JS + Python</td>
+                <td>JavaScript</td>
+                <td>จำกัด</td>
+              </tr>
+              <tr>
+                <td>Integrations</td>
+                <td>350+ Nodes</td>
+                <td>1000+ Apps</td>
+                <td class="highlight-cell">5000+ Apps</td>
+              </tr>
+              <tr>
+                <td>ความยาก</td>
+                <td>กลาง-สูง</td>
+                <td>กลาง</td>
+                <td class="highlight-cell">ง่ายที่สุด</td>
+              </tr>
+              <tr>
+                <td>เหมาะสำหรับ</td>
+                <td class="highlight-cell">Developer/Tech</td>
+                <td>Technical User</td>
+                <td>Business User</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 10.5 -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">10.5</span> Make &amp; Zapier with AI</h2>
+
+        <p>
+          นอกจาก n8n ยังมีเครื่องมือ Automation ยอดนิยมอื่นที่รองรับ AI Integration ได้ดี ทั้ง
+          <strong>Make (เดิมชื่อ Integromat)</strong> และ <strong>Zapier</strong> ต่างมีจุดเด่นต่างกัน
+          เหมาะกับผู้ใช้และ Use Case ที่แตกต่างกัน
+        </p>
+
+        <div class="compare-box">
+          <div class="compare-col">
+            <h4><i class="fa-solid fa-diagram-project"></i> Make (Integromat)</h4>
+            <ul>
+              <li>Visual Scenario Builder แบบ Canvas</li>
+              <li>ราคาถูกกว่า Zapier</li>
+              <li>รองรับ Data Transformation ซับซ้อน</li>
+              <li>มี Iterator, Aggregator, Router</li>
+              <li>AI Integrations: OpenAI, Claude, Google AI</li>
+              <li>เหมาะกับ Workflow ที่ซับซ้อนระดับกลาง</li>
+            </ul>
+          </div>
+          <div class="compare-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="compare-col highlight-col">
+            <h4><i class="fa-solid fa-bolt"></i> Zapier</h4>
+            <ul>
+              <li>ใช้งานง่ายที่สุด สร้าง Zap ใน 5 นาที</li>
+              <li>Integrations มากที่สุด (5000+ Apps)</li>
+              <li>AI-powered Zap Builder</li>
+              <li>มี Zapier AI Actions ในตัว</li>
+              <li>เหมาะสำหรับ Business User ไม่ต้องโค้ด</li>
+              <li>ราคาสูงกว่าแต่ง่ายที่สุด</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>ตัวอย่าง Workflow: Email → AI → Notion → Slack</h3>
+        <div class="steps-flow">
+          <div class="step-box">
+            <div class="step-num">1</div>
+            <div class="step-icon"><i class="fa-solid fa-envelope"></i></div>
+            <h4>New Email</h4>
+            <p>Gmail Trigger รับ Email ใหม่ที่มีหัวข้อ "Request" เข้ามา</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">2</div>
+            <div class="step-icon"><i class="fa-solid fa-brain"></i></div>
+            <h4>AI Extract Info</h4>
+            <p>OpenAI Module สกัดข้อมูลสำคัญ: ชื่อผู้ส่ง ประเภทคำขอ ความด่วน วันที่ต้องการ</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">3</div>
+            <div class="step-icon"><i class="fa-solid fa-note-sticky"></i></div>
+            <h4>Create Notion Task</h4>
+            <p>บันทึก Task ลง Notion Database พร้อมข้อมูลที่ AI สกัดออกมา</p>
+          </div>
+          <div class="step-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step-box">
+            <div class="step-num">4</div>
+            <div class="step-icon"><i class="fa-brands fa-slack"></i></div>
+            <h4>Notify Slack</h4>
+            <p>ส่งแจ้งเตือนไปยัง Channel ของทีมพร้อม Summary และ Link ไปยัง Notion</p>
+          </div>
+        </div>
+
+        <h3>AI Integrations ที่รองรับ</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <h4>OpenAI Module</h4>
+            <p>สร้างข้อความ สรุป แปลภาษา วิเคราะห์ Sentiment สร้างภาพด้วย DALL-E รองรับ GPT-4o</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-atom"></i></div>
+            <h4>Claude (Anthropic)</h4>
+            <p>วิเคราะห์เอกสาร สรุปรายงาน ตอบคำถามซับซ้อน เหมาะกับงานที่ต้องการความแม่นยำสูง</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-brands fa-google"></i></div>
+            <h4>Google AI (Gemini)</h4>
+            <p>Multimodal AI ที่รับทั้ง Text, Image, Audio วิเคราะห์รูปภาพและประมวลผล Document</p>
+          </div>
+        </div>
+
+        <h3>คู่มือเลือกเครื่องมือที่เหมาะสม</h3>
+        <div class="info-box box-green">
+          <div class="box-icon"><i class="fa-solid fa-compass"></i></div>
+          <div>
+            <strong>เลือกให้เหมาะกับความต้องการ</strong><br/>
+            <ul style="margin-top:0.5rem">
+              <li><strong>n8n</strong> — เหมาะเมื่อต้องการ Self-host ปลอดภัย ต้องการเขียนโค้ด Custom หรืองานซับซ้อนที่มีงบประมาณจำกัด</li>
+              <li><strong>Make</strong> — เหมาะสำหรับทีมที่ต้องการ Visual Workflow ระดับกลาง ราคาสมเหตุสมผล ไม่อยากดูแล Server</li>
+              <li><strong>Zapier</strong> — เหมาะสำหรับ Non-technical User ที่ต้องการสร้าง Automation ง่ายๆ รวดเร็ว พร้อม Integration หลากหลาย</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10.6 -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">10.6</span> AutoGPT &amp; Autonomous Agents</h2>
+
+        <p>
+          <strong>AutoGPT</strong> คือ Autonomous AI Agent ตัวแรกที่ได้รับความสนใจจากสาธารณชนในวงกว้าง เปิดตัวในปี 2023
+          โดย Toran Bruce Richards ใช้แนวคิดว่า แค่บอกเป้าหมายระยะยาวให้ AI แล้วให้มันวางแผนและทำงานเองทั้งหมด
+          นับเป็นจุดเปลี่ยนสำคัญของการพัฒนา Autonomous AI
+        </p>
+
+        <h3>วิธีการทำงานของ AutoGPT</h3>
+        <div class="dev-lifecycle">
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+              <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <h4>Goal</h4>
+            <p>ผู้ใช้กำหนดเป้าหมายระยะยาว เช่น "สร้างเว็บไซต์ E-commerce"</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">
+              <i class="fa-solid fa-list-ol"></i>
+            </div>
+            <h4>Plan</h4>
+            <p>AI แบ่งเป้าหมายเป็นงานย่อย กำหนดลำดับความสำคัญ</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+              <i class="fa-solid fa-play"></i>
+            </div>
+            <h4>Execute</h4>
+            <p>ลงมือทำงานแต่ละขั้นโดยใช้ Tools ที่มี</p>
+          </div>
+          <div class="lc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="lc-step">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h4>Review</h4>
+            <p>ตรวจสอบผลลัพธ์ ปรับแผน และทำซ้ำจนสำเร็จ</p>
+          </div>
+          <div class="lc-arrow lc-loop"><i class="fa-solid fa-rotate-left"></i> วนซ้ำ</div>
+        </div>
+
+        <h3>สถาปัตยกรรม AutoGPT</h3>
+        <div class="nested-diagram">
+          <div class="nest-outer">
+            <span class="nest-label">Goals (เป้าหมาย)</span>
+            <div class="nest-inner">
+              <span class="nest-label">Task Queue (คิวงาน)</span>
+              <div class="nest-innermost">
+                <span class="nest-label">LLM Brain (GPT-4)</span>
+                <div class="nest-core">
+                  <span>Memory</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="content-list">
+          <li><strong>Goals</strong> — เป้าหมายระยะยาวที่ผู้ใช้กำหนด</li>
+          <li><strong>Task Queue</strong> — รายการงานย่อยที่ Agent สร้างขึ้น</li>
+          <li><strong>LLM Brain</strong> — GPT-4 ที่ทำหน้าที่ Reason และตัดสินใจ</li>
+          <li><strong>Memory</strong> — Short-term (Context) + Long-term (Vector DB)</li>
+          <li><strong>Tools</strong> — Browser, File System, Code Execution, APIs</li>
+        </ul>
+
+        <h3>Autonomous Agents อื่นที่น่าสนใจ</h3>
+        <div class="gen-types">
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">
+              <i class="fa-solid fa-baby"></i>
+            </div>
+            <h4>BabyAGI</h4>
+            <p>ระบบจัดการ Task อัตโนมัติที่ใช้ LLM + Vector DB สร้าง ดำเนินการ และจัดลำดับ Task อย่างต่อเนื่อง</p>
+            <div class="gen-examples">
+              <span>Task Mgmt</span><span>Vector DB</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#0891b2,#06b6d4)">
+              <i class="fa-solid fa-globe"></i>
+            </div>
+            <h4>AgentGPT</h4>
+            <p>Web-based Autonomous Agent ที่ใช้งานผ่าน Browser ได้ทันที ไม่ต้อง Setup เหมาะสำหรับทดลอง</p>
+            <div class="gen-examples">
+              <span>Web UI</span><span>No Setup</span>
+            </div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon" style="background:linear-gradient(135deg,#059669,#10b981)">
+              <i class="fa-solid fa-terminal"></i>
+            </div>
+            <h4>SWE-Agent</h4>
+            <p>Agent สำหรับแก้ Software Engineering Issues โดยตรง ทำ Benchmark บน GitHub Issues ได้ผลดีเยี่ยม</p>
+            <div class="gen-examples">
+              <span>GitHub</span><span>Bug Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box warning">
+          <div class="box-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <strong>ข้อควรระวังในการใช้ Autonomous Agents</strong>
+            <ul style="margin-top:0.5rem">
+              <li><strong>ต้นทุนสูง</strong> — Agent วนซ้ำหลายรอบทำให้เสีย Token จำนวนมาก ควรกำหนด max_iterations</li>
+              <li><strong>Hallucination Loop</strong> — Agent อาจวนอยู่ในกับดัก ทำงานซ้ำหรือสร้างข้อมูลผิดพลาดต่อเนื่อง</li>
+              <li><strong>ขาด Common Sense</strong> — Agent อาจทำสิ่งที่ไม่สมเหตุสมผลจากมุมมองของมนุษย์</li>
+              <li><strong>ความปลอดภัย</strong> — อย่าให้ Agent เข้าถึง System ที่สำคัญโดยไม่มี Human Approval</li>
+              <li><strong>ไม่ควรใช้กับงาน Production ที่สำคัญ</strong> โดยไม่มี Human-in-the-loop</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10.7 -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">10.7</span> Best Practices &amp; Design Patterns</h2>
+
+        <p>
+          การออกแบบ AI Agent ที่ดีต้องเลือก Pattern ที่เหมาะสมกับปัญหา มีระบบ Monitoring
+          บริหารต้นทุน และคำนึงถึงความปลอดภัยเสมอ
+        </p>
+
+        <h3>Agent Design Patterns ที่สำคัญ</h3>
+        <div class="pattern-list">
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <div class="pattern-body">
+              <h4>1. ReAct (Reason + Act)</h4>
+              <p>Agent สลับระหว่าง Thought (การคิด/วิเคราะห์) และ Action (การกระทำ/ใช้ Tool) ทำให้เห็น Reasoning Chain ชัดเจน
+              ง่ายต่อ Debug เหมาะกับงานที่ต้องการความโปร่งใสสูง เช่น การตอบคำถามที่ต้องค้นหาข้อมูล</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)"><i class="fa-solid fa-map-location-dot"></i></div>
+            <div class="pattern-body">
+              <h4>2. Plan-and-Execute</h4>
+              <p>Agent วางแผนทุกขั้นตอนก่อน แล้วค่อยดำเนินการตามแผน เหมาะสำหรับงานที่ซับซ้อนและมีหลายขั้นตอนชัดเจน
+              ลด Hallucination เพราะมีโครงสร้างชัดเจน แต่อาจยืดหยุ่นน้อยกว่า ReAct</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#10b981,#059669)"><i class="fa-solid fa-mirror-vertical"></i></div>
+            <div class="pattern-body">
+              <h4>3. Reflection</h4>
+              <p>Agent ตรวจสอบและวิจารณ์ Output ของตัวเองก่อนส่งให้ผู้ใช้ อาจมี Critic Agent แยกต่างหาก
+              ช่วยเพิ่มคุณภาพผลลัพธ์ ลด Error แต่เพิ่ม Latency และ Cost เหมาะกับงานที่ต้องการความแม่นยำสูง</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#f59e0b,#f97316)"><i class="fa-solid fa-toolbox"></i></div>
+            <div class="pattern-body">
+              <h4>4. Tool-Use</h4>
+              <p>Agent เลือกใช้ Tool ที่เหมาะสมจากคลัง (Search, Calculator, API, Code) ควรออกแบบ Tool ให้มี
+              Docstring ชัดเจน ชื่อ Tool สื่อความหมาย และจำกัดจำนวน Tool ต่อ Agent ไม่ให้มากเกินไป</p>
+            </div>
+          </div>
+          <div class="pattern-item">
+            <div class="pattern-icon" style="background:linear-gradient(135deg,#ec4899,#be185d)"><i class="fa-solid fa-database"></i></div>
+            <div class="pattern-body">
+              <h4>5. Memory</h4>
+              <p>ผสมผสาน Short-term Memory (Context Window) กับ Long-term Memory (Vector DB เช่น Pinecone, Weaviate)
+              ช่วยให้ Agent จำข้อมูลสำคัญข้ามบทสนทนา เหมาะสำหรับ Personalized Assistant หรืองานระยะยาว</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>Monitoring &amp; Observability</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-chart-mixed"></i></div>
+            <h4>LangSmith</h4>
+            <p>Platform ของ LangChain สำหรับ Debug, Test และ Monitor LLM Applications แสดง Trace ของทุก Step ใน Chain/Agent</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            <h4>Langfuse</h4>
+            <p>Open-source LLM Observability Platform Self-host ได้ ติดตาม Token Usage, Latency, Cost และ Quality</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <h4>PromptLayer</h4>
+            <p>บันทึกและวิเคราะห์ทุก Prompt ที่ส่งไป LLM เปรียบเทียบผลลัพธ์ระหว่าง Model Version ต่างๆ</p>
+          </div>
+        </div>
+
+        <h3>Cost Management สำหรับ AI Agents</h3>
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-coins"></i></div>
+          <div>
+            <strong>เทคนิคควบคุมต้นทุน</strong>
+            <ul style="margin-top:0.5rem">
+              <li>กำหนด <strong>max_iterations</strong> เสมอ ป้องกัน Agent วนซ้ำไม่สิ้นสุด</li>
+              <li>ใช้โมเดลเล็ก (GPT-4o-mini, Claude Haiku) สำหรับ Task ง่าย ใช้โมเดลใหญ่เฉพาะ Task ยาก</li>
+              <li>Cache ผลลัพธ์ที่ใช้บ่อยด้วย Semantic Cache เพื่อไม่ต้องเรียก API ซ้ำ</li>
+              <li>ใช้ Streaming เพื่อแสดงผลระหว่างรอ ไม่ใช่เพิ่มความเร็ว</li>
+              <li>ตั้ง Budget Alert บน OpenAI/Anthropic Dashboard</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Safety Considerations</h3>
+        <div class="info-box warning">
+          <div class="box-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div>
+            <strong>หลักความปลอดภัยสำหรับ AI Agents</strong>
+            <ul style="margin-top:0.5rem">
+              <li><strong>Human-in-the-Loop</strong> — ให้มนุษย์อนุมัติก่อน Action ที่มีผลกระทบสูง เช่น ส่ง Email, ลบไฟล์, ทำธุรกรรม</li>
+              <li><strong>Sandboxing</strong> — รัน Code ใน Isolated Environment ป้องกัน Agent เข้าถึง System จริง</li>
+              <li><strong>Permission Scoping</strong> — ให้ Agent มีสิทธิ์น้อยที่สุดที่จำเป็น (Principle of Least Privilege)</li>
+              <li><strong>Audit Logging</strong> — บันทึกทุก Action ที่ Agent ทำเพื่อตรวจสอบย้อนหลัง</li>
+              <li><strong>Rate Limiting</strong> — จำกัดความถี่ของ API Calls เพื่อป้องกัน Accidental DDoS</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10.8 -->
+      <section class="content-section" id="sec8">
+        <h2><span class="sec-num">10.8</span> สรุปและแบบฝึกหัด</h2>
+
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li><strong>AI Agent</strong> = LLM + Tools + Memory + Planning + Action ทำงานวนซ้ำเพื่อบรรลุเป้าหมาย ต่างจาก AI Model ที่ตอบครั้งเดียว</li>
+            <li><strong>LangChain</strong> เป็น Framework ยอดนิยมสำหรับสร้าง Agent ใช้ ReAct Pattern ที่สลับ Thought และ Action</li>
+            <li><strong>Multi-Agent Systems</strong> เช่น CrewAI ช่วยแก้ปัญหาซับซ้อนด้วยการแบ่ง Agent ให้มีบทบาทเฉพาะ</li>
+            <li><strong>n8n, Make, Zapier</strong> คือ No/Low-code Automation Tools ที่รองรับ AI Integration ใช้สร้าง Workflow โดยไม่ต้องเขียนโค้ดมาก</li>
+            <li><strong>Autonomous Agents</strong> เช่น AutoGPT สามารถทำงานเองจนสำเร็จ แต่ต้องระวังเรื่องต้นทุน ความปลอดภัย และ Hallucination</li>
+            <li>ควรใช้ <strong>Human-in-the-Loop, Sandboxing และ Monitoring</strong> เสมอเมื่อ Deploy Agent ใน Production</li>
+            <li>Design Patterns สำคัญ ได้แก่ ReAct, Plan-and-Execute, Reflection, Tool-Use และ Memory</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item">
+            <div class="ex-num">1</div>
+            <div>
+              <strong>สร้าง LangChain Agent พร้อม Tools</strong>
+              <p>สร้าง Agent ด้วย LangChain ที่มี Custom Tools อย่างน้อย 3 อย่าง เช่น ค้นหาเว็บ คำนวณ และอ่านไฟล์ CSV
+              ทดสอบโดยถามคำถามที่ต้องใช้ Tools หลายตัวร่วมกัน บันทึก Log และวิเคราะห์ ReAct Trace</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">2</div>
+            <div>
+              <strong>สร้าง Multi-Agent System ด้วย CrewAI</strong>
+              <p>สร้างระบบ 2 Agent (Researcher + Writer) ด้วย CrewAI เพื่อค้นหาข้อมูลและเขียนบทความภาษาไทย
+              กำหนด Role, Goal และ Backstory ให้ชัดเจน เปรียบเทียบผลลัพธ์กับการใช้ Agent เดี่ยว</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">3</div>
+            <div>
+              <strong>สร้าง Workflow ใน n8n สำหรับสรุป Email</strong>
+              <p>ติดตั้ง n8n บน Local หรือใช้ Cloud Version สร้าง Workflow ที่รับ Email ใหม่ ส่งไปให้ OpenAI สรุปเนื้อหา
+              แล้วส่งสรุปไปยัง Slack Channel ทดสอบกับ Email จริงอย่างน้อย 5 ฉบับ</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">4</div>
+            <div>
+              <strong>สร้าง Simple Autonomous Agent สำหรับโจทย์คณิตศาสตร์</strong>
+              <p>สร้าง Agent ที่รับโจทย์คณิตศาสตร์แบบ Word Problem รับเป้าหมายและวางแผนขั้นตอนการแก้ปัญหา
+              ใช้ Calculator Tool คำนวณ และตรวจสอบคำตอบด้วย Reflection Pattern กำหนด max_iterations = 5</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">5</div>
+            <div>
+              <strong>Implement Memory ด้วย Vector Database</strong>
+              <p>เพิ่ม Long-term Memory ให้กับ Agent โดยใช้ Vector Database (Chroma หรือ FAISS)
+              ให้ Agent จำข้อมูลผู้ใช้ข้าม Session ได้ ทดสอบโดยถามข้อมูลที่เคยบอกในบทสนทนาก่อนหน้า
+              วัดประสิทธิภาพการค้นหาด้วย Cosine Similarity Score</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nav Buttons -->
+        <div class="lesson-nav">
+          <a href="lesson9.html" class="ln-btn ln-prev"><i class="fa-solid fa-arrow-left"></i> บทที่ 9</a>
+          <a href="lesson11.html" class="ln-btn ln-next">บทที่ 11 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i class="fa-solid fa-robot"></i>
+          <span>Generative AI &amp; Prompt Engineering</span>
+        </div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const sections = document.querySelectorAll('.content-section');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+</body>
+</html>
