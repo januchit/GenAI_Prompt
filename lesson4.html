@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทที่ 4: Advanced Prompting Techniques</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="lesson.css" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand"><a href="index.html"><i class="fa-solid fa-robot"></i><span>GenAI Course</span></a></div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="tools.html">AI Tools</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="lesson-hero">
+    <div class="container">
+      <a href="index.html#modules" class="back-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก</a>
+      <div class="lesson-badge"><span class="badge-num">04</span> Techniques</div>
+      <h1>Advanced Prompting Techniques</h1>
+      <p class="lesson-desc">เรียนรู้เทคนิคการเขียน Prompt ขั้นสูง ตั้งแต่ Zero-shot, Few-shot, Chain-of-Thought ไปจนถึง ReAct และ Self-Consistency ที่ใช้ในงานจริง</p>
+      <div class="lesson-meta-bar">
+        <span><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</span>
+        <span><i class="fa-solid fa-signal"></i> ระดับกลาง</span>
+        <span><i class="fa-solid fa-list-check"></i> 7 หัวข้อ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-layout container">
+    <aside class="toc-sidebar">
+      <h4><i class="fa-solid fa-list"></i> เนื้อหาในบทนี้</h4>
+      <ul>
+        <li><a href="#sec1" class="toc-link active">4.1 Zero-shot Prompting</a></li>
+        <li><a href="#sec2" class="toc-link">4.2 Few-shot Prompting</a></li>
+        <li><a href="#sec3" class="toc-link">4.3 Chain-of-Thought (CoT)</a></li>
+        <li><a href="#sec4" class="toc-link">4.4 Tree-of-Thought (ToT)</a></li>
+        <li><a href="#sec5" class="toc-link">4.5 ReAct Prompting</a></li>
+        <li><a href="#sec6" class="toc-link">4.6 Self-Consistency</a></li>
+        <li><a href="#sec7" class="toc-link">4.7 เลือกเทคนิคให้เหมาะกับงาน</a></li>
+        <li><a href="#sec8" class="toc-link">4.8 สรุปและแบบฝึกหัด</a></li>
+      </ul>
+    </aside>
+
+    <main class="lesson-content">
+
+      <!-- 4.1 Zero-shot -->
+      <section class="content-section" id="sec1">
+        <h2><span class="sec-num">4.1</span> Zero-shot Prompting</h2>
+        <p><strong>Zero-shot</strong> คือการถาม AI โดยไม่ให้ตัวอย่างใดๆ เลย เพียงแค่บอกว่าต้องการอะไร ขึ้นอยู่กับความรู้ที่โมเดลเรียนรู้มาจาก Pre-training</p>
+
+        <div class="technique-badge zero">Zero-shot</div>
+
+        <div class="prompt-compare-block">
+          <div class="pcb-label"><i class="fa-solid fa-comment"></i> ตัวอย่าง Zero-shot Prompt</div>
+          <div class="pcb-prompt">
+            จงจำแนกประเภทของข้อความต่อไปนี้ว่าเป็น Positive, Negative หรือ Neutral:<br/><br/>
+            "สินค้าดีมาก ส่งเร็ว บริการประทับใจ ซื้ออีกแน่นอน"
+          </div>
+          <div class="pcb-response-label"><i class="fa-solid fa-robot"></i> AI Response</div>
+          <div class="pcb-response">
+            <span class="resp-tag positive">Positive</span><br/>
+            เหตุผล: ข้อความมีคำแสดงความพึงพอใจหลายจุด เช่น "ดีมาก", "ประทับใจ", "ซื้ออีกแน่นอน"
+          </div>
+        </div>
+
+        <h3>เมื่อไรควรใช้ Zero-shot?</h3>
+        <div class="when-grid">
+          <div class="when-card good-card">
+            <i class="fa-solid fa-check"></i>
+            <div>
+              <strong>เหมาะกับ</strong>
+              <ul><li>งานทั่วไปที่ AI รู้อยู่แล้ว</li><li>สรุป, แปล, จัดหมวดหมู่</li><li>เมื่อต้องการคำตอบเร็ว</li></ul>
+            </div>
+          </div>
+          <div class="when-card bad-card">
+            <i class="fa-solid fa-xmark"></i>
+            <div>
+              <strong>ไม่เหมาะกับ</strong>
+              <ul><li>งานเฉพาะทางที่ซับซ้อน</li><li>ต้องการรูปแบบเฉพาะ</li><li>Domain ที่ AI ไม่คุ้นเคย</li></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4.2 Few-shot -->
+      <section class="content-section" id="sec2">
+        <h2><span class="sec-num">4.2</span> Few-shot Prompting</h2>
+        <p><strong>Few-shot</strong> คือการให้ตัวอย่าง Input→Output จำนวน 2–5 ชุดก่อนถามคำถามจริง ช่วยให้ AI เข้าใจรูปแบบที่ต้องการได้แม่นยำขึ้นมาก</p>
+
+        <div class="technique-badge few">Few-shot</div>
+
+        <div class="prompt-compare-block">
+          <div class="pcb-label"><i class="fa-solid fa-comment"></i> ตัวอย่าง Few-shot Prompt</div>
+          <div class="pcb-prompt">
+            <span style="color:#a5b4fc">// ตัวอย่างที่ 1</span><br/>
+            Input: "บริษัทยกเลิกการประชุมกะทันหัน"<br/>
+            Sentiment: Negative | อารมณ์: หงุดหงิด<br/><br/>
+            <span style="color:#a5b4fc">// ตัวอย่างที่ 2</span><br/>
+            Input: "ได้รับโบนัสเพิ่มขึ้น 20%"<br/>
+            Sentiment: Positive | อารมณ์: ดีใจมาก<br/><br/>
+            <span style="color:#a5b4fc">// ตัวอย่างที่ 3</span><br/>
+            Input: "การประชุมวันนี้ใช้เวลา 2 ชั่วโมง"<br/>
+            Sentiment: Neutral | อารมณ์: เฉยๆ<br/><br/>
+            <span style="color:#6ee7b7">// คำถามจริง</span><br/>
+            Input: "เพื่อนร่วมงานช่วยทำงานส่วนที่ยากให้โดยไม่ได้ขอ"<br/>
+            Sentiment: ??? | อารมณ์: ???
+          </div>
+          <div class="pcb-response-label"><i class="fa-solid fa-robot"></i> AI Response</div>
+          <div class="pcb-response">
+            Sentiment: <span class="resp-tag positive">Positive</span> | อารมณ์: ประทับใจและขอบคุณ
+          </div>
+        </div>
+
+        <h3>หลักการเลือก Few-shot Examples</h3>
+        <ul class="content-list">
+          <li><strong>จำนวน:</strong> 2–5 ตัวอย่างก็เพียงพอ มากไปทำให้ Prompt ยาวเกินไป</li>
+          <li><strong>ความหลากหลาย:</strong> ครอบคลุมกรณีต่างๆ ที่อาจเกิดขึ้น</li>
+          <li><strong>ความถูกต้อง:</strong> ตัวอย่างต้องถูกต้อง เพราะ AI จะเรียนรู้ตามนั้น</li>
+          <li><strong>รูปแบบสม่ำเสมอ:</strong> ใช้ Format เดียวกันทุก Example</li>
+        </ul>
+
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <div><strong>One-shot vs Few-shot</strong><br/>
+          One-shot = ให้ตัวอย่าง 1 ชุด | Few-shot = ให้ 2-5 ชุด | Many-shot = ให้มากกว่า 5 ชุด<br/>
+          งานวิจัยพบว่า Few-shot มักให้ผลดีกว่า One-shot อย่างชัดเจน</div>
+        </div>
+      </section>
+
+      <!-- 4.3 CoT -->
+      <section class="content-section" id="sec3">
+        <h2><span class="sec-num">4.3</span> Chain-of-Thought (CoT) Prompting</h2>
+        <p>
+          <strong>Chain-of-Thought (CoT)</strong> คือการกระตุ้นให้ AI แสดงขั้นตอนการคิดทีละขั้น ก่อนตอบคำถาม
+          ช่วยเพิ่มความแม่นยำสูงมากในงานที่ต้องใช้ Reasoning เช่น คณิตศาสตร์, Logic, Multi-step Problems
+        </p>
+
+        <div class="technique-badge cot">Chain-of-Thought</div>
+
+        <div class="cot-compare">
+          <div class="cot-col">
+            <div class="cot-header bad-header"><i class="fa-solid fa-xmark"></i> ไม่ใช้ CoT</div>
+            <div class="cot-prompt">
+              โรงงานผลิตสินค้าได้ 250 ชิ้น/วัน ทำงาน 5 วัน/สัปดาห์ ต้องการสินค้า 3,000 ชิ้น ใช้เวลากี่สัปดาห์?
+            </div>
+            <div class="cot-response bad-response">
+              ใช้เวลา 3 สัปดาห์ <span style="color:#f87171">(ผิด!)</span>
+            </div>
+          </div>
+          <div class="cot-divider"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="cot-col">
+            <div class="cot-header good-header"><i class="fa-solid fa-check"></i> ใช้ CoT</div>
+            <div class="cot-prompt">
+              โรงงานผลิตสินค้าได้ 250 ชิ้น/วัน ทำงาน 5 วัน/สัปดาห์ ต้องการสินค้า 3,000 ชิ้น ใช้เวลากี่สัปดาห์?<br/><br/>
+              <strong>Let's think step by step.</strong>
+            </div>
+            <div class="cot-response good-response">
+              ขั้นที่ 1: ผลิต/สัปดาห์ = 250 × 5 = <strong>1,250 ชิ้น</strong><br/>
+              ขั้นที่ 2: จำนวนสัปดาห์ = 3,000 ÷ 1,250 = <strong>2.4 สัปดาห์</strong><br/>
+              ขั้นที่ 3: ปัดขึ้น = <strong>3 สัปดาห์</strong> (แต่ไม่ครบ 3,000)<br/>
+              ดังนั้นต้องใช้ <span style="color:#34d399"><strong>3 สัปดาห์</strong></span> เพื่อให้ครบ
+            </div>
+          </div>
+        </div>
+
+        <h3>วิธีเปิดใช้ CoT</h3>
+        <div class="cot-triggers">
+          <div class="ct-item"><div class="ct-tag">Magic Phrase</div><code>"Let's think step by step."</code></div>
+          <div class="ct-item"><div class="ct-tag">ภาษาไทย</div><code>"คิดทีละขั้นตอน"</code></div>
+          <div class="ct-item"><div class="ct-tag">Explicit</div><code>"อธิบายขั้นตอนการแก้ปัญหาก่อนตอบ"</code></div>
+          <div class="ct-item"><div class="ct-tag">Few-shot CoT</div><code>ให้ตัวอย่างที่มีการแสดงขั้นตอนด้วย</code></div>
+        </div>
+
+        <h3>Zero-shot CoT vs Few-shot CoT</h3>
+        <div class="compare-mini" style="gap:.6rem">
+          <div class="mini-good"><strong>Zero-shot CoT:</strong> เพิ่มแค่ "คิดทีละขั้น" ง่าย ไม่ต้องเตรียมตัวอย่าง เหมาะกับงานทั่วไป</div>
+          <div class="mini-good"><strong>Few-shot CoT:</strong> ให้ตัวอย่างที่มีขั้นตอนด้วย แม่นยำกว่า เหมาะกับงานเฉพาะทาง</div>
+        </div>
+      </section>
+
+      <!-- 4.4 ToT -->
+      <section class="content-section" id="sec4">
+        <h2><span class="sec-num">4.4</span> Tree-of-Thought (ToT)</h2>
+        <p>
+          <strong>Tree-of-Thought</strong> เป็นการขยาย CoT โดยให้ AI สำรวจ <em>หลายแนวทางการคิด</em> พร้อมกัน
+          เหมือนต้นไม้ที่แตกกิ่งก้าน แล้วประเมินว่าแนวทางไหนดีที่สุด เหมาะกับปัญหาที่ซับซ้อนและมีหลายวิธีแก้
+        </p>
+
+        <div class="technique-badge tot">Tree-of-Thought</div>
+
+        <div class="tot-diagram">
+          <div class="tot-root"><strong>ปัญหา</strong></div>
+          <div class="tot-branches">
+            <div class="tot-branch">
+              <div class="tot-node node-a">แนวทาง A</div>
+              <div class="tot-children">
+                <div class="tot-leaf leaf-ok">A1 ✓</div>
+                <div class="tot-leaf leaf-bad">A2 ✗</div>
+              </div>
+            </div>
+            <div class="tot-branch">
+              <div class="tot-node node-b best-path">แนวทาง B ⭐</div>
+              <div class="tot-children">
+                <div class="tot-leaf leaf-best">B1 ✓✓</div>
+                <div class="tot-leaf leaf-ok">B2 ✓</div>
+              </div>
+            </div>
+            <div class="tot-branch">
+              <div class="tot-node node-c">แนวทาง C</div>
+              <div class="tot-children">
+                <div class="tot-leaf leaf-bad">C1 ✗</div>
+                <div class="tot-leaf leaf-bad">C2 ✗</div>
+              </div>
+            </div>
+          </div>
+          <div class="tot-result">เลือก <strong>แนวทาง B1</strong> เป็นคำตอบสุดท้าย</div>
+        </div>
+
+        <div class="prompt-compare-block">
+          <div class="pcb-label"><i class="fa-solid fa-comment"></i> ตัวอย่าง ToT Prompt</div>
+          <div class="pcb-prompt">
+            ลองคิดวิธีแก้ปัญหาต่อไปนี้ 3 แนวทาง แต่ละแนวทางให้อธิบายขั้นตอน แล้วประเมินข้อดีข้อเสีย สุดท้ายเลือกแนวทางที่ดีที่สุด:<br/><br/>
+            ปัญหา: บริษัท Startup ต้องการเพิ่ม User ใน App โดยมีงบ 50,000 บาทต่อเดือน
+          </div>
+        </div>
+
+        <div class="info-box box-blue">
+          <div class="box-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <div><strong>เมื่อไรควรใช้ ToT?</strong><br/>
+          ปัญหาการวางกลยุทธ์, การออกแบบระบบ, Creative Problem Solving ที่มีหลายวิธี ToT เหมาะกว่า CoT เมื่อไม่มีคำตอบถูกผิดชัดเจน</div>
+        </div>
+      </section>
+
+      <!-- 4.5 ReAct -->
+      <section class="content-section" id="sec5">
+        <h2><span class="sec-num">4.5</span> ReAct Prompting</h2>
+        <p>
+          <strong>ReAct</strong> (Reasoning + Acting) คือเทคนิคที่ให้ AI สลับกันระหว่าง <em>คิด (Think)</em> และ <em>กระทำ (Act)</em>
+          เช่น ค้นหาข้อมูล, เรียก API, รันโค้ด ใช้ใน AI Agent ที่ต้องทำงานหลายขั้นตอน
+        </p>
+
+        <div class="technique-badge react">ReAct</div>
+
+        <div class="react-flow">
+          <div class="rf-step">
+            <div class="rf-icon thought"><i class="fa-solid fa-brain"></i></div>
+            <div class="rf-label">Thought</div>
+            <div class="rf-desc">"ต้องค้นหาข้อมูลราคาหุ้น NVDA วันนี้"</div>
+          </div>
+          <div class="rf-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="rf-step">
+            <div class="rf-icon action"><i class="fa-solid fa-bolt"></i></div>
+            <div class="rf-label">Action</div>
+            <div class="rf-desc">search("NVDA stock price today")</div>
+          </div>
+          <div class="rf-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="rf-step">
+            <div class="rf-icon observe"><i class="fa-solid fa-eye"></i></div>
+            <div class="rf-label">Observation</div>
+            <div class="rf-desc">ผล: "NVDA: $875.40 (+2.3%)"</div>
+          </div>
+          <div class="rf-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="rf-step">
+            <div class="rf-icon thought"><i class="fa-solid fa-brain"></i></div>
+            <div class="rf-label">Thought</div>
+            <div class="rf-desc">"ได้ข้อมูลแล้ว ตอบผู้ใช้ได้"</div>
+          </div>
+          <div class="rf-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="rf-step final-step">
+            <div class="rf-icon final"><i class="fa-solid fa-flag-checkered"></i></div>
+            <div class="rf-label">Final Answer</div>
+            <div class="rf-desc">"ราคาหุ้น NVIDIA วันนี้คือ $875.40 (+2.3%)"</div>
+          </div>
+        </div>
+
+        <h3>ReAct ในทางปฏิบัติ</h3>
+        <ul class="content-list">
+          <li>ใช้ใน AI Agent ที่เชื่อมต่อกับเครื่องมือ (Tools) เช่น Search, Calculator, Database</li>
+          <li>LangChain, LlamaIndex ใช้ ReAct เป็น Default Reasoning Strategy</li>
+          <li>ChatGPT Plugins และ Claude Tool Use ก็ใช้ ReAct-style</li>
+          <li>เหมาะกับงานที่ต้องการข้อมูล Real-time หรือทำงานหลายขั้นตอน</li>
+        </ul>
+      </section>
+
+      <!-- 4.6 Self-Consistency -->
+      <section class="content-section" id="sec6">
+        <h2><span class="sec-num">4.6</span> Self-Consistency Prompting</h2>
+        <p>
+          <strong>Self-Consistency</strong> คือการให้ AI สร้างคำตอบหลายรอบด้วยวิธีคิดที่แตกต่างกัน แล้วเลือกคำตอบที่ได้รับ <em>Majority Vote</em> สูงสุด
+          ช่วยเพิ่มความน่าเชื่อถือสำหรับปัญหาที่มีคำตอบเดียว
+        </p>
+
+        <div class="technique-badge sc">Self-Consistency</div>
+
+        <div class="sc-diagram">
+          <div class="sc-question">คำถาม: 15% ของ 240 คือเท่าไร?</div>
+          <div class="sc-paths">
+            <div class="sc-path">
+              <div class="sc-path-label">วิธีที่ 1</div>
+              <div class="sc-steps">240 × 0.15 = <strong>36</strong></div>
+            </div>
+            <div class="sc-path">
+              <div class="sc-path-label">วิธีที่ 2</div>
+              <div class="sc-steps">10% = 24, 5% = 12, รวม = <strong>36</strong></div>
+            </div>
+            <div class="sc-path">
+              <div class="sc-path-label">วิธีที่ 3</div>
+              <div class="sc-steps">240 ÷ 100 × 15 = <strong>36</strong></div>
+            </div>
+          </div>
+          <div class="sc-vote">
+            <i class="fa-solid fa-check-to-slot"></i>
+            Majority Vote: <strong>36</strong> (3/3 เห็นตรงกัน) → คำตอบสุดท้าย = <strong class="answer">36</strong>
+          </div>
+        </div>
+
+        <div class="info-box box-green">
+          <div class="box-icon"><i class="fa-solid fa-chart-bar"></i></div>
+          <div><strong>ผลการทดสอบ (Wang et al., 2022)</strong><br/>
+          Self-Consistency เพิ่มความแม่นยำบน GSM8K Math benchmark จาก <strong>56.5%</strong> (CoT alone) เป็น <strong>74.4%</strong> — เพิ่มขึ้น ~18%</div>
+        </div>
+      </section>
+
+      <!-- 4.7 เลือกเทคนิค -->
+      <section class="content-section" id="sec7">
+        <h2><span class="sec-num">4.7</span> เลือกเทคนิคให้เหมาะกับงาน</h2>
+
+        <div class="technique-selector">
+          <table class="tech-table">
+            <thead>
+              <tr>
+                <th>เทคนิค</th>
+                <th>เหมาะกับงาน</th>
+                <th>ข้อดี</th>
+                <th>ข้อเสีย</th>
+                <th>Token ที่ใช้</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="tech-tag zero-tag">Zero-shot</span></td>
+                <td>งานทั่วไป, สรุป, แปล</td>
+                <td>ง่าย ประหยัด Token</td>
+                <td>ไม่แม่นในงานเฉพาะ</td>
+                <td>⭐</td>
+              </tr>
+              <tr>
+                <td><span class="tech-tag few-tag">Few-shot</span></td>
+                <td>จำแนกประเภท, รูปแบบเฉพาะ</td>
+                <td>แม่นยำขึ้น กำหนด Format ได้</td>
+                <td>ต้องเตรียม Examples</td>
+                <td>⭐⭐</td>
+              </tr>
+              <tr>
+                <td><span class="tech-tag cot-tag">CoT</span></td>
+                <td>คณิตศาสตร์, Logic, Reasoning</td>
+                <td>แม่นยำสูงในงาน Reasoning</td>
+                <td>ตอบช้า Token เพิ่ม</td>
+                <td>⭐⭐⭐</td>
+              </tr>
+              <tr>
+                <td><span class="tech-tag tot-tag">ToT</span></td>
+                <td>กลยุทธ์, Creative, Complex</td>
+                <td>สำรวจหลายทางเลือก</td>
+                <td>ใช้ Token มาก ช้ากว่า</td>
+                <td>⭐⭐⭐⭐</td>
+              </tr>
+              <tr>
+                <td><span class="tech-tag react-tag">ReAct</span></td>
+                <td>Agent, Multi-step, Real-time</td>
+                <td>ใช้ Tools ได้ ข้อมูล Real-time</td>
+                <td>ต้องการ Tool Support</td>
+                <td>⭐⭐⭐⭐</td>
+              </tr>
+              <tr>
+                <td><span class="tech-tag sc-tag">Self-Consistency</span></td>
+                <td>คำตอบเดียว, Math, Factual</td>
+                <td>ความแม่นยำสูงสุด</td>
+                <td>ใช้ Token มากที่สุด</td>
+                <td>⭐⭐⭐⭐⭐</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Decision Tree: เลือกเทคนิคไหนดี?</h3>
+        <div class="decision-flow">
+          <div class="df-node root-node">มีงานที่ต้องทำ</div>
+          <div class="df-row">
+            <div class="df-branch">
+              <div class="df-q">งานทั่วไป?</div>
+              <div class="df-ans zero-ans">Zero-shot</div>
+            </div>
+            <div class="df-branch">
+              <div class="df-q">ต้องการ Format เฉพาะ?</div>
+              <div class="df-ans few-ans">Few-shot</div>
+            </div>
+            <div class="df-branch">
+              <div class="df-q">ต้องคิดหลายขั้น?</div>
+              <div class="df-ans cot-ans">CoT</div>
+            </div>
+            <div class="df-branch">
+              <div class="df-q">ต้องการ Tools?</div>
+              <div class="df-ans react-ans">ReAct</div>
+            </div>
+            <div class="df-branch">
+              <div class="df-q">ต้องการความแม่นยำสูงสุด?</div>
+              <div class="df-ans sc-ans">Self-Consistency</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4.8 สรุป -->
+      <section class="content-section" id="sec8">
+        <h2><span class="sec-num">4.8</span> สรุปและแบบฝึกหัด</h2>
+
+        <div class="summary-box">
+          <h3><i class="fa-solid fa-bookmark"></i> สรุปสาระสำคัญ</h3>
+          <ul>
+            <li><strong>Zero-shot</strong> — ถาม AI โดยตรง ไม่ให้ตัวอย่าง ง่ายและเร็ว</li>
+            <li><strong>Few-shot</strong> — ให้ตัวอย่าง 2-5 ชุด ช่วยกำหนดรูปแบบและเพิ่มความแม่นยำ</li>
+            <li><strong>CoT</strong> — "คิดทีละขั้น" ช่วยให้ AI แสดง Reasoning ก่อนตอบ แม่นยำในงาน Logic/Math</li>
+            <li><strong>ToT</strong> — สำรวจหลายแนวทางพร้อมกัน เหมาะกับปัญหาซับซ้อน</li>
+            <li><strong>ReAct</strong> — สลับ Thinking และ Acting ใช้ใน AI Agent ที่มี Tools</li>
+            <li><strong>Self-Consistency</strong> — ตอบหลายรอบแล้ว Vote เลือก เพิ่มความแม่นยำสูงสุด</li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:1rem"><i class="fa-solid fa-pencil"></i> แบบฝึกหัดท้ายบท</h3>
+        <div class="exercise-list">
+          <div class="exercise-item">
+            <div class="ex-num">1</div>
+            <div>
+              <strong>เปรียบเทียบ Zero-shot vs Few-shot</strong>
+              <p>เลือกงาน Classification (เช่น จำแนกประเภทข่าว) แล้วทดสอบทั้ง Zero-shot และ Few-shot (3 examples) วัดและเปรียบเทียบความแม่นยำ</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">2</div>
+            <div>
+              <strong>CoT สำหรับโจทย์คณิตศาสตร์</strong>
+              <p>นำโจทย์คณิตศาสตร์ 5 ข้อมาทดสอบ ทั้งแบบไม่ใช้ CoT และใช้ CoT ("คิดทีละขั้น") บันทึกและเปรียบเทียบผล</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">3</div>
+            <div>
+              <strong>ToT สำหรับการตัดสินใจ</strong>
+              <p>ใช้ ToT Prompt ช่วยตัดสินใจเรื่องที่คุณสนใจ (เช่น เลือกเรียนต่อ, เลือก Career Path) ให้ AI เสนอ 3 แนวทางพร้อมประเมินแต่ละทาง</p>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="ex-num">4</div>
+            <div>
+              <strong>Self-Consistency ทดลอง</strong>
+              <p>ถามคำถาม Factual เดิม 5 ครั้งในหน้าต่างใหม่ทุกครั้ง บันทึกคำตอบ แล้วดูว่าคำตอบส่วนใหญ่ตรงกันไหม และมี Inconsistency ตรงไหนบ้าง</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-nav">
+          <a href="lesson3.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> บทที่ 3: Prompt Engineering</a>
+          <a href="lesson5.html" class="btn btn-primary">บทที่ 5: Text Generation <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand"><i class="fa-solid fa-robot"></i><span>Generative AI & Prompt Engineering</span></div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const sections = document.querySelectorAll('.content-section');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    });
+  </script>
+</body>
+</html>
