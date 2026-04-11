@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh -T git@github.com)",
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(ssh-keyscan github.com)",
+      "Bash(chmod 700 ~/.ssh)",
+      "Bash(ssh-add -l)",
+      "Bash(ssh-add ~/.ssh/id_ed25519)"
+    ]
+  }
+}

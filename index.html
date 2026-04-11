@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generative AI and Prompt Engineering</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fa-solid fa-robot"></i>
+        <span>GenAI Course</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#overview">ภาพรวม</a></li>
+        <li><a href="#modules">บทเรียน</a></li>
+        <li><a href="#tools">เครื่องมือ AI</a></li>
+        <li><a href="#schedule">ตารางเรียน</a></li>
+        <li><a href="#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><i class="fa-solid fa-sparkles"></i> วิชาใหม่ 2025</div>
+      <h1 class="hero-title">
+        Generative AI<br/>
+        <span class="gradient-text">& Prompt Engineering</span>
+      </h1>
+      <p class="hero-subtitle">
+        เรียนรู้เทคโนโลยี AI สร้างสรรค์ที่กำลังเปลี่ยนโลก ตั้งแต่พื้นฐาน LLM จนถึงเทคนิค Prompt Engineering ขั้นสูง
+        สำหรับการประยุกต์ใช้งานจริงในยุคดิจิทัล
+      </p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">12</span><span class="stat-label">บทเรียน</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">45</span><span class="stat-label">ชั่วโมง</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">10+</span><span class="stat-label">AI Tools</span></div>
+      </div>
+      <div class="hero-actions">
+        <a href="#modules" class="btn btn-primary"><i class="fa-solid fa-play"></i> เริ่มเรียน</a>
+        <a href="#overview" class="btn btn-outline">ดูรายละเอียด</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="ai-card">
+        <div class="ai-card-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+        <div class="ai-card-body">
+          <p class="prompt-label">Prompt</p>
+          <p class="prompt-text">"สร้างโค้ด Python สำหรับวิเคราะห์ข้อมูล..."</p>
+          <div class="ai-thinking"><span></span><span></span><span></span></div>
+          <p class="response-label">Response</p>
+          <p class="response-text"><code>import pandas as pd<br/>import matplotlib.pyplot as plt<br/><span class="code-comment"># AI Generated Code ✨</span></code></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Overview Section -->
+  <section class="section" id="overview">
+    <div class="container">
+      <div class="section-header">
+        <h2>ภาพรวมวิชา</h2>
+        <p>รายวิชานี้ออกแบบมาเพื่อให้ผู้เรียนเข้าใจและประยุกต์ใช้ Generative AI ได้อย่างมีประสิทธิภาพ</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card card-blue">
+          <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
+          <h3>พื้นฐาน AI</h3>
+          <p>ทำความเข้าใจ Large Language Models, Transformer Architecture และหลักการทำงานของ Generative AI</p>
+        </div>
+        <div class="card card-purple">
+          <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <h3>Prompt Engineering</h3>
+          <p>เรียนรู้เทคนิคการเขียน Prompt ตั้งแต่พื้นฐานจนถึงขั้นสูง เช่น Chain-of-Thought, Few-shot, Zero-shot</p>
+        </div>
+        <div class="card card-green">
+          <div class="card-icon"><i class="fa-solid fa-tools"></i></div>
+          <h3>AI Tools</h3>
+          <p>ฝึกใช้งานเครื่องมือ AI ชั้นนำ ChatGPT, Claude, Gemini, Midjourney, GitHub Copilot และอื่นๆ</p>
+        </div>
+        <div class="card card-orange">
+          <div class="card-icon"><i class="fa-solid fa-rocket"></i></div>
+          <h3>ประยุกต์ใช้งาน</h3>
+          <p>สร้างแอปพลิเคชัน AI ด้วย API, RAG System และ Workflow Automation ในสถานการณ์จริง</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modules Section -->
+  <section class="section section-dark" id="modules">
+    <div class="container">
+      <div class="section-header">
+        <h2>บทเรียนทั้งหมด</h2>
+        <p>12 บทเรียน ครอบคลุมตั้งแต่พื้นฐานจนถึงการประยุกต์ใช้งานขั้นสูง</p>
+      </div>
+      <div class="modules-grid">
+
+        <div class="module-card">
+          <div class="module-num">01</div>
+          <div class="module-info">
+            <span class="module-tag">Introduction</span>
+            <h3>Introduction to Generative AI</h3>
+            <p>ประวัติและพัฒนาการของ AI, ความแตกต่างระหว่าง Generative AI กับ AI แบบอื่น, Use Cases ในอุตสาหกรรม</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">02</div>
+          <div class="module-info">
+            <span class="module-tag">Fundamentals</span>
+            <h3>Large Language Models (LLMs)</h3>
+            <p>Transformer Architecture, Tokenization, Embeddings, Training Process, GPT, BERT, LLaMA และโมเดลสำคัญ</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">03</div>
+          <div class="module-info">
+            <span class="module-tag">Prompt Basics</span>
+            <h3>Introduction to Prompt Engineering</h3>
+            <p>หลักการเขียน Prompt ที่ดี, โครงสร้าง Prompt, การกำหนด Context, Role และ Instruction ที่ชัดเจน</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">04</div>
+          <div class="module-info">
+            <span class="module-tag">Techniques</span>
+            <h3>Advanced Prompting Techniques</h3>
+            <p>Zero-shot, Few-shot, Chain-of-Thought (CoT), Tree-of-Thought, ReAct, Self-Consistency Prompting</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">05</div>
+          <div class="module-info">
+            <span class="module-tag">Text AI</span>
+            <h3>Text Generation & ChatBots</h3>
+            <p>การใช้งาน ChatGPT, Claude, Gemini, การตั้งค่า System Prompt, การสร้าง Chatbot สำหรับงานต่างๆ</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">06</div>
+          <div class="module-info">
+            <span class="module-tag">Image AI</span>
+            <h3>Image Generation & Visual AI</h3>
+            <p>Diffusion Models, DALL-E 3, Midjourney, Stable Diffusion, การเขียน Image Prompt, Style Transfer</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">07</div>
+          <div class="module-info">
+            <span class="module-tag">Code AI</span>
+            <h3>AI for Software Development</h3>
+            <p>GitHub Copilot, Cursor, Code Generation, Debugging ด้วย AI, Unit Test Generation, Code Review</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">08</div>
+          <div class="module-info">
+            <span class="module-tag">RAG</span>
+            <h3>Retrieval-Augmented Generation (RAG)</h3>
+            <p>Vector Database, Embeddings, Semantic Search, การสร้าง RAG Pipeline ด้วย LangChain และ LlamaIndex</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">09</div>
+          <div class="module-info">
+            <span class="module-tag">API</span>
+            <h3>Building AI Applications with API</h3>
+            <p>OpenAI API, Anthropic Claude API, Function Calling, Streaming, การสร้าง AI App ด้วย Python</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 4 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">10</div>
+          <div class="module-info">
+            <span class="module-tag">Automation</span>
+            <h3>AI Workflow & Automation</h3>
+            <p>n8n, Make (Integromat), Zapier with AI, AI Agents, Multi-Agent Systems, AutoGPT, LangChain Agents</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">11</div>
+          <div class="module-info">
+            <span class="module-tag">Ethics</span>
+            <h3>AI Ethics & Responsible AI</h3>
+            <p>Bias ใน AI, Hallucination, Privacy, ลิขสิทธิ์, แนวทาง Responsible AI, EU AI Act, การใช้ AI อย่างมีจริยธรรม</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</div>
+          </div>
+        </div>
+
+        <div class="module-card">
+          <div class="module-num">12</div>
+          <div class="module-info">
+            <span class="module-tag">Future</span>
+            <h3>Future of Generative AI</h3>
+            <p>Multimodal AI, AGI, AI in Healthcare/Education/Science, Trend 2025-2030, โอกาสอาชีพในยุค AI</p>
+            <div class="module-meta"><i class="fa-regular fa-clock"></i> 3 ชั่วโมง</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Tools Section -->
+  <section class="section" id="tools">
+    <div class="container">
+      <div class="section-header">
+        <h2>เครื่องมือ AI ที่ใช้ในวิชา</h2>
+        <p>ฝึกปฏิบัติกับ AI Tools ชั้นนำที่ใช้งานจริงในอุตสาหกรรม</p>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#10a37f">
+            <i class="fa-solid fa-comment-dots"></i>
+          </div>
+          <span>ChatGPT</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#cc785c">
+            <i class="fa-solid fa-c"></i>
+          </div>
+          <span>Claude</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#4285f4">
+            <i class="fa-solid fa-gem"></i>
+          </div>
+          <span>Gemini</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#1a1a2e">
+            <i class="fa-brands fa-github"></i>
+          </div>
+          <span>GitHub Copilot</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#ab68ff">
+            <i class="fa-solid fa-image"></i>
+          </div>
+          <span>DALL-E 3</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#e74c3c">
+            <i class="fa-solid fa-paintbrush"></i>
+          </div>
+          <span>Midjourney</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#2c3e50">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <span>Stable Diffusion</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#e67e22">
+            <i class="fa-solid fa-link"></i>
+          </div>
+          <span>LangChain</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#27ae60">
+            <i class="fa-solid fa-database"></i>
+          </div>
+          <span>Vector DB</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon" style="background:#8e44ad">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <span>n8n / Make</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schedule Section -->
+  <section class="section section-dark" id="schedule">
+    <div class="container">
+      <div class="section-header">
+        <h2>ตารางการเรียน</h2>
+        <p>แผนการเรียน 15 สัปดาห์ ภาคเรียนที่ 1 ปีการศึกษา 2568</p>
+      </div>
+      <div class="schedule-table-wrap">
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>สัปดาห์</th>
+              <th>หัวข้อ</th>
+              <th>กิจกรรม</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Introduction to Generative AI</td><td>บรรยาย + สาธิต AI Tools</td></tr>
+            <tr><td>2</td><td>Large Language Models (LLMs)</td><td>บรรยาย + Workshop</td></tr>
+            <tr><td>3</td><td>Introduction to Prompt Engineering</td><td>บรรยาย + ฝึกเขียน Prompt</td></tr>
+            <tr><td>4</td><td>Advanced Prompting Techniques</td><td>Workshop: CoT, Few-shot</td></tr>
+            <tr><td>5</td><td>Text Generation & ChatBots</td><td>Lab: สร้าง Chatbot</td></tr>
+            <tr><td>6</td><td>Image Generation & Visual AI</td><td>Lab: สร้างภาพด้วย AI</td></tr>
+            <tr><td>7</td><td>สอบกลางภาค</td><td>ข้อสอบ + นำเสนอ Mini-Project</td></tr>
+            <tr><td>8</td><td>AI for Software Development</td><td>Lab: GitHub Copilot, Cursor</td></tr>
+            <tr><td>9</td><td>Retrieval-Augmented Generation</td><td>Lab: สร้าง RAG System</td></tr>
+            <tr><td>10</td><td>Building AI Applications with API</td><td>Lab: Python + OpenAI API</td></tr>
+            <tr><td>11</td><td>AI Workflow & Automation</td><td>Lab: n8n Automation</td></tr>
+            <tr><td>12</td><td>AI Ethics & Responsible AI</td><td>Discussion + Case Study</td></tr>
+            <tr><td>13</td><td>Future of Generative AI</td><td>บรรยาย + Guest Speaker</td></tr>
+            <tr><td>14-15</td><td>Final Project</td><td>นำเสนอ Final Project</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instructor Section -->
+  <section class="section" id="instructor">
+    <div class="container">
+      <div class="section-header">
+        <h2>ผู้สอน</h2>
+      </div>
+      <div class="instructor-card">
+        <div class="instructor-avatar">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div class="instructor-info">
+          <h3>อาจารย์ ดร. อนุชิต จิตบรรจง</h3>
+          <p class="instructor-title">ภาควิชาวิทยาการคอมพิวเตอร์ คณะวิทยาศาสตร์ประยุกต์<br/>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ (KMUTNB)</p>
+          <p class="instructor-email"><i class="fa-solid fa-envelope"></i> anuchit.j@sci.kmutnb.ac.th</p>
+          <div class="instructor-tags">
+            <span>Machine Learning</span>
+            <span>Deep Learning</span>
+            <span>Computer Vision</span>
+            <span>Generative AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i class="fa-solid fa-robot"></i>
+          <span>Generative AI & Prompt Engineering</span>
+        </div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
