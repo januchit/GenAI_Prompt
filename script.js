@@ -14,9 +14,9 @@ navToggle.addEventListener('click', () => {
     navLinks.style.position = 'absolute';
     navLinks.style.top = '100%';
     navLinks.style.left = '0'; navLinks.style.right = '0';
-    navLinks.style.background = 'rgba(15,23,42,0.98)';
+    navLinks.style.background = 'rgba(255,255,255,0.98)';
     navLinks.style.padding = '1rem 1.5rem 1.5rem';
-    navLinks.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
+    navLinks.style.borderBottom = '1px solid rgba(15,23,42,0.08)';
   }
 });
 

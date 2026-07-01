@@ -276,15 +276,15 @@
 
         <h3>ตัวอย่าง Debug Session</h3>
         <div class="prompt-compare-block">
-          <div class="pcb-label"><i class="fa-solid fa-bug" style="color:#f87171"></i> Error ที่พบ</div>
-          <div class="pcb-prompt"><code style="color:#f87171">KeyError: 'user_id'
+          <div class="pcb-label"><i class="fa-solid fa-bug" style="color:#dc2626"></i> Error ที่พบ</div>
+          <div class="pcb-prompt"><code style="color:#dc2626">KeyError: 'user_id'
 Traceback: line 45, in get_user_data
     return data['user_id']</code></div>
           <div class="pcb-response-label"><i class="fa-solid fa-robot"></i> AI วิเคราะห์และแก้ไข</div>
           <div class="pcb-response">
             <strong>สาเหตุ:</strong> Dictionary `data` ไม่มี key 'user_id' เกิดจาก API Response มี field ชื่อต่างกัน<br/><br/>
             <strong>วิธีแก้:</strong><br/>
-            <code style="color:#7dd3fc">
+            <code style="color:#0369a1">
             # ใช้ .get() พร้อม default value<br/>
             user_id = data.get('user_id') or data.get('id') or data.get('userId')<br/>
             if not user_id:<br/>
