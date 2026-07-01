@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>กำลังเปิดสไลด์… — GenAI Course</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="reader.css" />
+</head>
+<body class="reader-body">
+
+  <!-- Reader top bar -->
+  <header class="reader-bar">
+    <a class="reader-back" href="slides.html">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>สไลด์ทั้งหมด</span>
+    </a>
+    <div class="reader-title" id="bookTitle">กำลังโหลด…</div>
+    <div class="reader-actions">
+      <button class="rb" id="btnZoomOut" title="ย่อ (-)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+      <button class="rb" id="btnZoomIn" title="ขยาย (+)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+      <a class="rb" id="btnDownload" title="ดาวน์โหลด PDF" download><i class="fa-solid fa-download"></i></a>
+      <button class="rb" id="btnFullscreen" title="เต็มจอ (F)"><i class="fa-solid fa-expand"></i></button>
+    </div>
+  </header>
+
+  <!-- Loading overlay -->
+  <div class="loader" id="loader">
+    <div class="loader-book">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <p id="loaderText">กำลังเปิดสไลด์…</p>
+  </div>
+
+  <!-- Slide stage -->
+  <main class="stage" id="stage">
+    <button class="nav-edge nav-prev" id="navPrev" aria-label="สไลด์ก่อนหน้า">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <div class="book-frame" id="bookFrame">
+      <div class="book-spread" id="spread">
+        <!-- canvases injected by JS -->
+      </div>
+    </div>
+
+    <button class="nav-edge nav-next" id="navNext" aria-label="สไลด์ถัดไป">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </main>
+
+  <!-- Bottom controls -->
+  <footer class="reader-foot">
+    <button class="rb wide" id="btnPrev">
+      <i class="fa-solid fa-chevron-left"></i>
+      <span class="rb-text">ก่อนหน้า</span>
+    </button>
+    <div class="page-slider">
+      <input type="range" id="pageRange" min="1" max="1" value="1" />
+      <span class="page-label"><span id="pageCur">1</span> / <span id="pageTotal">–</span></span>
+    </div>
+    <button class="rb wide" id="btnNext">
+      <span class="rb-text">ถัดไป</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </footer>
+
+  <!-- Flipbook engine (imports PDF.js as a module) -->
+  <script type="module" src="assets/js/reader.js"></script>
+</body>
+</html>

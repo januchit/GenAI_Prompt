@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สไลด์ประกอบการสอน — Generative AI and Prompt Engineering</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fa-solid fa-robot"></i>
+        <span>GenAI Course</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="slides.html">สไลด์</a></li>
+        <li><a href="tools.html">AI Tools</a></li>
+        <li><a href="index.html#schedule">ตารางเรียน</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="section" style="padding-top:8rem;">
+    <div class="container">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-chalkboard-user" style="color:var(--primary);margin-right:.5rem"></i>สไลด์ประกอบการสอน</h2>
+        <p>สไลด์ทั้ง 13 บท เปิดอ่านได้ทันทีบนเบราว์เซอร์แบบพลิกหน้า ไม่ต้องดาวน์โหลด หรือกดดาวน์โหลดไฟล์ PDF เก็บไว้อ่านออฟไลน์ได้</p>
+      </div>
+
+      <div class="modules-grid">
+
+        <a href="reader.html?book=chapter-1" class="module-card module-card-link">
+          <div class="module-num">01</div>
+          <div class="module-info">
+            <span class="module-tag">Introduction</span>
+            <h3>Generative AI Introduction</h3>
+            <p>ความหมายและพัฒนาการของ Generative AI, ความแตกต่างจาก AI แบบดั้งเดิม, ตัวอย่างการประยุกต์ใช้งาน</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-2" class="module-card module-card-link">
+          <div class="module-num">02</div>
+          <div class="module-info">
+            <span class="module-tag">Fundamentals</span>
+            <h3>Large Language Models</h3>
+            <p>สถาปัตยกรรม Transformer, การฝึกโมเดล, โมเดลภาษาสำคัญอย่าง GPT, BERT, LLaMA</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-3" class="module-card module-card-link">
+          <div class="module-num">03</div>
+          <div class="module-info">
+            <span class="module-tag">Deep Dive</span>
+            <h3>How LLMs Work Internally</h3>
+            <p>Tokenization, Embeddings, Attention Mechanism และกระบวนการทำงานภายในของโมเดลภาษาขนาดใหญ่</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-4" class="module-card module-card-link">
+          <div class="module-num">04</div>
+          <div class="module-info">
+            <span class="module-tag">Prompt Basics</span>
+            <h3>Introduction to Prompt Engineering</h3>
+            <p>หลักการเขียน Prompt ที่ดี, โครงสร้าง Prompt, การกำหนด Context, Role และ Instruction ที่ชัดเจน</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-5" class="module-card module-card-link">
+          <div class="module-num">05</div>
+          <div class="module-info">
+            <span class="module-tag">Techniques</span>
+            <h3>Basic Prompting Techniques</h3>
+            <p>Zero-shot, Few-shot Prompting, การจัดรูปแบบ Output และเทคนิคพื้นฐานในการสื่อสารกับ AI</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-6" class="module-card module-card-link">
+          <div class="module-num">06</div>
+          <div class="module-info">
+            <span class="module-tag">Techniques</span>
+            <h3>Advanced Prompting Techniques I</h3>
+            <p>Chain-of-Thought (CoT), Self-Consistency และเทคนิคการให้เหตุผลขั้นสูงของ AI</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-7" class="module-card module-card-link">
+          <div class="module-num">07</div>
+          <div class="module-info">
+            <span class="module-tag">Techniques</span>
+            <h3>Advanced Prompting Techniques II</h3>
+            <p>Tree-of-Thought, ReAct, Prompt Chaining และการออกแบบ Workflow การให้เหตุผลที่ซับซ้อน</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-8" class="module-card module-card-link">
+          <div class="module-num">08</div>
+          <div class="module-info">
+            <span class="module-tag">Application</span>
+            <h3>Prompt Design for Specific Tasks</h3>
+            <p>การออกแบบ Prompt สำหรับงานเฉพาะทาง เช่น การสรุปความ การแปลภาษา และการวิเคราะห์ข้อมูล</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-9" class="module-card module-card-link">
+          <div class="module-num">09</div>
+          <div class="module-info">
+            <span class="module-tag">Code AI</span>
+            <h3>Prompt Engineering for Code</h3>
+            <p>การเขียน Prompt สำหรับสร้างและแก้ไขโค้ด, การใช้งาน GitHub Copilot และเครื่องมือ Code AI</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-10" class="module-card module-card-link">
+          <div class="module-num">10</div>
+          <div class="module-info">
+            <span class="module-tag">RAG</span>
+            <h3>Retrieval-Augmented Generation</h3>
+            <p>Vector Database, Embeddings, Semantic Search และการสร้าง RAG Pipeline</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-11" class="module-card module-card-link">
+          <div class="module-num">11</div>
+          <div class="module-info">
+            <span class="module-tag">Customization</span>
+            <h3>Fine-tuning and LLM Customization</h3>
+            <p>แนวคิดการทำ Fine-tuning, LoRA, PEFT และการปรับแต่งโมเดลภาษาให้เหมาะกับงานเฉพาะทาง</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-12" class="module-card module-card-link">
+          <div class="module-num">12</div>
+          <div class="module-info">
+            <span class="module-tag">Agents</span>
+            <h3>AI Agents and Tool Use</h3>
+            <p>แนวคิด AI Agents, Function Calling, Multi-Agent Systems และการใช้เครื่องมือร่วมกับ LLM</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+        <a href="reader.html?book=chapter-13" class="module-card module-card-link">
+          <div class="module-num">13</div>
+          <div class="module-info">
+            <span class="module-tag">Ethics</span>
+            <h3>Ethics and Safety of Generative AI</h3>
+            <p>Bias, Hallucination, ความเป็นส่วนตัว ลิขสิทธิ์ และแนวทางการใช้ Generative AI อย่างมีความรับผิดชอบ</p>
+            <div class="module-meta"><i class="fa-regular fa-file-pdf"></i> เปิดอ่านสไลด์ <i class="fa-solid fa-arrow-right" style="margin-left:.3rem"></i></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i class="fa-solid fa-robot"></i>
+          <span>Generative AI & Prompt Engineering</span>
+        </div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
