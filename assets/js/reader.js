@@ -20,6 +20,21 @@ const BOOKS = {
   'chapter-11': { file: 'slides/chapter-11.pdf', title: 'บทที่ 11 · Fine-tuning and LLM Customization' },
   'chapter-12': { file: 'slides/chapter-12.pdf', title: 'บทที่ 12 · AI Agents and Tool Use' },
   'chapter-13': { file: 'slides/chapter-13.pdf', title: 'บทที่ 13 · Ethics and Safety of Generative AI' },
+
+  /* ---- เอกสารประกอบการสอน (lecture handouts) ---- */
+  'doc-1':  { file: 'docs/chapter-1.pdf',  title: 'เอกสารบทที่ 1 · Generative AI Introduction' },
+  'doc-2':  { file: 'docs/chapter-2.pdf',  title: 'เอกสารบทที่ 2 · Large Language Models' },
+  'doc-3':  { file: 'docs/chapter-3.pdf',  title: 'เอกสารบทที่ 3 · How LLMs Work Internally' },
+  'doc-4':  { file: 'docs/chapter-4.pdf',  title: 'เอกสารบทที่ 4 · Introduction to Prompt Engineering' },
+  'doc-5':  { file: 'docs/chapter-5.pdf',  title: 'เอกสารบทที่ 5 · Basic Prompting Techniques' },
+  'doc-6':  { file: 'docs/chapter-6.pdf',  title: 'เอกสารบทที่ 6 · Advanced Prompting Techniques I' },
+  'doc-7':  { file: 'docs/chapter-7.pdf',  title: 'เอกสารบทที่ 7 · Advanced Prompting Techniques II' },
+  'doc-8':  { file: 'docs/chapter-8.pdf',  title: 'เอกสารบทที่ 8 · Prompt Design for Specific Tasks' },
+  'doc-9':  { file: 'docs/chapter-9.pdf',  title: 'เอกสารบทที่ 9 · Prompt Engineering for Code' },
+  'doc-10': { file: 'docs/chapter-10.pdf', title: 'เอกสารบทที่ 10 · Retrieval-Augmented Generation' },
+  'doc-11': { file: 'docs/chapter-11.pdf', title: 'เอกสารบทที่ 11 · Fine-tuning and LLM Customization' },
+  'doc-12': { file: 'docs/chapter-12.pdf', title: 'เอกสารบทที่ 12 · AI Agents and Tool Use' },
+  'doc-13': { file: 'docs/chapter-13.pdf', title: 'เอกสารบทที่ 13 · Ethics and Safety of Generative AI' },
 };
 
 /* ---- DOM ---- */
