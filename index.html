@@ -32,7 +32,11 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg">
+      <span class="orb orb-1"></span>
+      <span class="orb orb-2"></span>
+      <span class="orb orb-3"></span>
+    </div>
     <div class="hero-content">
       <div class="hero-badge"><i class="fa-solid fa-sparkles"></i> วิชาใหม่ 2026</div>
       <h1 class="hero-title">
@@ -56,15 +60,22 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div class="ai-card">
-        <div class="ai-card-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
-        <div class="ai-card-body">
-          <p class="prompt-label">Prompt</p>
-          <p class="prompt-text">"สร้างโค้ด Python สำหรับวิเคราะห์ข้อมูล..."</p>
-          <div class="ai-thinking"><span></span><span></span><span></span></div>
-          <p class="response-label">Response</p>
-          <p class="response-text"><code>import pandas as pd<br/>import matplotlib.pyplot as plt<br/><span class="code-comment"># AI Generated Code ✨</span></code></p>
+      <div class="hero-scene" id="heroScene">
+        <div class="glow-ring"></div>
+        <div class="ai-card">
+          <div class="ai-card-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+          <div class="ai-card-body">
+            <p class="prompt-label">Prompt</p>
+            <p class="prompt-text">"สร้างโค้ด Python สำหรับวิเคราะห์ข้อมูล..."</p>
+            <div class="ai-thinking"><span></span><span></span><span></span></div>
+            <p class="response-label">Response</p>
+            <p class="response-text"><code>import pandas as pd<br/>import matplotlib.pyplot as plt<br/><span class="code-comment"># AI Generated Code ✨</span></code></p>
+          </div>
         </div>
+        <div class="float-chip chip-1" aria-hidden="true"><i class="fa-solid fa-robot"></i></div>
+        <div class="float-chip chip-2" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <div class="float-chip chip-3" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
+        <div class="float-chip chip-4" aria-hidden="true"><i class="fa-solid fa-bolt"></i></div>
       </div>
     </div>
   </section>

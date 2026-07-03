@@ -43,3 +43,19 @@ document.querySelectorAll('.card, .module-card, .tool-card').forEach(el => {
   el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
   observer.observe(el);
 });
+
+// 3D hero scene: tilt follows the cursor (desktop pointers only)
+const heroScene = document.getElementById('heroScene');
+if (heroScene && window.matchMedia('(pointer: fine)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const hero = document.querySelector('.hero');
+  const BASE_Y = -14, BASE_X = 8; // resting tilt (deg), matches CSS
+  hero.addEventListener('mousemove', (e) => {
+    const r = hero.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width - 0.5;
+    const ny = (e.clientY - r.top) / r.height - 0.5;
+    heroScene.style.transform =
+      `rotateY(${BASE_Y + nx * 16}deg) rotateX(${BASE_X - ny * 12}deg)`;
+  });
+  hero.addEventListener('mouseleave', () => { heroScene.style.transform = ''; });
+}
