@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>GenAI Quest — เกมทบทวนบทเรียน</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0d1420; font-family: 'Segoe UI', 'Prompt', 'Sarabun', sans-serif; }
+  #game { display: block; width: 100vw; height: 100vh; touch-action: none; }
+
+  /* ---------- HUD ---------- */
+  #hud {
+    position: fixed; top: 12px; left: 12px; z-index: 10;
+    background: rgba(13, 20, 32, .82); color: #fff;
+    padding: 10px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,.15);
+    backdrop-filter: blur(6px); pointer-events: none; max-width: 340px;
+  }
+  #hud h1 { font-size: 15px; color: #7dd3fc; margin-bottom: 4px; }
+  #hud .stats { font-size: 13px; display: flex; gap: 14px; flex-wrap: wrap; }
+  #hud .stats b { color: #fbbf24; }
+  #hint {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); z-index: 10;
+    background: rgba(13, 20, 32, .85); color: #fde68a; font-size: 15px;
+    padding: 10px 22px; border-radius: 999px; border: 1px solid rgba(253, 230, 138, .4);
+    display: none; pointer-events: none; white-space: nowrap;
+  }
+  #minimap {
+    position: fixed; top: 12px; right: 12px; z-index: 10;
+    border-radius: 10px; border: 1px solid rgba(255,255,255,.2);
+    background: rgba(13,20,32,.7);
+  }
+
+  /* ---------- Virtual joystick (touch) ---------- */
+  #joy {
+    position: fixed; bottom: 26px; left: 26px; width: 130px; height: 130px; z-index: 10;
+    border-radius: 50%; background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.18);
+    display: none; touch-action: none;
+  }
+  #joyKnob {
+    position: absolute; width: 54px; height: 54px; left: 38px; top: 38px;
+    border-radius: 50%; background: rgba(255,255,255,.35);
+  }
+  #actBtn {
+    position: fixed; bottom: 46px; right: 30px; z-index: 10;
+    width: 84px; height: 84px; border-radius: 50%;
+    background: rgba(251,191,36,.85); color: #1f2937; font-size: 15px; font-weight: 700;
+    border: 3px solid rgba(255,255,255,.5); display: none; touch-action: none;
+  }
+
+  /* ---------- Overlays / modals ---------- */
+  .overlay {
+    position: fixed; inset: 0; z-index: 20; display: none;
+    align-items: center; justify-content: center;
+    background: rgba(5, 10, 18, .72); backdrop-filter: blur(4px);
+    padding: 16px;
+  }
+  .card {
+    background: linear-gradient(160deg, #16233a, #0e1728);
+    border: 1px solid rgba(125, 211, 252, .35);
+    border-radius: 20px; color: #e5e7eb;
+    max-width: 620px; width: 100%; max-height: 92vh; overflow-y: auto;
+    padding: 28px 30px; box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  }
+  .card .tag { color: #7dd3fc; font-size: 13px; letter-spacing: 1px; margin-bottom: 8px; }
+  .card h2 { font-size: 20px; line-height: 1.5; margin-bottom: 18px; color: #fff; }
+  .choice {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    background: rgba(255,255,255,.06); color: #e5e7eb;
+    border: 1px solid rgba(255,255,255,.14); border-radius: 12px;
+    padding: 13px 16px; margin-bottom: 10px; font-size: 15.5px; line-height: 1.45;
+    transition: background .15s, border-color .15s;
+  }
+  .choice:hover:not(:disabled) { background: rgba(125,211,252,.14); border-color: #7dd3fc; }
+  .choice.correct { background: rgba(34,197,94,.22); border-color: #22c55e; color: #bbf7d0; }
+  .choice.wrong   { background: rgba(239,68,68,.22); border-color: #ef4444; color: #fecaca; }
+  .choice:disabled { cursor: default; opacity: .9; }
+  #feedback { display: none; margin-top: 6px; padding: 14px 16px; border-radius: 12px; font-size: 14.5px; line-height: 1.6; }
+  #feedback.ok  { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.4); color: #bbf7d0; }
+  #feedback.bad { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.4); color: #fecaca; }
+  .btn {
+    display: inline-block; margin-top: 16px; cursor: pointer; text-decoration: none;
+    background: linear-gradient(135deg, #38bdf8, #6366f1); color: #fff;
+    border: none; border-radius: 999px; padding: 12px 28px; font-size: 16px; font-weight: 700;
+  }
+  .btn:hover { filter: brightness(1.12); }
+  .btn.ghost { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25); }
+
+  /* ---------- Title & result ---------- */
+  #titleCard h2, #resultCard h2 { font-size: 25px; }
+  #titleCard p, #resultCard p { line-height: 1.8; font-size: 15px; margin-bottom: 10px; color: #cbd5e1; }
+  #titleCard .keys { background: rgba(255,255,255,.06); border-radius: 12px; padding: 12px 16px; font-size: 14px; }
+  #scoreBig { font-size: 56px; font-weight: 800; text-align: center; margin: 10px 0;
+    background: linear-gradient(135deg, #fbbf24, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #grade { text-align: center; font-size: 19px; font-weight: 700; color: #7dd3fc; margin-bottom: 14px; }
+  #wrongList { font-size: 14px; color: #fca5a5; line-height: 1.7; margin-bottom: 6px; }
+  #resultBtns { text-align: center; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<canvas id="minimap" width="170" height="128"></canvas>
+
+<div id="hud">
+  <h1 id="hudTitle">🗺️ GenAI Quest</h1>
+  <div class="stats">
+    <span>📍 ตอบแล้ว <b id="stAnswered">0</b>/10</span>
+    <span>⭐ ถูก <b id="stScore">0</b></span>
+  </div>
+</div>
+<div id="hint"></div>
+
+<div id="joy"><div id="joyKnob"></div></div>
+<button id="actBtn">ตอบ<br>คำถาม</button>
+
+<!-- Title screen -->
+<div class="overlay" id="titleOverlay" style="display:flex">
+  <div class="card" id="titleCard">
+    <div class="tag" id="titleTag">GENAI QUEST · OPEN WORLD QUIZ</div>
+    <h2 id="titleName">กำลังโหลด...</h2>
+    <p id="titleDesc"></p>
+    <div class="keys">
+      🎮 <b>เดิน:</b> WASD หรือปุ่มลูกศร (มือถือ: จอยสติ๊กซ้ายล่าง)<br>
+      💬 <b>ตอบคำถาม:</b> เดินเข้าใกล้ศิลาเรืองแสง แล้วกด <b>E</b> / <b>Space</b> (มือถือ: ปุ่มเหลือง)<br>
+      🗺️ <b>แผนที่ย่อ:</b> มุมขวาบน — จุดเหลืองคือศิลาที่ยังไม่ได้ตอบ
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="startBtn">🚀 เริ่มการผจญภัย</button>
+      <a class="btn ghost" href="games.html">🗺️ หน้ารวมด่าน</a>
+    </div>
+  </div>
+</div>
+
+<!-- Question modal -->
+<div class="overlay" id="qOverlay">
+  <div class="card">
+    <div class="tag" id="qTag">ศิลาที่ 1 / 10</div>
+    <h2 id="qText"></h2>
+    <div id="choices"></div>
+    <div id="feedback"></div>
+    <button class="btn" id="continueBtn" style="display:none">🚶 เดินทางต่อ</button>
+  </div>
+</div>
+
+<!-- Result screen -->
+<div class="overlay" id="resultOverlay">
+  <div class="card" id="resultCard">
+    <div class="tag">ภารกิจสำเร็จ</div>
+    <h2 style="text-align:center">🏆 ปลดผนึกครบทั้ง 10 ศิลา!</h2>
+    <div id="scoreBig"></div>
+    <div id="grade"></div>
+    <div id="wrongList"></div>
+    <div id="resultBtns">
+      <button class="btn" id="restartBtn">🔄 เล่นใหม่</button>
+      <a class="btn ghost" href="games.html">🗺️ หน้ารวมด่าน</a>
+      <a class="btn" id="nextBtn" style="display:none">➡️ ด่านถัดไป</a>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/quiz-data.js"></script>
+<script>
+/* =========================================================
+   โหลดด่านจากพารามิเตอร์ ?chapter=N (1–13)
+   ========================================================= */
+const params = new URLSearchParams(location.search);
+let chapterNo = parseInt(params.get("chapter"), 10);
+if (!(chapterNo >= 1 && chapterNo <= QUIZ_DATA.length)) chapterNo = 1;
+const CHAPTER = QUIZ_DATA[chapterNo - 1];
+const QUESTIONS = CHAPTER.questions;
+const THEME = CHAPTER.theme;
+
+document.title = `GenAI Quest ด่านที่ ${chapterNo} — ${CHAPTER.title}`;
+document.getElementById("hudTitle").textContent = `${CHAPTER.icon} ด่านที่ ${chapterNo}: ${CHAPTER.title}`;
+document.getElementById("titleTag").textContent = `GENAI QUEST · ด่านที่ ${chapterNo} / ${QUIZ_DATA.length} · ${CHAPTER.tag}`;
+document.getElementById("titleName").textContent = `${CHAPTER.icon} ${CHAPTER.title}`;
+document.getElementById("titleDesc").innerHTML =
+  `<b>${CHAPTER.th}</b> — ศิลาความรู้ทั้ง <b>${QUESTIONS.length} ก้อน</b> ถูกผนึกไว้ทั่วแผนที่ ` +
+  `จงเดินทางไปปลดผนึกด้วยการตอบคำถามเรื่อง ${CHAPTER.desc} ให้ครบทุกก้อน`;
+
+/* =========================================================
+   World setup
+   ========================================================= */
+const WORLD = { w: 2600, h: 1900 };
+
+const STATIONS = [
+  { x: 420,  y: 330 },  { x: 1030, y: 220 },  { x: 1750, y: 330 },
+  { x: 2280, y: 560 },  { x: 2150, y: 1220 }, { x: 1650, y: 1620 },
+  { x: 980,  y: 1560 }, { x: 380,  y: 1420 }, { x: 780,  y: 900 },
+  { x: 1500, y: 880 }
+].map((p, i) => ({ ...p, idx: i, answered: false, correct: null }));
+
+// สิ่งกีดขวาง — สุ่ม deterministic ต่างกันตามหมายเลขด่าน
+function seededRand(seed) { return () => (seed = (seed * 9301 + 49297) % 233280) / 233280; }
+const rnd = seededRand(42 + chapterNo * 137);
+const OBSTACLES = [];
+for (let i = 0; i < 90; i++) {
+  const x = 80 + rnd() * (WORLD.w - 160);
+  const y = 80 + rnd() * (WORLD.h - 160);
+  const nearStation = STATIONS.some(s => Math.hypot(s.x - x, s.y - y) < 170);
+  const nearSpawn = Math.hypot(1300 - x, 1000 - y) < 200;
+  if (nearStation || nearSpawn) continue;
+  OBSTACLES.push({ x, y, r: 22 + rnd() * 16, emoji: THEME.obstacles[Math.floor(rnd() * THEME.obstacles.length)] });
+}
+const LAKES = [
+  { x: 600,  y: 550,  rx: 170, ry: 110 },
+  { x: 2050, y: 900,  rx: 200, ry: 130 },
+  { x: 1250, y: 1650, rx: 150, ry: 100 }
+];
+
+const player = { x: 1300, y: 1000, r: 18, speed: 4.2, face: 1, step: 0 };
+
+/* =========================================================
+   Canvas & camera
+   ========================================================= */
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const mini = document.getElementById("minimap");
+const mctx = mini.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+}
+window.addEventListener("resize", resize);
+resize();
+
+/* =========================================================
+   Input
+   ========================================================= */
+const keys = {};
+let joyVec = { x: 0, y: 0 };
+let gameState = "title"; // title | play | question | result
+let nearStation = null;
+
+window.addEventListener("keydown", e => {
+  keys[e.key.toLowerCase()] = true;
+  if (gameState === "play" && nearStation && (e.key === "e" || e.key === "E" || e.key === " " || e.key === "อ")) {
+    e.preventDefault();
+    openQuestion(nearStation.idx);
+  }
+});
+window.addEventListener("keyup", e => { keys[e.key.toLowerCase()] = false; });
+
+const joy = document.getElementById("joy");
+const joyKnob = document.getElementById("joyKnob");
+const actBtn = document.getElementById("actBtn");
+const isTouch = matchMedia("(pointer: coarse)").matches;
+if (isTouch) { joy.style.display = "block"; }
+
+let joyId = null;
+function joyMove(t) {
+  const rect = joy.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+  let dx = t.clientX - cx, dy = t.clientY - cy;
+  const d = Math.hypot(dx, dy), max = rect.width / 2 - 10;
+  if (d > max) { dx = dx / d * max; dy = dy / d * max; }
+  joyKnob.style.left = (38 + dx) + "px";
+  joyKnob.style.top = (38 + dy) + "px";
+  joyVec = { x: dx / max, y: dy / max };
+}
+joy.addEventListener("touchstart", e => { joyId = e.changedTouches[0].identifier; joyMove(e.changedTouches[0]); e.preventDefault(); });
+joy.addEventListener("touchmove", e => {
+  for (const t of e.changedTouches) if (t.identifier === joyId) joyMove(t);
+  e.preventDefault();
+});
+joy.addEventListener("touchend", e => {
+  joyId = null; joyVec = { x: 0, y: 0 };
+  joyKnob.style.left = "38px"; joyKnob.style.top = "38px";
+});
+actBtn.addEventListener("click", () => { if (nearStation) openQuestion(nearStation.idx); });
+
+/* =========================================================
+   Physics
+   ========================================================= */
+function collides(x, y) {
+  if (x < player.r || y < player.r || x > WORLD.w - player.r || y > WORLD.h - player.r) return true;
+  for (const o of OBSTACLES) {
+    if (Math.hypot(o.x - x, o.y - (y + 6)) < o.r * 0.6 + player.r) return true;
+  }
+  for (const l of LAKES) {
+    const nx = (x - l.x) / (l.rx + player.r), ny = (y - l.y) / (l.ry + player.r);
+    if (nx * nx + ny * ny < 1) return true;
+  }
+  return false;
+}
+
+function update() {
+  if (gameState !== "play") return;
+  let dx = 0, dy = 0;
+  if (keys["arrowleft"] || keys["a"] || keys["ฟ"]) dx -= 1;
+  if (keys["arrowright"] || keys["d"] || keys["ก"]) dx += 1;
+  if (keys["arrowup"] || keys["w"] || keys["ไ"]) dy -= 1;
+  if (keys["arrowdown"] || keys["s"] || keys["ห"]) dy += 1;
+  dx += joyVec.x; dy += joyVec.y;
+  const len = Math.hypot(dx, dy);
+  if (len > 0.01) {
+    dx = dx / Math.max(len, 1) * player.speed;
+    dy = dy / Math.max(len, 1) * player.speed;
+    if (!collides(player.x + dx, player.y)) player.x += dx;
+    if (!collides(player.x, player.y + dy)) player.y += dy;
+    if (dx !== 0) player.face = dx > 0 ? 1 : -1;
+    player.step += 0.25;
+  }
+
+  nearStation = null;
+  for (const s of STATIONS) {
+    if (!s.answered && Math.hypot(s.x - player.x, s.y - player.y) < 85) { nearStation = s; break; }
+  }
+  const hint = document.getElementById("hint");
+  if (nearStation) {
+    hint.textContent = isTouch
+      ? `💎 ศิลาที่ ${nearStation.idx + 1} — แตะปุ่ม "ตอบคำถาม"`
+      : `💎 ศิลาที่ ${nearStation.idx + 1} — กด E หรือ Space เพื่อตอบคำถาม`;
+    hint.style.display = "block";
+    if (isTouch) actBtn.style.display = "block";
+  } else {
+    hint.style.display = "none";
+    actBtn.style.display = "none";
+  }
+}
+
+/* =========================================================
+   Rendering
+   ========================================================= */
+const grassDots = [];
+const rnd2 = seededRand(7 + chapterNo);
+for (let i = 0; i < 420; i++) {
+  grassDots.push({ x: rnd2() * WORLD.w, y: rnd2() * WORLD.h, r: 3 + rnd2() * 9, c: rnd2() });
+}
+
+function draw(time) {
+  const vw = canvas.width / devicePixelRatio, vh = canvas.height / devicePixelRatio;
+  const camX = Math.max(0, Math.min(player.x - vw / 2, WORLD.w - vw));
+  const camY = Math.max(0, Math.min(player.y - vh / 2, WORLD.h - vh));
+
+  ctx.fillStyle = THEME.ground;
+  ctx.fillRect(0, 0, vw, vh);
+  ctx.save();
+  ctx.translate(-camX, -camY);
+
+  for (const g of grassDots) {
+    if (g.x < camX - 20 || g.x > camX + vw + 20 || g.y < camY - 20 || g.y > camY + vh + 20) continue;
+    ctx.fillStyle = g.c < 0.5 ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)";
+    ctx.beginPath(); ctx.arc(g.x, g.y, g.r, 0, 7); ctx.fill();
+  }
+
+  for (const l of LAKES) {
+    ctx.fillStyle = "rgba(0,0,0,.25)";
+    ctx.beginPath(); ctx.ellipse(l.x, l.y + 5, l.rx, l.ry, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = THEME.water;
+    ctx.beginPath(); ctx.ellipse(l.x, l.y, l.rx, l.ry, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.25)"; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(l.x, l.y, l.rx * 0.55, l.ry * 0.5, 0, 0.3 + Math.sin(time / 900) * .2, 2.6);
+    ctx.stroke();
+  }
+
+  for (const s of STATIONS) {
+    const pulse = s.answered ? 0 : Math.sin(time / 300 + s.idx) * 4;
+    if (!s.answered) {
+      const grad = ctx.createRadialGradient(s.x, s.y, 5, s.x, s.y, 70 + pulse * 2);
+      grad.addColorStop(0, "rgba(251,191,36,.4)");
+      grad.addColorStop(1, "rgba(251,191,36,0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(s.x, s.y, 70 + pulse * 2, 0, 7); ctx.fill();
+    }
+    ctx.fillStyle = "rgba(0,0,0,.25)";
+    ctx.beginPath(); ctx.ellipse(s.x, s.y + 26, 30, 10, 0, 0, 7); ctx.fill();
+    ctx.font = "44px serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(s.answered ? (s.correct ? "🟩" : "🟥") : "💎", s.x, s.y - 6 - pulse);
+    ctx.font = "bold 15px sans-serif";
+    ctx.fillStyle = "#fff";
+    ctx.strokeStyle = "rgba(0,0,0,.6)"; ctx.lineWidth = 3;
+    const label = s.answered ? (s.correct ? `✓ ข้อ ${s.idx + 1}` : `✗ ข้อ ${s.idx + 1}`) : `ข้อ ${s.idx + 1}`;
+    ctx.strokeText(label, s.x, s.y + 46);
+    ctx.fillText(label, s.x, s.y + 46);
+  }
+
+  const drawables = OBSTACLES.filter(o =>
+    o.x > camX - 60 && o.x < camX + vw + 60 && o.y > camY - 80 && o.y < camY + vh + 80);
+  drawables.push({ x: player.x, y: player.y, player: true });
+  drawables.sort((a, b) => a.y - b.y);
+  for (const o of drawables) {
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    if (o.player) {
+      ctx.fillStyle = "rgba(0,0,0,.3)";
+      ctx.beginPath(); ctx.ellipse(o.x, o.y + 16, 15, 6, 0, 0, 7); ctx.fill();
+      ctx.save();
+      ctx.translate(o.x, o.y + Math.abs(Math.sin(player.step)) * -3);
+      ctx.scale(player.face, 1);
+      ctx.font = "38px serif";
+      ctx.fillText("🧙", 0, 0);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = "rgba(0,0,0,.25)";
+      ctx.beginPath(); ctx.ellipse(o.x, o.y + o.r * 0.55, o.r * 0.8, o.r * 0.3, 0, 0, 7); ctx.fill();
+      ctx.font = `${o.r * 2.2}px serif`;
+      ctx.fillText(o.emoji, o.x, o.y - o.r * 0.3);
+    }
+  }
+  ctx.restore();
+
+  drawMinimap();
+}
+
+function drawMinimap() {
+  const sx = mini.width / WORLD.w, sy = mini.height / WORLD.h;
+  mctx.clearRect(0, 0, mini.width, mini.height);
+  mctx.globalAlpha = 0.85;
+  mctx.fillStyle = THEME.ground;
+  mctx.fillRect(0, 0, mini.width, mini.height);
+  mctx.globalAlpha = 1;
+  for (const l of LAKES) {
+    mctx.fillStyle = THEME.water;
+    mctx.beginPath(); mctx.ellipse(l.x * sx, l.y * sy, l.rx * sx, l.ry * sy, 0, 0, 7); mctx.fill();
+  }
+  for (const s of STATIONS) {
+    mctx.fillStyle = s.answered ? (s.correct ? "#22c55e" : "#ef4444") : "#fbbf24";
+    mctx.beginPath(); mctx.arc(s.x * sx, s.y * sy, 4, 0, 7); mctx.fill();
+  }
+  mctx.fillStyle = "#fff";
+  mctx.strokeStyle = "#0d1420"; mctx.lineWidth = 1.5;
+  mctx.beginPath(); mctx.arc(player.x * sx, player.y * sy, 4.5, 0, 7); mctx.fill(); mctx.stroke();
+}
+
+function loop(time) {
+  update();
+  draw(time || 0);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* =========================================================
+   Quiz flow
+   ========================================================= */
+let currentQ = null;
+let answeredCount = 0, score = 0;
+const wrongAnswers = [];
+
+function openQuestion(idx) {
+  const s = STATIONS[idx];
+  if (s.answered || gameState !== "play") return;
+  currentQ = s;
+  gameState = "question";
+  const q = QUESTIONS[idx];
+  document.getElementById("qTag").textContent = `💎 ศิลาที่ ${idx + 1} / ${QUESTIONS.length} · ด่านที่ ${chapterNo}`;
+  document.getElementById("qText").textContent = q.q;
+  const box = document.getElementById("choices");
+  box.innerHTML = "";
+  const labels = ["ก", "ข", "ค", "ง"];
+  q.c.forEach((c, i) => {
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.textContent = `${labels[i]}. ${c}`;
+    b.onclick = () => answer(i, b);
+    box.appendChild(b);
+  });
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("continueBtn").style.display = "none";
+  document.getElementById("qOverlay").style.display = "flex";
+}
+
+function answer(i, btn) {
+  const q = QUESTIONS[currentQ.idx];
+  const buttons = document.querySelectorAll("#choices .choice");
+  buttons.forEach(b => b.disabled = true);
+  const correct = i === q.a;
+  buttons[q.a].classList.add("correct");
+  if (!correct) btn.classList.add("wrong");
+
+  currentQ.answered = true;
+  currentQ.correct = correct;
+  answeredCount++;
+  if (correct) score++;
+  else wrongAnswers.push(currentQ.idx);
+
+  const fb = document.getElementById("feedback");
+  fb.className = correct ? "ok" : "bad";
+  fb.innerHTML = (correct ? "✅ <b>ถูกต้อง!</b> " : "❌ <b>ยังไม่ถูก</b> — ") + q.ex;
+  fb.style.display = "block";
+  document.getElementById("continueBtn").style.display = "inline-block";
+
+  document.getElementById("stAnswered").textContent = answeredCount;
+  document.getElementById("stScore").textContent = score;
+}
+
+document.getElementById("continueBtn").onclick = () => {
+  document.getElementById("qOverlay").style.display = "none";
+  if (answeredCount >= QUESTIONS.length) showResult();
+  else gameState = "play";
+};
+
+function showResult() {
+  gameState = "result";
+  // บันทึกคะแนนที่ดีที่สุดของด่านนี้ไว้ในเครื่องผู้เล่น
+  try {
+    const key = `gq_best_${chapterNo}`;
+    const best = parseInt(localStorage.getItem(key), 10) || 0;
+    if (score > best) localStorage.setItem(key, score);
+  } catch (e) { /* private mode */ }
+
+  document.getElementById("scoreBig").textContent = `${score} / ${QUESTIONS.length}`;
+  const g = document.getElementById("grade");
+  if (score === 10)     g.textContent = "🌟 ยอดเยี่ยม! ผู้พิชิตด่านนี้ตัวจริง";
+  else if (score >= 8)  g.textContent = "🎉 เก่งมาก! เข้าใจเนื้อหาเป็นอย่างดี";
+  else if (score >= 6)  g.textContent = "👍 ดี! ทบทวนอีกนิดจะสมบูรณ์แบบ";
+  else if (score >= 4)  g.textContent = `📖 พอใช้ — ลองกลับไปอ่านบทที่ ${chapterNo} อีกรอบ`;
+  else                  g.textContent = "💪 สู้ๆ! ทบทวนบทเรียนแล้วกลับมาลองใหม่นะ";
+  const wl = document.getElementById("wrongList");
+  wl.innerHTML = wrongAnswers.length
+    ? "<b>หัวข้อที่ควรทบทวน:</b><br>" + wrongAnswers.map(i => `• ข้อ ${i + 1}: ${QUESTIONS[i].q}`).join("<br>")
+    : "";
+  const next = document.getElementById("nextBtn");
+  if (chapterNo < QUIZ_DATA.length) {
+    next.style.display = "inline-block";
+    next.href = `game.html?chapter=${chapterNo + 1}`;
+    next.textContent = `➡️ ด่านที่ ${chapterNo + 1}`;
+  }
+  document.getElementById("resultOverlay").style.display = "flex";
+}
+
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("titleOverlay").style.display = "none";
+  gameState = "play";
+};
+document.getElementById("restartBtn").onclick = () => location.reload();
+</script>
+</body>
+</html>
