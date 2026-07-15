@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Lab — ห้องทดลองการทำงานภายใน LLMs</title>
+  <meta name="description" content="ห้องทดลอง Interactive ประกอบบทที่ 3: Tokenization, BPE, Embeddings, Cosine Similarity, Temperature, Context Window" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --c1: #4f46e5; --c2: #d97706; --c3: #0891b2; --c4: #be185d; --c5: #4d7c0f;
+      --c1-soft: rgba(79,70,229,0.12); --c2-soft: rgba(217,119,6,0.14);
+      --c3-soft: rgba(8,145,178,0.12); --c4-soft: rgba(190,24,93,0.11);
+      --c5-soft: rgba(77,124,15,0.13);
+      --lab-line: rgba(15,23,42,0.1);
+    }
+    .lab-hero { padding: 7.5rem 1.5rem 1.5rem; }
+    .lab-hero h1 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 800; color: var(--text); margin-bottom: 0.6rem; }
+    .lab-hero h1 i { color: var(--primary); margin-right: 0.6rem; }
+    .lab-hero p.sub { color: var(--text-muted); max-width: 780px; line-height: 1.8; }
+    .lab-hero .chip-links { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+    .chip-links a {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.4rem 0.95rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+      background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); color: #4f46e5;
+      transition: all 0.2s;
+    }
+    .chip-links a:hover { background: rgba(99,102,241,0.18); }
+
+    /* sticky section tabs */
+    .lab-tabs {
+      position: sticky; top: 58px; z-index: 500;
+      background: rgba(248,250,252,0.94); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--lab-line);
+      padding: 0.55rem 1.5rem;
+    }
+    .lab-tabs-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; }
+    .lab-tabs-inner::-webkit-scrollbar { display: none; }
+    .lab-tab {
+      padding: 0.42rem 0.95rem; border-radius: 999px; white-space: nowrap;
+      font-size: 0.86rem; font-weight: 700; color: var(--text-muted);
+      border: 1px solid transparent; transition: all 0.2s;
+    }
+    .lab-tab:hover { color: var(--primary-dark); background: rgba(99,102,241,0.08); }
+    .lab-tab.active { color: #fff; background: var(--primary); }
+
+    .lab-section { padding: 3.2rem 1.5rem 1rem; scroll-margin-top: 118px; }
+    .lab-panel {
+      background: var(--card-bg); border: 1px solid var(--lab-line);
+      border-radius: 18px; padding: 1.8rem;
+      box-shadow: 0 8px 30px rgba(15,23,42,0.05);
+    }
+    .lab-head { display: flex; gap: 0.9rem; align-items: flex-start; margin-bottom: 1.1rem; }
+    .lab-ico {
+      width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; color: #fff;
+    }
+    .lab-head h2 { font-size: 1.3rem; font-weight: 800; color: var(--text); line-height: 1.3; }
+    .lab-head .ref { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+    .lab-desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.8; margin-bottom: 1.2rem; max-width: 900px; }
+
+    textarea.lab-input, input.lab-text {
+      width: 100%; font-family: inherit; font-size: 0.95rem; color: var(--text);
+      background: #fff; border: 1.5px solid var(--lab-line); border-radius: 12px;
+      padding: 0.8rem 1rem; resize: vertical; line-height: 1.7;
+    }
+    textarea.lab-input:focus, input.lab-text:focus, input.lab-num:focus, select.lab-select:focus { outline: 2px solid rgba(99,102,241,0.4); border-color: var(--primary); }
+    .preset-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.7rem 0 1rem; }
+    .preset-btn, .lab-btn {
+      font-family: inherit; cursor: pointer; font-size: 0.84rem; font-weight: 700;
+      padding: 0.45rem 1rem; border-radius: 9px;
+      background: rgba(15,23,42,0.045); border: 1px solid var(--lab-line); color: var(--text);
+      transition: all 0.18s;
+    }
+    .preset-btn:hover, .lab-btn:hover { border-color: var(--primary); color: var(--primary-dark); background: rgba(99,102,241,0.08); }
+    .lab-btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .lab-btn.primary:hover { background: var(--primary-dark); color: #fff; }
+    .lab-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* token chips */
+    .token-out { margin-top: 1rem; padding: 1rem; background: rgba(15,23,42,0.028); border-radius: 12px; min-height: 64px; line-height: 2.35; }
+    .tk {
+      display: inline-block; margin: 0 2px; padding: 0.16rem 0.5rem; border-radius: 7px;
+      font-size: 0.92rem; font-weight: 600; color: var(--text); white-space: pre;
+      border: 1px solid rgba(15,23,42,0.07);
+    }
+    .tk.sp { color: #94a3b8; }
+    .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+    .stat-tile {
+      flex: 1; min-width: 150px; background: #fff; border: 1px solid var(--lab-line);
+      border-radius: 12px; padding: 0.85rem 1.1rem;
+    }
+    .stat-tile .k { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-tile .v { font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1.3; }
+    .stat-tile .v small { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+
+    /* compare bars */
+    .cmp-row { display: flex; align-items: center; gap: 0.8rem; margin: 0.5rem 0; }
+    .cmp-label { width: 88px; flex-shrink: 0; font-size: 0.84rem; font-weight: 700; color: var(--text); text-align: right; }
+    .cmp-track { flex: 1; height: 26px; background: rgba(15,23,42,0.05); border-radius: 6px; overflow: hidden; }
+    .cmp-fill { height: 100%; border-radius: 0 4px 4px 0; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #fff; font-size: 0.8rem; font-weight: 800; min-width: 40px; transition: width 0.5s ease; }
+
+    /* BPE */
+    .bpe-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.2rem; margin-top: 1rem; }
+    @media (max-width: 860px) { .bpe-grid { grid-template-columns: 1fr; } }
+    .bpe-box { background: #fff; border: 1px solid var(--lab-line); border-radius: 12px; padding: 1rem 1.1rem; }
+    .bpe-box h4 { font-size: 0.82rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+    .bpe-word { margin: 0.3rem 0; font-size: 0.95rem; }
+    .bpe-word .freq { color: var(--text-muted); font-size: 0.78rem; margin-left: 0.4rem; }
+    .bpe-seg {
+      display: inline-block; padding: 0.1rem 0.42rem; margin: 1px; border-radius: 6px;
+      background: rgba(15,23,42,0.05); border: 1px solid rgba(15,23,42,0.08);
+      font-family: 'Courier New', monospace; font-weight: 700; font-size: 0.88rem;
+    }
+    .bpe-seg.hl { background: var(--c2-soft); border-color: var(--c2); color: var(--c2); }
+    .bpe-pair-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .bpe-pair-table th { text-align: left; color: var(--text-muted); font-size: 0.76rem; text-transform: uppercase; padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--lab-line); }
+    .bpe-pair-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(15,23,42,0.05); font-family: 'Courier New', monospace; font-weight: 700; }
+    .bpe-pair-table tr.best td { background: var(--c2-soft); color: var(--c2); }
+    .merge-chip {
+      display: inline-block; margin: 2px; padding: 0.2rem 0.6rem; border-radius: 999px;
+      background: var(--c1-soft); color: var(--c1); border: 1px solid rgba(79,70,229,0.3);
+      font-family: 'Courier New', monospace; font-size: 0.82rem; font-weight: 700;
+    }
+    .bpe-status { font-size: 0.88rem; color: var(--text-muted); margin-top: 0.6rem; }
+
+    /* cosine canvas */
+    .cos-grid { display: grid; grid-template-columns: auto 1fr; gap: 1.4rem; align-items: start; margin-top: 0.5rem; }
+    @media (max-width: 900px) { .cos-grid { grid-template-columns: 1fr; } }
+    #cosCanvas { border: 1px solid var(--lab-line); border-radius: 14px; background: #fff; touch-action: none; cursor: grab; max-width: 100%; }
+    .cos-readout { background: #fff; border: 1px solid var(--lab-line); border-radius: 12px; padding: 1rem 1.2rem; font-size: 0.92rem; }
+    .cos-readout .frm { font-family: 'Courier New', monospace; font-size: 0.9rem; background: rgba(15,23,42,0.04); border-radius: 8px; padding: 0.6rem 0.8rem; margin: 0.6rem 0; overflow-x: auto; white-space: nowrap; }
+    .cos-big { font-size: 2rem; font-weight: 800; }
+    .cos-verdict { display: inline-block; padding: 0.25rem 0.8rem; border-radius: 999px; font-size: 0.84rem; font-weight: 700; margin-top: 0.4rem; }
+    .sel-row { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.8rem; align-items: center; }
+    select.lab-select {
+      font-family: inherit; font-size: 0.9rem; font-weight: 600; color: var(--text);
+      padding: 0.4rem 0.7rem; border-radius: 9px; border: 1.5px solid var(--lab-line); background: #fff;
+    }
+    .vec-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 800; font-size: 0.9rem; }
+    .vec-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+    /* analogy */
+    .ana-box { margin-top: 1.6rem; border-top: 1px dashed var(--lab-line); padding-top: 1.4rem; }
+    .ana-eq { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; font-weight: 800; font-size: 1rem; }
+    .ana-eq select { font-weight: 700; }
+    .ana-result {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1.1rem; border-radius: 999px; font-weight: 800;
+      background: var(--c5-soft); color: var(--c5); border: 1px solid rgba(77,124,15,0.35);
+    }
+
+    /* temperature */
+    .temp-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 1.4rem; margin-top: 0.6rem; }
+    @media (max-width: 900px) { .temp-grid { grid-template-columns: 1fr; } }
+    .ctl-box { background: #fff; border: 1px solid var(--lab-line); border-radius: 12px; padding: 1.1rem 1.2rem; }
+    .ctl-box h4 { font-size: 0.82rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.7rem; }
+    .tok-edit-row { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.45rem; }
+    .tok-edit-row .swatch { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+    .tok-edit-row input[type=text] { flex: 1; min-width: 0; }
+    input.lab-num, .tok-edit-row input[type=text] {
+      font-family: inherit; font-size: 0.9rem; font-weight: 600; color: var(--text);
+      padding: 0.38rem 0.6rem; border-radius: 8px; border: 1.5px solid var(--lab-line); background: #fff;
+    }
+    input.lab-num { width: 74px; text-align: right; }
+    .slider-row { display: flex; align-items: center; gap: 0.8rem; margin: 0.7rem 0; }
+    .slider-row label { font-size: 0.88rem; font-weight: 700; width: 118px; flex-shrink: 0; }
+    .slider-row input[type=range] { flex: 1; accent-color: var(--primary); }
+    .slider-row .val { width: 52px; text-align: right; font-weight: 800; font-family: 'Courier New', monospace; font-size: 0.95rem; }
+    .prob-row { display: flex; align-items: center; gap: 0.7rem; margin: 0.55rem 0; }
+    .prob-name { width: 74px; flex-shrink: 0; text-align: right; font-weight: 700; font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .prob-track { flex: 1; height: 30px; background: rgba(15,23,42,0.045); border-radius: 7px; position: relative; overflow: hidden; }
+    .prob-fill { height: 100%; border-radius: 0 4px 4px 0; transition: width 0.35s ease; }
+    .prob-cut .prob-fill { background: repeating-linear-gradient(45deg, #cbd5e1 0 6px, #e2e8f0 6px 12px) !important; }
+    .prob-pct { width: 62px; flex-shrink: 0; font-weight: 800; font-family: 'Courier New', monospace; font-size: 0.92rem; }
+    .prob-count { width: 52px; flex-shrink: 0; font-size: 0.78rem; color: var(--text-muted); font-weight: 700; }
+    .prob-cut .prob-pct, .prob-cut .prob-name { color: #94a3b8; text-decoration: line-through; }
+    .cut-badge { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.68rem; font-weight: 800; color: #64748b; }
+    .sample-out {
+      margin-top: 1rem; background: rgba(15,23,42,0.03); border-radius: 12px; padding: 0.9rem 1.1rem;
+      font-size: 1.05rem; min-height: 56px; display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem;
+    }
+    .sample-tok { padding: 0.15rem 0.7rem; border-radius: 8px; font-weight: 800; color: #fff; animation: popIn 0.3s ease; }
+    @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    /* context window */
+    .cw-msgs { margin-top: 0.8rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .cw-msg {
+      display: flex; gap: 0.7rem; align-items: baseline;
+      background: #fff; border: 1px solid var(--lab-line); border-radius: 10px; padding: 0.55rem 0.9rem;
+      font-size: 0.88rem; transition: all 0.3s;
+    }
+    .cw-msg .who { font-weight: 800; width: 64px; flex-shrink: 0; font-size: 0.78rem; }
+    .cw-msg .who.u { color: var(--c1); } .cw-msg .who.a { color: var(--c3); }
+    .cw-msg .txt { flex: 1; color: var(--text); }
+    .cw-msg .tks { flex-shrink: 0; font-size: 0.76rem; font-weight: 800; color: var(--text-muted); font-family: 'Courier New', monospace; }
+    .cw-msg.dropped { opacity: 0.42; border-style: dashed; background: rgba(15,23,42,0.02); }
+    .cw-msg.dropped .txt { text-decoration: line-through; color: #94a3b8; }
+    .cw-drop-tag { font-size: 0.7rem; font-weight: 800; color: #b91c1c; flex-shrink: 0; }
+    .cw-meter { height: 14px; border-radius: 999px; background: rgba(15,23,42,0.06); overflow: hidden; margin-top: 0.8rem; }
+    .cw-meter-fill { height: 100%; background: linear-gradient(90deg, var(--c1), var(--c3)); border-radius: 999px; transition: width 0.3s; }
+
+    /* cost calc */
+    .cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.9rem; margin-top: 0.6rem; }
+    .cost-field label { display: block; font-size: 0.78rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .cost-field input { width: 100%; }
+    .cost-formula { font-family: 'Courier New', monospace; font-size: 0.88rem; background: rgba(15,23,42,0.04); border-radius: 10px; padding: 0.8rem 1rem; margin-top: 1rem; overflow-x: auto; white-space: nowrap; color: var(--text); }
+
+    .lab-note {
+      display: flex; gap: 0.8rem; margin-top: 1.3rem;
+      background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.22);
+      border-radius: 12px; padding: 0.9rem 1.1rem; font-size: 0.88rem; line-height: 1.75; color: var(--text);
+    }
+    .lab-note i { color: var(--primary); margin-top: 0.2rem; }
+    .lab-note b { color: var(--primary-dark); }
+    .sim-warn { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.7rem; }
+    .sim-warn i { margin-right: 0.3rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fa-solid fa-robot"></i>
+        <span>GenAI Course</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#overview">ภาพรวม</a></li>
+        <li><a href="index.html#modules">บทเรียน</a></li>
+        <li><a href="slides.html">สไลด์</a></li>
+        <li><a href="documents.html">เอกสาร</a></li>
+        <li><a href="tools.html">AI Tools</a></li>
+        <li><a href="games.html">เกม</a></li>
+        <li><a href="llm-lab.html" style="color:var(--primary-dark)">ห้องทดลอง</a></li>
+        <li><a href="index.html#instructor">ผู้สอน</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="lab-hero">
+    <div class="container">
+      <h1><i class="fa-solid fa-flask"></i>LLM Lab — ห้องทดลองการทำงานภายใน LLMs</h1>
+      <p class="sub">ทดลองด้วยตัวเองเพื่อเข้าใจกลไกภายในของโมเดลภาษาขนาดใหญ่ ประกอบ <b>บทที่ 3: How LLMs Work Internally</b>
+        — แก้ไขข้อมูล ปรับค่าพารามิเตอร์ แล้วดูผลลัพธ์ที่เปลี่ยนไปแบบเรียลไทม์</p>
+      <div class="chip-links">
+        <a href="reader.html?book=chapter-3"><i class="fa-solid fa-chalkboard-user"></i> สไลด์บทที่ 3</a>
+        <a href="reader.html?book=doc-3"><i class="fa-solid fa-file-lines"></i> เอกสารบทที่ 3</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section tabs -->
+  <div class="lab-tabs">
+    <div class="lab-tabs-inner" id="labTabs">
+      <a class="lab-tab active" href="#tokenizer">1 · Tokenizer</a>
+      <a class="lab-tab" href="#bpe">2 · BPE</a>
+      <a class="lab-tab" href="#cosine">3 · Embeddings &amp; Cosine</a>
+      <a class="lab-tab" href="#temperature">4 · Temperature</a>
+      <a class="lab-tab" href="#context">5 · Context Window</a>
+      <a class="lab-tab" href="#cost">6 · ต้นทุน Token</a>
+    </div>
+  </div>
+
+  <!-- ================= 1. TOKENIZER ================= -->
+  <section class="lab-section container" id="tokenizer">
+    <div class="lab-panel">
+      <div class="lab-head">
+        <div class="lab-ico" style="background:linear-gradient(135deg,#4f46e5,#8b5cf6)"><i class="fa-solid fa-scissors"></i></div>
+        <div>
+          <h2>Tokenizer Playground</h2>
+          <span class="ref">อ้างอิงเนื้อหา 3.1 — Tokenization</span>
+        </div>
+      </div>
+      <p class="lab-desc">LLM ไม่ได้อ่าน "คำ" แบบมนุษย์ แต่อ่าน <b>Token</b> — พิมพ์หรือแก้ไขข้อความด้านล่าง แล้วดูว่าข้อความถูกหั่นเป็น Token อย่างไร
+        สังเกตว่าภาษาอังกฤษถูกแบ่งเป็นคำ/ส่วนของคำ ขณะที่ภาษาไทยถูกหั่นละเอียดกว่ามาก</p>
+
+      <textarea class="lab-input" id="tokInput" rows="3">ChatGPT is amazing! ปัญญาประดิษฐ์กำลังเปลี่ยนโลก</textarea>
+      <div class="preset-row">
+        <button class="preset-btn" data-text="ChatGPT is amazing!">ตัวอย่างในหนังสือ</button>
+        <button class="preset-btn" data-text="The quick brown fox jumps over the lazy dog. Unbelievable!">ภาษาอังกฤษ</button>
+        <button class="preset-btn" data-text="วันนี้อากาศดีมาก เหมาะกับการเรียนวิชา Generative AI">ไทยผสมอังกฤษ</button>
+        <button class="preset-btn" data-text="มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ">ภาษาไทยล้วน</button>
+      </div>
+
+      <div class="token-out" id="tokOut"></div>
+
+      <div class="stat-row">
+        <div class="stat-tile"><div class="k">Token ทั้งหมด</div><div class="v" id="tokCount">0</div></div>
+        <div class="stat-tile"><div class="k">ตัวอักษร</div><div class="v" id="tokChars">0</div></div>
+        <div class="stat-tile"><div class="k">อักษร / Token</div><div class="v" id="tokRatio">0</div></div>
+        <div class="stat-tile"><div class="k">ค่าใช้จ่ายขาเข้า <small>($0.15 / 1M)</small></div><div class="v" id="tokCost">$0 <small></small></div></div>
+      </div>
+
+      <h4 style="margin:1.6rem 0 0.4rem; font-size:0.95rem; font-weight:800; color:var(--text)">เทียบกันชัด ๆ: ประโยคความหมายเดียวกัน ไทย vs อังกฤษ</h4>
+      <div class="cmp-row">
+        <div class="cmp-label">English</div>
+        <div class="cmp-track"><div class="cmp-fill" id="cmpEn" style="background:var(--c1)"></div></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-label">ภาษาไทย</div>
+        <div class="cmp-track"><div class="cmp-fill" id="cmpTh" style="background:var(--c4)"></div></div>
+      </div>
+      <p class="sim-warn" id="cmpNote"></p>
+
+      <div class="lab-note"><i class="fa-solid fa-lightbulb"></i>
+        <div><b>โจทย์ชวนคิด:</b> ลองพิมพ์ชื่อ-นามสกุลของคุณทั้งภาษาไทยและอังกฤษ อันไหนใช้ Token มากกว่ากัน? แล้วถ้าต้องส่งรายงาน 10 หน้าให้ AI สรุป ควรใช้ภาษาอะไรถึงประหยัดกว่า?</div>
+      </div>
+      <p class="sim-warn"><i class="fa-solid fa-circle-info"></i>เครื่องมือนี้เป็น "ตัวจำลอง" เพื่อการเรียนรู้ — Tokenizer จริงของแต่ละโมเดล (เช่น tiktoken ของ OpenAI) จะแบ่งต่างไปเล็กน้อย ทดลองของจริงได้ที่ platform.openai.com/tokenizer</p>
+    </div>
+  </section>
+
+  <!-- ================= 2. BPE ================= -->
+  <section class="lab-section container" id="bpe">
+    <div class="lab-panel">
+      <div class="lab-head">
+        <div class="lab-ico" style="background:linear-gradient(135deg,#d97706,#f59e0b)"><i class="fa-solid fa-object-group"></i></div>
+        <div>
+          <h2>Byte Pair Encoding (BPE) ทีละขั้น</h2>
+          <span class="ref">อ้างอิงเนื้อหา 3.1.2 — Byte Pair Encoding</span>
+        </div>
+      </div>
+      <p class="lab-desc">BPE เริ่มจากมองทุกคำเป็นตัวอักษรเดี่ยว แล้ว<b>วนหาคู่ที่ติดกันและพบบ่อยที่สุด → รวมเป็นหน่วยใหม่</b> ทำซ้ำไปเรื่อย ๆ
+        กด "รวม 1 ขั้น" แล้วสังเกตว่าคู่ไหนถูกเลือก และคำในคลังเปลี่ยนไปอย่างไร (เครื่องหมาย <code>_</code> คือจุดจบคำ)</p>
+
+      <input class="lab-text" id="bpeCorpus" value="low low low low low lower lower newest newest newest newest newest newest widest widest widest" />
+      <div class="preset-row">
+        <button class="lab-btn primary" id="bpeStep"><i class="fa-solid fa-forward-step"></i> รวม 1 ขั้น</button>
+        <button class="lab-btn" id="bpeStep5"><i class="fa-solid fa-forward"></i> รวม 5 ขั้น</button>
+        <button class="lab-btn" id="bpeReset"><i class="fa-solid fa-rotate-left"></i> เริ่มใหม่</button>
+      </div>
+      <div class="bpe-status" id="bpeStatus"></div>
+
+      <div class="bpe-grid">
+        <div class="bpe-box">
+          <h4>คลังคำ (แบ่งตามหน่วยปัจจุบัน)</h4>
+          <div id="bpeWords"></div>
+        </div>
+        <div>
+          <div class="bpe-box" style="margin-bottom:1rem">
+            <h4>คู่ที่พบบ่อยที่สุดตอนนี้</h4>
+            <table class="bpe-pair-table">
+              <thead><tr><th>คู่</th><th>ความถี่</th></tr></thead>
+              <tbody id="bpePairs"></tbody>
+            </table>
+          </div>
+          <div class="bpe-box">
+            <h4>กฎการรวม (Merge Rules) ที่เรียนรู้แล้ว</h4>
+            <div id="bpeMerges" style="min-height:34px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.2rem" class="bpe-box">
+        <h4>ลอง Tokenize คำใหม่ด้วยกฎที่เรียนรู้</h4>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center">
+          <input class="lab-text" id="bpeTestWord" value="lowest" style="max-width:220px" />
+          <span style="font-weight:800; color:var(--text-muted)">→</span>
+          <span id="bpeTestOut" style="line-height:2.2"></span>
+        </div>
+      </div>
+
+      <div class="lab-note"><i class="fa-solid fa-lightbulb"></i>
+        <div><b>โจทย์ชวนคิด:</b> คำว่า <code>lowest</code> ไม่เคยอยู่ในคลังคำเลย แต่หลังรวมหลาย ๆ ขั้น BPE กลับแบ่งมันได้อย่างมีความหมาย (<code>low</code> + <code>est_</code>) — นี่คือเหตุผลที่ LLM จัดการ "คำใหม่ที่ไม่เคยเห็น" ได้</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. COSINE ================= -->
+  <section class="lab-section container" id="cosine">
+    <div class="lab-panel">
+      <div class="lab-head">
+        <div class="lab-ico" style="background:linear-gradient(135deg,#0891b2,#06b6d4)"><i class="fa-solid fa-arrows-to-dot"></i></div>
+        <div>
+          <h2>Embeddings &amp; Cosine Similarity</h2>
+          <span class="ref">อ้างอิงเนื้อหา 3.2 — Word Embeddings และ Semantic Space</span>
+        </div>
+      </div>
+      <p class="lab-desc">คำถูกแทนด้วย "เวกเตอร์" ในปริภูมิความหมาย — คำที่ความหมายใกล้กันจะชี้ไปทางเดียวกัน
+        <b>ลากปลายลูกศร</b> หรือเลือกคำจากเมนู แล้วดูค่า Cosine Similarity เปลี่ยนแบบเรียลไทม์ (จำลองเป็น 2 มิติเพื่อให้มองเห็นได้ ของจริงมีหลายพันมิติ)</p>
+
+      <div class="sel-row">
+        <span class="vec-tag"><span class="vec-dot" style="background:var(--c1)"></span> เวกเตอร์ A:</span>
+        <select class="lab-select" id="wordA"></select>
+        <span class="vec-tag" style="margin-left:1rem"><span class="vec-dot" style="background:var(--c4)"></span> เวกเตอร์ B:</span>
+        <select class="lab-select" id="wordB"></select>
+      </div>
+
+      <div class="cos-grid">
+        <canvas id="cosCanvas" width="380" height="380"></canvas>
+        <div>
+          <div class="cos-readout">
+            <div>A = (<span id="cosAx"></span>, <span id="cosAy"></span>) &nbsp;·&nbsp; B = (<span id="cosBx"></span>, <span id="cosBy"></span>)</div>
+            <div class="frm" id="cosFormula"></div>
+            <div>cosine similarity = <span class="cos-big" id="cosVal" style="color:var(--c3)">0.00</span>
+              &nbsp; <span style="color:var(--text-muted)">(มุม <span id="cosDeg">0</span>°)</span></div>
+            <div><span class="cos-verdict" id="cosVerdict"></span></div>
+          </div>
+          <div class="ana-box">
+            <h4 style="font-size:0.95rem; font-weight:800; margin-bottom:0.7rem">เรขาคณิตของความหมาย: Vector Arithmetic</h4>
+            <div class="ana-eq">
+              <select class="lab-select" id="anaA"></select>
+              <span>−</span>
+              <select class="lab-select" id="anaB"></select>
+              <span>+</span>
+              <select class="lab-select" id="anaC"></select>
+              <span>≈</span>
+              <span class="ana-result" id="anaOut"><i class="fa-solid fa-crown"></i> ราชินี</span>
+            </div>
+            <p class="sim-warn" style="margin-top:0.6rem">ตัวอย่างคลาสสิกจาก Word2Vec: <b>King − Man + Woman ≈ Queen</b> — โมเดลเรียนรู้ "ทิศทาง" ของแนวคิด เช่น เพศ หรือความเป็นกษัตริย์ เอาไว้ในปริภูมิเวกเตอร์</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-note"><i class="fa-solid fa-lightbulb"></i>
+        <div><b>โจทย์ชวนคิด:</b> เลือกคู่คำ "แมว–สุนัข" แล้วเทียบกับ "แมว–รถยนต์" ค่า cosine ต่างกันแค่ไหน? แล้วลองลากเวกเตอร์ให้ชี้สวนทางกันจนได้ค่าติดลบ — หลักการนี้แหละคือหัวใจของ Semantic Search และ RAG (บทที่ 10)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 4. TEMPERATURE ================= -->
+  <section class="lab-section container" id="temperature">
+    <div class="lab-panel">
+      <div class="lab-head">
+        <div class="lab-ico" style="background:linear-gradient(135deg,#be185d,#ec4899)"><i class="fa-solid fa-temperature-half"></i></div>
+        <div>
+          <h2>Temperature, Top-k &amp; Top-p Sampling Lab</h2>
+          <span class="ref">อ้างอิงเนื้อหา 3.4 — Generation Parameters</span>
+        </div>
+      </div>
+      <p class="lab-desc">โมเดลกำลังเติมคำในประโยค <b>"วันนี้อากาศ___"</b> (ตัวอย่างจากหนังสือ) โดยให้ความน่าจะเป็นกับ Token ผู้สมัครแต่ละตัว —
+        ปรับ <b>Temperature</b> เพื่อดูการแจกแจง "แหลมขึ้น" หรือ "แบนลง" ใช้ <b>Top-k / Top-p</b> ตัดตัวเลือก แล้วกดสุ่มดูผลจริง</p>
+
+      <div class="temp-grid">
+        <div>
+          <div class="ctl-box">
+            <h4>Token ผู้สมัคร + น้ำหนักตั้งต้น (แก้ไขได้)</h4>
+            <div id="tokRows"></div>
+          </div>
+          <div class="ctl-box" style="margin-top:1rem">
+            <h4>พารามิเตอร์</h4>
+            <div class="slider-row">
+              <label>Temperature</label>
+              <input type="range" id="tempSlider" min="0" max="2" step="0.05" value="1" />
+              <span class="val" id="tempVal">1.00</span>
+            </div>
+            <div class="slider-row">
+              <label>Top-k</label>
+              <input type="range" id="topkSlider" min="1" max="5" step="1" value="5" />
+              <span class="val" id="topkVal">ปิด</span>
+            </div>
+            <div class="slider-row">
+              <label>Top-p</label>
+              <input type="range" id="toppSlider" min="0.3" max="1" step="0.05" value="1" />
+              <span class="val" id="toppVal">ปิด</span>
+            </div>
+            <div class="preset-row" style="margin-bottom:0">
+              <button class="preset-btn" data-t="0">แม่นยำ T=0</button>
+              <button class="preset-btn" data-t="0.7">สมดุล T=0.7</button>
+              <button class="preset-btn" data-t="1.5">สร้างสรรค์ T=1.5</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="ctl-box">
+            <h4>การแจกแจงความน่าจะเป็นหลังปรับค่า <span style="text-transform:none">(P ∝ w^(1/T))</span></h4>
+            <div id="probBars"></div>
+            <div class="preset-row" style="margin-top:0.9rem; margin-bottom:0">
+              <button class="lab-btn primary" id="sample1"><i class="fa-solid fa-dice"></i> สุ่ม 1 ครั้ง</button>
+              <button class="lab-btn" id="sample100"><i class="fa-solid fa-dice-d20"></i> สุ่ม 100 ครั้ง</button>
+              <button class="lab-btn" id="sampleClear">ล้างผล</button>
+            </div>
+          </div>
+          <div class="sample-out" id="sampleOut">
+            <span style="font-weight:700">วันนี้อากาศ</span>
+            <span style="color:var(--text-muted); font-size:0.85rem">← กด "สุ่ม 1 ครั้ง" เพื่อให้โมเดลเติมคำ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-note"><i class="fa-solid fa-lightbulb"></i>
+        <div><b>โจทย์ชวนคิด:</b> ตั้ง T=0 แล้วสุ่ม 100 ครั้ง ได้คำเดิมกี่ครั้ง? เปลี่ยนเป็น T=1.5 แล้วสุ่มอีก 100 ครั้ง — ผลต่างที่เห็นคือ <b>Non-Determinism</b> (หัวข้อ 3.5.4) และเป็นเหตุผลว่าทำไมงานสกัดข้อมูลควรใช้ T ต่ำ แต่งานแต่งกลอนควรใช้ T สูง</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. CONTEXT WINDOW ================= -->
+  <section class="lab-section container" id="context">
+    <div class="lab-panel">
+      <div class="lab-head">
+        <div class="lab-ico" style="background:linear-gradient(135deg,#4d7c0f,#65a30d)"><i class="fa-solid fa-memory"></i></div>
+        <div>
+          <h2>Context Window — ความจำระยะสั้นของโมเดล</h2>
+          <span class="ref">อ้างอิงเนื้อหา 3.3 — Context Window และ Lost in the Middle</span>
+        </div>
+      </div>
+      <p class="lab-desc">ทุกการสนทนามีขีดจำกัดจำนวน Token ที่โมเดล "จำ" ได้ — ลองหด/ขยาย Context Window ด้านล่าง
+        แล้วดูว่าข้อความเก่า ๆ ถูก<b>ตัดทิ้ง</b>เมื่อไร (โมเดลเก็บข้อความ<b>ล่าสุด</b>ไว้ก่อนเสมอ)</p>
+
+      <div class="slider-row" style="max-width:560px">
+        <label style="width:150px">Context Window</label>
+        <input type="range" id="cwSlider" min="100" max="1300" step="50" value="500" />
+        <span class="val" id="cwVal" style="width:110px">500 tok</span>
+      </div>
+      <div class="cw-meter"><div class="cw-meter-fill" id="cwMeter"></div></div>
+      <div style="font-size:0.84rem; color:var(--text-muted); margin-top:0.35rem" id="cwStat"></div>
+
+      <div class="cw-msgs" id="cwMsgs"></div>
+
+      <div class="lab-note"><i class="fa-solid fa-lightbulb"></i>
+        <div><b>โจทย์ชวนคิด:</b> ข้อความแรกบอกว่าผู้ใช้ "แพ้กุ้ง" — หดหน้าต่างจนข้อความนั้นหลุด แล้วโมเดลจะยังรู้ไหมถ้าถามเมนูแนะนำ?
+        และแม้ข้อมูลจะยังอยู่ในหน้าต่าง งานวิจัยพบว่าโมเดลมักมองข้ามข้อมูล "ตรงกลาง" (<b>Lost in the Middle</b>) — ข้อมูลสำคัญจึงควรวางไว้ต้นหรือท้าย Prompt</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 6. COST ================= -->
+  <section class="lab-section container" id="cost" style="padding-bottom:4rem">
+    <div class="lab-panel">
+      <div class="lab-head">
+        <div class="lab-ico" style="background:linear-gradient(135deg,#0e7490,#0891b2)"><i class="fa-solid fa-calculator"></i></div>
+        <div>
+          <h2>เครื่องคิดต้นทุน Token</h2>
+          <span class="ref">อ้างอิงเนื้อหา 3.1.4 — Worked Example การคำนวณต้นทุน</span>
+        </div>
+      </div>
+      <p class="lab-desc">ผู้ให้บริการคิดเงินตามจำนวน Token ทั้ง<b>ขาเข้า</b>และ<b>ขาออก</b> (ขาออกมักแพงกว่า) — ตัวเลขตั้งต้นคือโจทย์ในหนังสือ ลองแก้ดูว่าถ้าระบบโตขึ้น 10 เท่า ต้นทุนจะเป็นเท่าไร</p>
+
+      <div class="cost-grid">
+        <div class="cost-field"><label>จำนวนครั้ง / วัน</label><input class="lab-num" style="width:100%" type="number" id="cCalls" value="10000" min="0" /></div>
+        <div class="cost-field"><label>Token ขาเข้า / ครั้ง</label><input class="lab-num" style="width:100%" type="number" id="cIn" value="500" min="0" /></div>
+        <div class="cost-field"><label>Token ขาออก / ครั้ง</label><input class="lab-num" style="width:100%" type="number" id="cOut" value="300" min="0" /></div>
+        <div class="cost-field"><label>ราคาขาเข้า ($/1M)</label><input class="lab-num" style="width:100%" type="number" id="cPIn" value="0.15" step="0.01" min="0" /></div>
+        <div class="cost-field"><label>ราคาขาออก ($/1M)</label><input class="lab-num" style="width:100%" type="number" id="cPOut" value="0.60" step="0.01" min="0" /></div>
+        <div class="cost-field"><label>อัตราแลกเปลี่ยน (฿/$)</label><input class="lab-num" style="width:100%" type="number" id="cFx" value="36" step="0.1" min="0" /></div>
+      </div>
+
+      <div class="cost-formula" id="costFormula"></div>
+
+      <div class="stat-row">
+        <div class="stat-tile"><div class="k">Token ขาเข้า/วัน</div><div class="v" id="cTokIn">–</div></div>
+        <div class="stat-tile"><div class="k">Token ขาออก/วัน</div><div class="v" id="cTokOut">–</div></div>
+        <div class="stat-tile"><div class="k">ต้นทุน / วัน</div><div class="v" id="cDay" style="color:var(--c3)">–</div></div>
+        <div class="stat-tile"><div class="k">ต้นทุน / เดือน (30 วัน)</div><div class="v" id="cMonth" style="color:var(--c4)">–</div></div>
+      </div>
+
+      <div class="lab-note"><i class="fa-solid fa-lightbulb"></i>
+        <div><b>โจทย์ชวนคิด:</b> สังเกตว่า Token ขาออกน้อยกว่าขาเข้า แต่กลับเป็นต้นทุนก้อนใหญ่กว่า — ถ้าบังคับให้โมเดลตอบสั้นลงครึ่งหนึ่ง (Max Tokens) จะประหยัดเงินต่อเดือนได้กี่บาท?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i class="fa-solid fa-robot"></i>
+          <span>Generative AI &amp; Prompt Engineering</span>
+        </div>
+        <p>คณะวิทยาศาสตร์ประยุกต์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+        <p class="footer-copy">&copy; 2025 All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+  (function(){
+  'use strict';
+  const PAL = ['#4f46e5','#d97706','#0891b2','#be185d','#4d7c0f'];
+  const PAL_SOFT = ['rgba(79,70,229,0.12)','rgba(217,119,6,0.14)','rgba(8,145,178,0.12)','rgba(190,24,93,0.11)','rgba(77,124,15,0.13)'];
+  const fmt = (n, d=2) => Number(n).toLocaleString('en-US', {maximumFractionDigits:d});
+
+  /* ============ 1. TOKENIZER ============ */
+  const thaiSeg = (typeof Intl !== 'undefined' && Intl.Segmenter)
+    ? new Intl.Segmenter('th', {granularity:'grapheme'}) : null;
+  const SUFFIXES = ['ational','tion','sion','ment','ness','able','ible','ing','est','ers','ies','ed','ly','er','es','al','s'];
+  const PREFIXES = ['under','over','anti','inter','pre','dis','un','re'];
+
+  function splitLatin(word){
+    if (word.length <= 4) return [word];
+    const parts = [];
+    let w = word;
+    for (const p of PREFIXES){
+      if (w.toLowerCase().startsWith(p) && w.length - p.length >= 3){
+        parts.push(w.slice(0, p.length)); w = w.slice(p.length); break;
+      }
+    }
+    let suffix = null;
+    for (const s of SUFFIXES){
+      if (w.toLowerCase().endsWith(s) && w.length - s.length >= 3){ suffix = w.slice(w.length - s.length); w = w.slice(0, w.length - s.length); break; }
+    }
+    while (w.length > 5){ parts.push(w.slice(0,4)); w = w.slice(4); }
+    if (w) parts.push(w);
+    if (suffix) parts.push(suffix);
+    return parts;
+  }
+  function graphemes(str){
+    if (thaiSeg) return Array.from(thaiSeg.segment(str), s => s.segment);
+    return Array.from(str);
+  }
+  function tokenize(text){
+    const tokens = [];
+    const re = /(\s+)|([A-Za-z]+)|([0-9]+)|([฀-๿]+)|(.)/gsu;
+    let m, pendingSpace = '';
+    while ((m = re.exec(text)) !== null){
+      if (m[1] !== undefined){ pendingSpace = ' '; continue; }
+      if (m[2] !== undefined){
+        const parts = splitLatin(m[2]);
+        parts.forEach((p, i) => { tokens.push((i===0 ? pendingSpace : '') + p); });
+        pendingSpace = '';
+      } else if (m[3] !== undefined){
+        const d = m[3];
+        for (let i=0; i<d.length; i+=3) tokens.push((i===0?pendingSpace:'') + d.slice(i,i+3));
+        pendingSpace = '';
+      } else if (m[4] !== undefined){
+        const gs = graphemes(m[4]);
+        gs.forEach((g, i) => tokens.push((i===0?pendingSpace:'') + g));
+        pendingSpace = '';
+      } else {
+        tokens.push(pendingSpace + m[5]); pendingSpace = '';
+      }
+    }
+    return tokens;
+  }
+  const tokInput = document.getElementById('tokInput');
+  const tokOut = document.getElementById('tokOut');
+  function renderTokens(){
+    const text = tokInput.value;
+    const toks = tokenize(text);
+    tokOut.innerHTML = '';
+    toks.forEach((t, i) => {
+      const span = document.createElement('span');
+      span.className = 'tk';
+      span.style.background = PAL_SOFT[i % 5];
+      span.textContent = t.replace(/^ /, '␣');
+      span.title = 'Token #' + (i+1);
+      tokOut.appendChild(span);
+    });
+    const chars = Array.from(text.replace(/\s/g,'')).length;
+    document.getElementById('tokCount').textContent = fmt(toks.length, 0);
+    document.getElementById('tokChars').textContent = fmt(chars, 0);
+    document.getElementById('tokRatio').textContent = toks.length ? (chars/toks.length).toFixed(2) : '0';
+    const cost = toks.length / 1e6 * 0.15;
+    document.getElementById('tokCost').innerHTML = '$' + cost.toFixed(7).replace(/0+$/,'').replace(/\.$/,'.0');
+  }
+  tokInput.addEventListener('input', renderTokens);
+  document.querySelectorAll('.preset-btn[data-text]').forEach(b => {
+    b.addEventListener('click', () => { tokInput.value = b.dataset.text; renderTokens(); });
+  });
+  renderTokens();
+
+  // fixed comparison
+  (function(){
+    const en = 'The weather is very nice today';
+    const th = 'วันนี้อากาศดีมาก';
+    const nEn = tokenize(en).length, nTh = tokenize(th).length;
+    const maxN = Math.max(nEn, nTh);
+    document.getElementById('cmpEn').style.width = (nEn/maxN*100) + '%';
+    document.getElementById('cmpEn').textContent = nEn + ' tok';
+    document.getElementById('cmpTh').style.width = (nTh/maxN*100) + '%';
+    document.getElementById('cmpTh').textContent = nTh + ' tok';
+    document.getElementById('cmpNote').innerHTML =
+      '<i class="fa-solid fa-circle-info"></i>"' + en + '" ↔ "' + th + '" — ความหมายเดียวกัน แต่ภาษาไทยใช้ Token มากกว่าราว ' + (nTh/nEn).toFixed(1) + ' เท่า → จ่ายแพงกว่าและกิน Context Window มากกว่า';
+  })();
+
+  /* ============ 2. BPE ============ */
+  let bpeWords = [], bpeMergeRules = [], bpeStepNum = 0;
+  const bpeCorpusEl = document.getElementById('bpeCorpus');
+
+  function bpeInit(){
+    const words = bpeCorpusEl.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const freq = {};
+    words.forEach(w => freq[w] = (freq[w]||0) + 1);
+    bpeWords = Object.entries(freq).map(([w, f]) => ({segs: [...w.split(''), '_'], freq: f, word: w}));
+    bpeMergeRules = []; bpeStepNum = 0;
+    bpeRender(null);
+    document.getElementById('bpeStatus').textContent = 'พร้อมเริ่ม — คลังมี ' + bpeWords.length + ' คำ (ไม่ซ้ำ), หน่วยเริ่มต้นคือตัวอักษรเดี่ยว';
+  }
+  function bpeCountPairs(){
+    const pairs = {};
+    bpeWords.forEach(({segs, freq}) => {
+      for (let i=0; i<segs.length-1; i++){
+        const key = segs[i] + ' ' + segs[i+1];
+        pairs[key] = (pairs[key]||0) + freq;
+      }
+    });
+    return Object.entries(pairs).map(([k, f]) => {
+      const [a, b] = k.split(' '); return {a, b, f};
+    }).sort((x,y) => y.f - x.f || (x.a+x.b).localeCompare(y.a+y.b));
+  }
+  function bpeDoStep(){
+    const pairs = bpeCountPairs();
+    if (!pairs.length || pairs[0].f < 2){
+      document.getElementById('bpeStatus').textContent = 'จบแล้ว — ไม่มีคู่ไหนปรากฏเกิน 1 ครั้ง';
+      return false;
+    }
+    const best = pairs[0];
+    bpeWords.forEach(w => {
+      const out = [];
+      for (let i=0; i<w.segs.length; i++){
+        if (i < w.segs.length-1 && w.segs[i] === best.a && w.segs[i+1] === best.b){
+          out.push(best.a + best.b); i++;
+        } else out.push(w.segs[i]);
+      }
+      w.segs = out;
+    });
+    bpeMergeRules.push(best);
+    bpeStepNum++;
+    bpeRender(best);
+    document.getElementById('bpeStatus').innerHTML =
+      'ขั้นที่ <b>' + bpeStepNum + '</b>: คู่ที่พบบ่อยที่สุดคือ <b style="color:var(--c2)">' + best.a + ' + ' + best.b + '</b> (พบ ' + best.f + ' ครั้ง) → รวมเป็นหน่วยใหม่ <b style="color:var(--c2)">' + best.a + best.b + '</b>';
+    return true;
+  }
+  function bpeRender(lastMerge){
+    const wordsEl = document.getElementById('bpeWords');
+    wordsEl.innerHTML = '';
+    bpeWords.forEach(({segs, freq, word}) => {
+      const div = document.createElement('div');
+      div.className = 'bpe-word';
+      segs.forEach(s => {
+        const el = document.createElement('span');
+        el.className = 'bpe-seg' + (lastMerge && s === lastMerge.a + lastMerge.b ? ' hl' : '');
+        el.textContent = s;
+        div.appendChild(el);
+      });
+      const f = document.createElement('span');
+      f.className = 'freq'; f.textContent = '×' + freq;
+      div.appendChild(f);
+      wordsEl.appendChild(div);
+    });
+    const pairs = bpeCountPairs().slice(0, 5);
+    const tb = document.getElementById('bpePairs');
+    tb.innerHTML = pairs.length ? '' : '<tr><td colspan="2" style="color:var(--text-muted)">— ไม่มีคู่เหลือ —</td></tr>';
+    pairs.forEach((p, i) => {
+      const tr = document.createElement('tr');
+      if (i === 0 && p.f >= 2) tr.className = 'best';
+      tr.innerHTML = '<td>' + p.a + ' + ' + p.b + (i===0 && p.f>=2 ? ' &nbsp;⟵ คู่ถัดไป' : '') + '</td><td>' + p.f + '</td>';
+      tb.appendChild(tr);
+    });
+    const mg = document.getElementById('bpeMerges');
+    mg.innerHTML = bpeMergeRules.length ? '' : '<span style="color:var(--text-muted); font-size:0.85rem">ยังไม่มี — กด "รวม 1 ขั้น" เพื่อเริ่ม</span>';
+    bpeMergeRules.forEach((m, i) => {
+      const c = document.createElement('span');
+      c.className = 'merge-chip';
+      c.textContent = (i+1) + '. ' + m.a + '+' + m.b + '→' + m.a + m.b;
+      mg.appendChild(c);
+    });
+    bpeTestRender();
+  }
+  function bpeApply(word){
+    let segs = [...word.toLowerCase().split(''), '_'];
+    bpeMergeRules.forEach(({a, b}) => {
+      const out = [];
+      for (let i=0; i<segs.length; i++){
+        if (i < segs.length-1 && segs[i] === a && segs[i+1] === b){ out.push(a+b); i++; }
+        else out.push(segs[i]);
+      }
+      segs = out;
+    });
+    return segs;
+  }
+  function bpeTestRender(){
+    const w = document.getElementById('bpeTestWord').value.trim();
+    const out = document.getElementById('bpeTestOut');
+    out.innerHTML = '';
+    if (!w) return;
+    bpeApply(w).forEach((s, i) => {
+      const el = document.createElement('span');
+      el.className = 'bpe-seg';
+      el.style.background = PAL_SOFT[i % 5];
+      el.style.borderColor = PAL[i % 5];
+      el.style.color = PAL[i % 5];
+      el.textContent = s;
+      out.appendChild(el);
+    });
+    const n = document.createElement('span');
+    n.style.cssText = 'margin-left:0.5rem; font-size:0.82rem; color:var(--text-muted); font-weight:700';
+    n.textContent = bpeApply(w).length + ' token';
+    out.appendChild(n);
+  }
+  document.getElementById('bpeStep').addEventListener('click', bpeDoStep);
+  document.getElementById('bpeStep5').addEventListener('click', () => { for (let i=0;i<5;i++) if (!bpeDoStep()) break; });
+  document.getElementById('bpeReset').addEventListener('click', bpeInit);
+  bpeCorpusEl.addEventListener('change', bpeInit);
+  document.getElementById('bpeTestWord').addEventListener('input', bpeTestRender);
+  bpeInit();
+
+  /* ============ 3. COSINE ============ */
+  const WORDS = [
+    {w:'แมว', x:0.85, y:0.55}, {w:'สุนัข', x:0.9, y:0.38}, {w:'สัตว์เลี้ยง', x:0.68, y:0.6},
+    {w:'เสือ', x:0.95, y:0.12}, {w:'รถยนต์', x:-0.75, y:0.55}, {w:'จักรยาน', x:-0.58, y:0.72},
+    {w:'เครื่องบิน', x:-0.88, y:0.32}, {w:'อาหาร', x:0.3, y:-0.78}, {w:'กาแฟ', x:0.12, y:-0.88},
+    {w:'คอมพิวเตอร์', x:-0.55, y:-0.62}, {w:'AI', x:-0.42, y:-0.78}
+  ];
+  let vecA = {x:0.85, y:0.55}, vecB = {x:0.9, y:0.38};
+  const canvas = document.getElementById('cosCanvas');
+  const ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const CSIZE = 380;
+  canvas.width = CSIZE * DPR; canvas.height = CSIZE * DPR;
+  canvas.style.width = CSIZE + 'px'; canvas.style.height = CSIZE + 'px';
+  ctx.scale(DPR, DPR);
+  const C = CSIZE/2, UNIT = 150;
+  const toPx = v => ({px: C + v.x*UNIT, py: C - v.y*UNIT});
+
+  function drawArrow(v, color){
+    const {px, py} = toPx(v);
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(C, C); ctx.lineTo(px, py); ctx.stroke();
+    const ang = Math.atan2(py - C, px - C);
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(px - 12*Math.cos(ang - 0.42), py - 12*Math.sin(ang - 0.42));
+    ctx.lineTo(px - 12*Math.cos(ang + 0.42), py - 12*Math.sin(ang + 0.42));
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI*2);
+    ctx.fillStyle = color + '22'; ctx.fill();
+  }
+  function cosDraw(){
+    ctx.clearRect(0, 0, CSIZE, CSIZE);
+    // grid
+    ctx.strokeStyle = 'rgba(15,23,42,0.06)'; ctx.lineWidth = 1;
+    for (let g=-2; g<=2; g++){
+      ctx.beginPath(); ctx.moveTo(C + g*UNIT/2, 0); ctx.lineTo(C + g*UNIT/2, CSIZE); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, C + g*UNIT/2); ctx.lineTo(CSIZE, C + g*UNIT/2); ctx.stroke();
+    }
+    ctx.strokeStyle = 'rgba(15,23,42,0.18)';
+    ctx.beginPath(); ctx.moveTo(0, C); ctx.lineTo(CSIZE, C); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(C, 0); ctx.lineTo(C, CSIZE); ctx.stroke();
+    // word map dots
+    ctx.font = '11px Sarabun, sans-serif';
+    WORDS.forEach(({w, x, y}) => {
+      const {px, py} = toPx({x, y});
+      ctx.fillStyle = 'rgba(15,23,42,0.28)';
+      ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(15,23,42,0.45)';
+      ctx.fillText(w, px + 6, py - 5);
+    });
+    // angle arc
+    const a1 = Math.atan2(vecA.y, vecA.x), a2 = Math.atan2(vecB.y, vecB.x);
+    ctx.strokeStyle = 'rgba(8,145,178,0.65)'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(C, C, 34, -a1, -a2, ((a2 - a1 + 2*Math.PI) % (2*Math.PI)) < Math.PI ? false : true);
+    ctx.stroke();
+    drawArrow(vecA, '#4f46e5');
+    drawArrow(vecB, '#be185d');
+  }
+  function cosUpdate(){
+    cosDraw();
+    const dot = vecA.x*vecB.x + vecA.y*vecB.y;
+    const nA = Math.hypot(vecA.x, vecA.y), nB = Math.hypot(vecB.x, vecB.y);
+    const cos = (nA && nB) ? dot/(nA*nB) : 0;
+    const deg = Math.acos(Math.max(-1, Math.min(1, cos))) * 180/Math.PI;
+    document.getElementById('cosAx').textContent = vecA.x.toFixed(2);
+    document.getElementById('cosAy').textContent = vecA.y.toFixed(2);
+    document.getElementById('cosBx').textContent = vecB.x.toFixed(2);
+    document.getElementById('cosBy').textContent = vecB.y.toFixed(2);
+    document.getElementById('cosFormula').innerHTML =
+      'cos&theta; = (A·B) / (|A|·|B|) = ' + dot.toFixed(3) + ' / (' + nA.toFixed(3) + ' × ' + nB.toFixed(3) + ')';
+    document.getElementById('cosVal').textContent = cos.toFixed(3);
+    document.getElementById('cosDeg').textContent = deg.toFixed(1);
+    const verdict = document.getElementById('cosVerdict');
+    let txt, bg, fg;
+    if (cos > 0.8){ txt = 'ความหมายใกล้กันมาก'; bg = 'rgba(77,124,15,0.14)'; fg = '#4d7c0f'; }
+    else if (cos > 0.4){ txt = 'ค่อนข้างเกี่ยวข้องกัน'; bg = 'rgba(8,145,178,0.13)'; fg = '#0e7490'; }
+    else if (cos > -0.2){ txt = 'แทบไม่เกี่ยวข้องกัน'; bg = 'rgba(15,23,42,0.07)'; fg = '#475569'; }
+    else { txt = 'ความหมายไปคนละทาง (ตรงข้าม)'; bg = 'rgba(190,24,93,0.12)'; fg = '#be185d'; }
+    verdict.textContent = txt; verdict.style.background = bg; verdict.style.color = fg;
+  }
+  // selects
+  const selA = document.getElementById('wordA'), selB = document.getElementById('wordB');
+  [selA, selB].forEach(sel => {
+    WORDS.forEach(({w}) => { const o = document.createElement('option'); o.value = w; o.textContent = w; sel.appendChild(o); });
+    const custom = document.createElement('option'); custom.value = '__custom'; custom.textContent = 'กำหนดเอง (ลาก)';
+    sel.appendChild(custom);
+  });
+  selA.value = 'แมว'; selB.value = 'สุนัข';
+  selA.addEventListener('change', () => { const w = WORDS.find(x => x.w === selA.value); if (w){ vecA = {x:w.x, y:w.y}; cosUpdate(); } });
+  selB.addEventListener('change', () => { const w = WORDS.find(x => x.w === selB.value); if (w){ vecB = {x:w.x, y:w.y}; cosUpdate(); } });
+  // drag
+  let dragging = null;
+  function evPos(e){
+    const r = canvas.getBoundingClientRect();
+    const cx = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    const cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+    return {x: (cx - C)/UNIT, y: (C - cy)/UNIT};
+  }
+  function nearTip(pos, v){ return Math.hypot(pos.x - v.x, pos.y - v.y) < 0.16; }
+  function dragStart(e){
+    const p = evPos(e);
+    if (nearTip(p, vecA)) dragging = 'A';
+    else if (nearTip(p, vecB)) dragging = 'B';
+    if (dragging) e.preventDefault();
+  }
+  function dragMove(e){
+    if (!dragging) return;
+    e.preventDefault();
+    const p = evPos(e);
+    const clamp = v => Math.max(-1.2, Math.min(1.2, v));
+    const nv = {x: clamp(p.x), y: clamp(p.y)};
+    if (dragging === 'A'){ vecA = nv; selA.value = '__custom'; }
+    else { vecB = nv; selB.value = '__custom'; }
+    cosUpdate();
+  }
+  canvas.addEventListener('mousedown', dragStart);
+  canvas.addEventListener('mousemove', dragMove);
+  window.addEventListener('mouseup', () => dragging = null);
+  canvas.addEventListener('touchstart', dragStart, {passive:false});
+  canvas.addEventListener('touchmove', dragMove, {passive:false});
+  window.addEventListener('touchend', () => dragging = null);
+  cosUpdate();
+
+  // analogy
+  const ANA = [
+    {w:'กษัตริย์', x:0.8, y:0.8}, {w:'ราชินี', x:-0.8, y:0.8},
+    {w:'ผู้ชาย', x:0.8, y:-0.6}, {w:'ผู้หญิง', x:-0.8, y:-0.6},
+    {w:'เจ้าชาย', x:0.8, y:0.2}, {w:'เจ้าหญิง', x:-0.8, y:0.2}
+  ];
+  const anaSelects = ['anaA','anaB','anaC'].map(id => {
+    const s = document.getElementById(id);
+    ANA.forEach(({w}) => { const o = document.createElement('option'); o.value = w; o.textContent = w; s.appendChild(o); });
+    s.addEventListener('change', anaUpdate);
+    return s;
+  });
+  anaSelects[0].value = 'กษัตริย์'; anaSelects[1].value = 'ผู้ชาย'; anaSelects[2].value = 'ผู้หญิง';
+  function anaUpdate(){
+    const g = w => ANA.find(x => x.w === w);
+    const a = g(anaSelects[0].value), b = g(anaSelects[1].value), c = g(anaSelects[2].value);
+    const r = {x: a.x - b.x + c.x, y: a.y - b.y + c.y};
+    let best = null, bestD = Infinity;
+    ANA.forEach(w => {
+      if (w.w === anaSelects[0].value || w.w === anaSelects[2].value) return;
+      const d = Math.hypot(w.x - r.x, w.y - r.y);
+      if (d < bestD){ bestD = d; best = w; }
+    });
+    document.getElementById('anaOut').innerHTML = '<i class="fa-solid fa-star"></i> ' + (best ? best.w : '—');
+  }
+  anaUpdate();
+
+  /* ============ 4. TEMPERATURE ============ */
+  let TOKS = [
+    {label:'ดี', w:50}, {label:'ร้อน', w:30}, {label:'เย็น', w:15}, {label:'แปลก', w:5}, {label:'ฝนตก', w:10}
+  ];
+  let counts = [0,0,0,0,0];
+  const tokRowsEl = document.getElementById('tokRows');
+  function buildTokRows(){
+    tokRowsEl.innerHTML = '';
+    TOKS.forEach((t, i) => {
+      const row = document.createElement('div');
+      row.className = 'tok-edit-row';
+      row.innerHTML = '<span class="swatch" style="background:' + PAL[i] + '"></span>' +
+        '<input type="text" value="' + t.label + '" data-i="' + i + '" data-f="label" />' +
+        '<input class="lab-num" type="number" min="0" max="1000" value="' + t.w + '" data-i="' + i + '" data-f="w" />' +
+        '<span style="font-size:0.78rem;color:var(--text-muted);width:56px">น้ำหนัก</span>';
+      tokRowsEl.appendChild(row);
+    });
+    tokRowsEl.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const i = +inp.dataset.i;
+        if (inp.dataset.f === 'label') TOKS[i].label = inp.value || ('token' + (i+1));
+        else TOKS[i].w = Math.max(0, +inp.value || 0);
+        tempUpdate();
+      });
+    });
+  }
+  function computeProbs(){
+    const T = +tempSlider.value;
+    const active = TOKS.map((t, i) => ({...t, i})).filter(t => t.w > 0);
+    let probs;
+    if (T <= 0.001){
+      const maxW = Math.max(...active.map(t => t.w));
+      probs = active.map(t => t.w === maxW ? 1 : 0);
+      const s = probs.reduce((a,b) => a+b, 0);
+      probs = probs.map(p => p/s);
+    } else {
+      const pw = active.map(t => Math.pow(t.w, 1/T));
+      const s = pw.reduce((a,b) => a+b, 0);
+      probs = pw.map(p => p/s);
+    }
+    let items = active.map((t, j) => ({i: t.i, label: t.label, p: probs[j], cut: false}));
+    // sort desc for top-k / top-p logic
+    const sorted = [...items].sort((a,b) => b.p - a.p);
+    const k = +topkSlider.value;
+    if (k < sorted.length) sorted.forEach((it, idx) => { if (idx >= k) it.cut = true; });
+    const topP = +toppSlider.value;
+    if (topP < 0.999){
+      let cum = 0;
+      sorted.forEach(it => {
+        if (it.cut) return;
+        if (cum >= topP) it.cut = true;
+        cum += it.p;
+      });
+    }
+    const keptSum = items.filter(it => !it.cut).reduce((a,b) => a + b.p, 0);
+    items.forEach(it => it.final = it.cut ? 0 : it.p / keptSum);
+    return items;
+  }
+  const tempSlider = document.getElementById('tempSlider');
+  const topkSlider = document.getElementById('topkSlider');
+  const toppSlider = document.getElementById('toppSlider');
+  const probBarsEl = document.getElementById('probBars');
+  function tempUpdate(){
+    const T = +tempSlider.value;
+    document.getElementById('tempVal').textContent = T <= 0.001 ? '0 (greedy)' : T.toFixed(2);
+    const k = +topkSlider.value;
+    document.getElementById('topkVal').textContent = k >= 5 ? 'ปิด' : 'k=' + k;
+    const p = +toppSlider.value;
+    document.getElementById('toppVal').textContent = p >= 0.999 ? 'ปิด' : 'p=' + p.toFixed(2);
+    const items = computeProbs();
+    probBarsEl.innerHTML = '';
+    const totalCount = counts.reduce((a,b)=>a+b,0);
+    items.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'prob-row' + (it.cut ? ' prob-cut' : '');
+      const pct = (it.final*100);
+      row.innerHTML =
+        '<span class="prob-name">' + it.label + '</span>' +
+        '<div class="prob-track"><div class="prob-fill" style="width:' + Math.max(pct, it.cut?100:0.5) + '%; background:' + PAL[it.i] + '"></div>' +
+        (it.cut ? '<span class="cut-badge">ถูกตัดออก</span>' : '') + '</div>' +
+        '<span class="prob-pct">' + (it.cut ? '—' : pct.toFixed(1) + '%') + '</span>' +
+        '<span class="prob-count">' + (totalCount && counts[it.i] ? '×' + counts[it.i] : '') + '</span>';
+      probBarsEl.appendChild(row);
+    });
+  }
+  function samplePick(){
+    const items = computeProbs().filter(it => !it.cut);
+    let r = Math.random();
+    for (const it of items){ r -= it.final; if (r <= 0) return it; }
+    return items[items.length-1];
+  }
+  const sampleOut = document.getElementById('sampleOut');
+  const promptPrefix = 'วันนี้อากาศ';
+  function showSample(it){
+    sampleOut.innerHTML = '<span style="font-weight:700">' + promptPrefix + '</span>';
+    const chip = document.createElement('span');
+    chip.className = 'sample-tok';
+    chip.style.background = PAL[it.i];
+    chip.textContent = it.label;
+    sampleOut.appendChild(chip);
+  }
+  document.getElementById('sample1').addEventListener('click', () => {
+    const it = samplePick(); if (!it) return;
+    counts[it.i]++; showSample(it); tempUpdate();
+  });
+  document.getElementById('sample100').addEventListener('click', () => {
+    let last = null;
+    for (let n=0; n<100; n++){ const it = samplePick(); if (!it) break; counts[it.i]++; last = it; }
+    if (last) showSample(last);
+    tempUpdate();
+  });
+  document.getElementById('sampleClear').addEventListener('click', () => {
+    counts = TOKS.map(() => 0);
+    sampleOut.innerHTML = '<span style="font-weight:700">' + promptPrefix + '</span><span style="color:var(--text-muted); font-size:0.85rem">← กด "สุ่ม 1 ครั้ง" เพื่อให้โมเดลเติมคำ</span>';
+    tempUpdate();
+  });
+  document.querySelectorAll('.preset-btn[data-t]').forEach(b => {
+    b.addEventListener('click', () => { tempSlider.value = b.dataset.t; tempUpdate(); });
+  });
+  [tempSlider, topkSlider, toppSlider].forEach(s => s.addEventListener('input', tempUpdate));
+  buildTokRows();
+  tempUpdate();
+
+  /* ============ 5. CONTEXT WINDOW ============ */
+  const MSGS = [
+    {who:'User', u:1, txt:'สวัสดีครับ ผมแพ้กุ้งนะครับ ช่วยจำไว้ด้วย', tk:120},
+    {who:'AI', u:0, txt:'รับทราบครับ จะหลีกเลี่ยงเมนูที่มีกุ้งให้เสมอ', tk:110},
+    {who:'User', u:1, txt:'วันนี้อยากกินอาหารญี่ปุ่น มีอะไรแนะนำบ้าง', tk:130},
+    {who:'AI', u:0, txt:'แนะนำซูชิหน้าปลาแซลมอน ราเมนทงคตสึ และเทมปุระผักครับ', tk:150},
+    {who:'User', u:1, txt:'ราเมนน่าสนใจ ร้านแถวมหาวิทยาลัยมีไหม', tk:120},
+    {who:'AI', u:0, txt:'มีครับ ร้าน A อยู่หน้ามอ ร้าน B อยู่ในโรงอาหารตึกวิทยาศาสตร์', tk:140},
+    {who:'User', u:1, txt:'โอเค แล้วพรุ่งนี้ช่วยเตือนผมส่งการบ้านวิชา GenAI ด้วย', tk:130},
+    {who:'AI', u:0, txt:'ได้ครับ พรุ่งนี้จะเตือนเรื่องการบ้านวิชา Generative AI', tk:120},
+    {who:'User', u:1, txt:'สรุปแล้ววันนี้กินอะไรดี แนะนำเมนูเดียวเด็ด ๆ', tk:110},
+    {who:'AI', u:0, txt:'ราเมนทงคตสึร้าน A ครับ น้ำซุปเข้มข้น ไม่มีส่วนผสมของกุ้ง', tk:140}
+  ];
+  const cwSlider = document.getElementById('cwSlider');
+  function cwUpdate(){
+    const win = +cwSlider.value;
+    document.getElementById('cwVal').textContent = win + ' tok';
+    let used = 0;
+    const kept = new Set();
+    for (let i = MSGS.length-1; i >= 0; i--){
+      if (used + MSGS[i].tk <= win){ used += MSGS[i].tk; kept.add(i); }
+      else break;
+    }
+    const total = MSGS.reduce((a,m) => a + m.tk, 0);
+    document.getElementById('cwMeter').style.width = Math.min(100, used/win*100) + '%';
+    document.getElementById('cwStat').textContent =
+      'ใช้ไป ' + used + ' / ' + win + ' token — เก็บได้ ' + kept.size + ' จาก ' + MSGS.length + ' ข้อความ (รวมทั้งบทสนทนา ' + total + ' token)';
+    const box = document.getElementById('cwMsgs');
+    box.innerHTML = '';
+    MSGS.forEach((m, i) => {
+      const div = document.createElement('div');
+      div.className = 'cw-msg' + (kept.has(i) ? '' : ' dropped');
+      div.innerHTML = '<span class="who ' + (m.u ? 'u' : 'a') + '">' + m.who + '</span>' +
+        '<span class="txt">' + m.txt + '</span>' +
+        (kept.has(i) ? '' : '<span class="cw-drop-tag">ถูกตัดทิ้ง</span>') +
+        '<span class="tks">' + m.tk + ' tok</span>';
+      box.appendChild(div);
+    });
+  }
+  cwSlider.addEventListener('input', cwUpdate);
+  cwUpdate();
+
+  /* ============ 6. COST ============ */
+  const costIds = ['cCalls','cIn','cOut','cPIn','cPOut','cFx'];
+  function costUpdate(){
+    const [calls, tin, tout, pin, pout, fx] = costIds.map(id => +document.getElementById(id).value || 0);
+    const tokIn = calls * tin, tokOut = calls * tout;
+    const day = tokIn/1e6*pin + tokOut/1e6*pout;
+    const month = day * 30;
+    document.getElementById('cTokIn').textContent = fmt(tokIn, 0);
+    document.getElementById('cTokOut').textContent = fmt(tokOut, 0);
+    document.getElementById('cDay').innerHTML = '$' + fmt(day) + ' <small>(฿' + fmt(day*fx) + ')</small>';
+    document.getElementById('cMonth').innerHTML = '$' + fmt(month) + ' <small>(฿' + fmt(month*fx) + ')</small>';
+    document.getElementById('costFormula').innerHTML =
+      'ต้นทุน/วัน = (' + fmt(tokIn/1e6) + 'M × $' + pin + ') + (' + fmt(tokOut/1e6) + 'M × $' + pout + ') = $' +
+      fmt(tokIn/1e6*pin) + ' + $' + fmt(tokOut/1e6*pout) + ' = <b>$' + fmt(day) + '</b>';
+  }
+  costIds.forEach(id => document.getElementById(id).addEventListener('input', costUpdate));
+  costUpdate();
+
+  /* ============ scrollspy ============ */
+  const tabs = document.querySelectorAll('.lab-tab');
+  const sections = ['tokenizer','bpe','cosine','temperature','context','cost'].map(id => document.getElementById(id));
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting){
+        tabs.forEach(t => t.classList.toggle('active', t.getAttribute('href') === '#' + en.target.id));
+      }
+    });
+  }, {rootMargin: '-40% 0px -55% 0px'});
+  sections.forEach(s => spy.observe(s));
+  })();
+  </script>
+</body>
+</html>
